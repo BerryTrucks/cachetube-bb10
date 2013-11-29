@@ -5,6 +5,12 @@ import YTVideoManagement 1.0
 
 TabbedPane {
     id: tabbedPane
+
+    onActiveTabChanged: {
+        if (activeTab === helpTab) {
+            helpWebView.url = qsTr("local:///assets/doc/help.html");
+        }
+    }
     
     Tab {
         id:          youTubeTab
@@ -355,6 +361,7 @@ TabbedPane {
     }
     
     Tab {
+        id:          helpTab
         title:       qsTr("Help")
         imageSource: "images/help.png" 
         
@@ -391,6 +398,7 @@ TabbedPane {
                 }
 
                 WebView {
+                    id:  helpWebView
                     url: qsTr("local:///assets/doc/help.html")
                 }
             }
