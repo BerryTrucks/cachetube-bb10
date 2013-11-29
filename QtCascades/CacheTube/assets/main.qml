@@ -206,15 +206,6 @@ TabbedPane {
                                         }
 
                                         ActionItem {
-                                            title:       qsTr("Open YouTube Page")
-                                            imageSource: "images/youtube.png"
-
-                                            onTriggered: {
-                                                itemRoot.ListItem.view.navigateToWebPage(itemRoot.ListItem.view.ytVideoManager.getTaskWebURL(itemRoot.itemVideoId));
-                                            }
-                                        }
-
-                                        ActionItem {
                                             title:       qsTr("Play Video")
                                             imageSource: "images/play_video.png"
                                             enabled:     itemRoot.itemState === YTDownloadState.StateCompleted
@@ -234,6 +225,15 @@ TabbedPane {
                                                     body: qsTr("Could not start video player")
                                                 }
                                             ]
+                                        }
+
+                                        ActionItem {
+                                            title:       qsTr("Open YouTube Page")
+                                            imageSource: "images/youtube.png"
+
+                                            onTriggered: {
+                                                itemRoot.ListItem.view.navigateToWebPage(itemRoot.ListItem.view.ytVideoManager.getTaskWebURL(itemRoot.itemVideoId));
+                                            }
                                         }
                                     }
                                 ]

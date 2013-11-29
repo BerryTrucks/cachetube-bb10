@@ -78,17 +78,17 @@
         <translation>Пауза/Продолжить</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="209"/>
+        <location filename="../assets/main.qml" line="231"/>
         <source>Open YouTube Page</source>
         <translation>Открыть страницу YouTube</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="218"/>
+        <location filename="../assets/main.qml" line="209"/>
         <source>Play Video</source>
         <translation>Воспроизведение</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="234"/>
+        <location filename="../assets/main.qml" line="225"/>
         <source>Could not start video player</source>
         <translation>Невозможно запустить видеоплеер</translation>
     </message>
