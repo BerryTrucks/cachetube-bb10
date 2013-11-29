@@ -110,6 +110,10 @@ TabbedPane {
         imageSource: "images/cache.png"
 
         Page {
+            titleBar: TitleBar {
+                title: qsTr("Cached Video")
+            }
+
             Container {
                 background: Color.White
 
@@ -180,8 +184,6 @@ TabbedPane {
 
                                 contextActions: [
                                     ActionSet {
-                                        title: qsTr("Manage Video")
-
                                         ActionItem {
                                             title:       qsTr("Delete")
                                             imageSource: "images/delete.png"
@@ -281,6 +283,10 @@ TabbedPane {
         imageSource: "images/settings.png"
 
         Page {
+            titleBar: TitleBar {
+                title: qsTr("Settings")
+            }
+
             Container {
                 background: Color.White
 
@@ -298,10 +304,12 @@ TabbedPane {
                         }
 
                         Label {
-                            textStyle.color:     Color.Black
-                            textStyle.fontStyle: FontStyle.Italic
-                            textStyle.fontSize:  FontSize.Large
-                            text:                qsTr("Preferred Video Format:")
+                            textStyle.color:    Color.Black
+                            textStyle.fontSize: FontSize.Large
+                            text:               qsTr("Preferred Video Format:")
+                        }
+
+                        Divider {
                         }
 
                         RadioGroup {

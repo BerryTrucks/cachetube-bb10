@@ -54,86 +54,83 @@
     </message>
     <message>
         <location filename="../assets/main.qml" line="109"/>
+        <location filename="../assets/main.qml" line="114"/>
         <source>Cached Video</source>
         <translation>Загруженное видео</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="137"/>
+        <location filename="../assets/main.qml" line="141"/>
         <source>No cached video</source>
         <translation>Нет загруженного видео</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="183"/>
-        <source>Manage Video</source>
-        <translation>Управление Видео</translation>
-    </message>
-    <message>
-        <location filename="../assets/main.qml" line="186"/>
+        <location filename="../assets/main.qml" line="188"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="195"/>
+        <location filename="../assets/main.qml" line="197"/>
         <source>Pause/Resume</source>
         <translation>Пауза/Продолжить</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="231"/>
+        <location filename="../assets/main.qml" line="233"/>
         <source>Open YouTube Page</source>
         <translation>Открыть страницу YouTube</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="209"/>
+        <location filename="../assets/main.qml" line="211"/>
         <source>Play Video</source>
         <translation>Воспроизведение</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="225"/>
+        <location filename="../assets/main.qml" line="227"/>
         <source>Could not start video player</source>
         <translation>Невозможно запустить видеоплеер</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="265"/>
+        <location filename="../assets/main.qml" line="267"/>
         <source>QUEUED</source>
         <translation>ОЖИДАНИЕ</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="266"/>
+        <location filename="../assets/main.qml" line="268"/>
         <source>PAUSED</source>
         <translation>ПАУЗА</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="280"/>
+        <location filename="../assets/main.qml" line="282"/>
+        <location filename="../assets/main.qml" line="287"/>
         <source>Settings</source>
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="304"/>
+        <location filename="../assets/main.qml" line="309"/>
         <source>Preferred Video Format:</source>
         <translation>Предпочитаемый формат видео:</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="333"/>
+        <location filename="../assets/main.qml" line="341"/>
         <source>720p H.264 MP4</source>
         <translation>720p H.264 MP4</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="337"/>
+        <location filename="../assets/main.qml" line="345"/>
         <source>360p H.264 MP4</source>
         <translation>360p H.264 MP4</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="350"/>
+        <location filename="../assets/main.qml" line="358"/>
         <source>Help</source>
         <translation>Справка</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="356"/>
+        <location filename="../assets/main.qml" line="364"/>
         <source>Review App</source>
         <translation>Отзыв</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="386"/>
+        <location filename="../assets/main.qml" line="394"/>
         <source>local:///assets/doc/help.html</source>
         <translation>local:///assets/doc/help_ru.html</translation>
     </message>
