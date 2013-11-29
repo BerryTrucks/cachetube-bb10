@@ -58,10 +58,10 @@ YTVideoManager::YTVideoManager(QNetworkAccessManager *network_access_manager, in
 YTVideoManager::~YTVideoManager()
 {
     if (MetadataReply != NULL) {
-        MetadataReply->deleteLater();
+        delete MetadataReply;
     }
     if (DownloadReply != NULL) {
-        DownloadReply->deleteLater();
+        delete DownloadReply;
     }
 }
 

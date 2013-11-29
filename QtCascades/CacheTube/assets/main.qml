@@ -260,10 +260,10 @@ TabbedPane {
                                     textStyle.color:     itemRoot.itemState === YTDownloadState.StateError ? Color.Red : Color.Grey
                                     textStyle.fontStyle: FontStyle.Italic
                                     textStyle.fontSize:  FontSize.Small
-                                    text:                itemRoot.itemState === YTDownloadState.StateCompleted ? (itemRoot.itemSize / 1048576).toFixed(2) + "MiB" :
-                                                        (itemRoot.itemState === YTDownloadState.StateError     ? itemRoot.itemErrorMsg                            :
-                                                        (itemRoot.itemState === YTDownloadState.StateQueued    ? qsTr("QUEUED")                                   :
-                                                        (itemRoot.itemState === YTDownloadState.StatePaused    ? qsTr("PAUSED")                                   : "")))
+                                    text:                itemRoot.itemState === YTDownloadState.StateCompleted ? (itemRoot.itemSize / 1048576).toFixed(2) + " MiB" :
+                                                        (itemRoot.itemState === YTDownloadState.StateError     ? itemRoot.itemErrorMsg                             :
+                                                        (itemRoot.itemState === YTDownloadState.StateQueued    ? qsTr("QUEUED")                                    :
+                                                        (itemRoot.itemState === YTDownloadState.StatePaused    ? qsTr("PAUSED")                                    : "")))
                                 }
 
                                 Divider {
