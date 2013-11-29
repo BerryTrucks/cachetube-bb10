@@ -367,7 +367,7 @@ TabbedPane {
 
                             query: InvokeQuery {
                                 mimeType: "application/x-bb-appworld"
-                                uri:      "appworld://content/20385658"
+                                uri:      "appworld://content/42093887"
                             }
                         }
                     ]
