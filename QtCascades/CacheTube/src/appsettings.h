@@ -8,26 +8,14 @@ class AppSettings : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(int  launchNumber                     READ launchNumber                     WRITE setLaunchNumber)
-    Q_PROPERTY(int  lastFeedbackRequestLaunchNumber  READ lastFeedbackRequestLaunchNumber  WRITE setLastFeedbackRequestLaunchNumber)
-    Q_PROPERTY(bool requestFeedback                  READ requestFeedback                  WRITE setRequestFeedback)
-    Q_PROPERTY(bool showModeChangeSuggestion         READ showModeChangeSuggestion         WRITE setShowModeChangeSuggestion)
+    Q_PROPERTY(int preferredVideoFormat READ preferredVideoFormat WRITE setPreferredVideoFormat)
 
 public:
     explicit AppSettings(QObject *parent = 0);
     virtual ~AppSettings();
 
-    int  launchNumber() const;
-    void setLaunchNumber(const int &number);
-
-    int  lastFeedbackRequestLaunchNumber() const;
-    void setLastFeedbackRequestLaunchNumber(const int &number);
-
-    bool requestFeedback() const;
-    void setRequestFeedback(const bool &request);
-
-    bool showModeChangeSuggestion() const;
-    void setShowModeChangeSuggestion(const bool &show);
+    int  preferredVideoFormat() const;
+    void setPreferredVideoFormat(const int &format);
 
 private:
     QSettings *Settings;

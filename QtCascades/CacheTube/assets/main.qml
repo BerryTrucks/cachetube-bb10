@@ -134,7 +134,7 @@ TabbedPane {
                         horizontalAlignment: HorizontalAlignment.Center
                         textStyle.color:     Color.Black
                         textStyle.fontSize:  FontSize.XLarge
-                        text:                qsTr("Video cache is empty")
+                        text:                qsTr("No cached video")
                     }
                 }
 
@@ -271,6 +271,76 @@ TabbedPane {
                             }
                         }
                     ]
+                }
+            }
+        }
+    }
+    
+    Tab {
+        title:       qsTr("Settings")
+        imageSource: "images/settings.png"
+
+        Page {
+            Container {
+                background: Color.White
+
+                ScrollView {
+                    scrollViewProperties {
+                        scrollMode: ScrollMode.Vertical
+                    }
+
+                    Container {
+                        background:   Color.Transparent
+                        leftPadding:  12
+                        rightPadding: 12
+
+                        layout: StackLayout {
+                        }
+
+                        Label {
+                            textStyle.color:     Color.Black
+                            textStyle.fontStyle: FontStyle.Italic
+                            textStyle.fontSize:  FontSize.Large
+                            text:                qsTr("Preferred Video Format:")
+                        }
+
+                        RadioGroup {
+                            onCreationCompleted: {
+                                var format = AppSettings.preferredVideoFormat;
+                                
+                                if (format === 22) {
+                                    selectedIndex = 0;
+                                } else if (format === 18) {
+                                    selectedIndex = 1;
+                                } else {
+                                    selectedIndex = 0;
+                                }
+                            }
+                            
+                            onSelectedIndexChanged: {
+                                if (selectedIndex === 0) {
+                                    AppSettings.preferredVideoFormat = 22;
+
+                                    YTVideoManager.setPreferredVideoFormat(22);
+                                } else if (selectedIndex === 1) {
+                                    AppSettings.preferredVideoFormat = 18;
+
+                                    YTVideoManager.setPreferredVideoFormat(18);
+                                }
+                            }
+                            
+                            Option {
+                                text: qsTr("720p H.264 MP4")
+                            }
+
+                            Option {
+                                text: qsTr("360p H.264 MP4")
+                            }
+                        }
+                        
+                        Divider {
+                        }
+                    }
                 }
             }
         }

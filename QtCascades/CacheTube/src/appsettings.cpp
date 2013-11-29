@@ -10,58 +10,16 @@ AppSettings::~AppSettings()
     delete Settings;
 }
 
-int AppSettings::launchNumber() const
+int AppSettings::preferredVideoFormat() const
 {
-    if (Settings->contains("LaunchNumber")) {
-        return Settings->value("LaunchNumber").toInt();
+    if (Settings->contains("PreferredVideoFormat")) {
+        return Settings->value("PreferredVideoFormat").toInt();
     } else {
         return 0;
     }
 }
 
-void AppSettings::setLaunchNumber(const int &number)
+void AppSettings::setPreferredVideoFormat(const int &format)
 {
-    Settings->setValue("LaunchNumber", number);
-}
-
-int AppSettings::lastFeedbackRequestLaunchNumber() const
-{
-    if (Settings->contains("LastFeedbackRequestLaunchNumber")) {
-        return Settings->value("LastFeedbackRequestLaunchNumber").toInt();
-    } else {
-        return 0;
-    }
-}
-
-void AppSettings::setLastFeedbackRequestLaunchNumber(const int &number)
-{
-    Settings->setValue("LastFeedbackRequestLaunchNumber", number);
-}
-
-bool AppSettings::requestFeedback() const
-{
-    if (Settings->contains("RequestFeedback")) {
-        return Settings->value("RequestFeedback").toBool();
-    } else {
-        return true;
-    }
-}
-
-void AppSettings::setRequestFeedback(const bool &request)
-{
-    Settings->setValue("RequestFeedback", request);
-}
-
-bool AppSettings::showModeChangeSuggestion() const
-{
-    if (Settings->contains("ShowModeChangeSuggestion")) {
-        return Settings->value("ShowModeChangeSuggestion").toBool();
-    } else {
-        return true;
-    }
-}
-
-void AppSettings::setShowModeChangeSuggestion(const bool &show)
-{
-    Settings->setValue("ShowModeChangeSuggestion", show);
+    Settings->setValue("PreferredVideoFormat", format);
 }

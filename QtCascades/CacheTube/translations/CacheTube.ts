@@ -87,11 +87,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Video cache is empty</source>
+        <source>Home</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Home</source>
+        <source>Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>720p H.264 MP4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>360p H.264 MP4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No cached video</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Preferred Video Format:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

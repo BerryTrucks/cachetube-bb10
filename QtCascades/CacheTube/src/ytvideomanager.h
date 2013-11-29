@@ -39,8 +39,10 @@ class YTVideoManager : public QObject
     Q_OBJECT
 
 public:
-    explicit YTVideoManager(QNetworkAccessManager *network_access_manager, QObject *parent = 0);
+    explicit YTVideoManager(QNetworkAccessManager *network_access_manager, int preferred_format, QObject *parent = 0);
     virtual ~YTVideoManager();
+
+    Q_INVOKABLE void setPreferredVideoFormat(const int &format);
 
     Q_INVOKABLE QString getVideoId(const QString &url);
 
@@ -80,6 +82,7 @@ private:
 
     static const int QUEUE_RUN_AFTER = 1000;
 
+    int                   PreferredVideoFormat;
     QDir                  DestinationDir;
     QList<YTDownloadTask> DownloadTasks;
     YTDownloadTask        CurrentTask;

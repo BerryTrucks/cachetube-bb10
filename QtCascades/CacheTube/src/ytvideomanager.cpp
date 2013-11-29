@@ -6,12 +6,12 @@
 
 #include "ytvideomanager.h"
 
-YTVideoManager::YTVideoManager(QNetworkAccessManager *network_access_manager, QObject *parent) : QObject(parent)
+YTVideoManager::YTVideoManager(QNetworkAccessManager *network_access_manager, int preferred_format, QObject *parent) : QObject(parent)
 {
-    DestinationDir = QDir(QDir::currentPath() + QDir::separator() + "shared" + QDir::separator() + "downloads" + QDir::separator() + "CacheTube" + QDir::separator() + "YouTube");
+    DestinationDir = QDir(QDir::currentPath() + QDir::separator() + "shared" + QDir::separator() + "downloads" + QDir::separator() + "CacheTube");
 
     if (!DestinationDir.exists()) {
-        QDir::current().mkpath(QString("shared") + QDir::separator() + "downloads" + QDir::separator() + "CacheTube" + QDir::separator() + "YouTube");
+        QDir::current().mkpath(QString("shared") + QDir::separator() + "downloads" + QDir::separator() + "CacheTube");
     }
 
     TaskDatabase = QSqlDatabase::addDatabase("QSQLITE");
@@ -45,6 +45,7 @@ YTVideoManager::YTVideoManager(QNetworkAccessManager *network_access_manager, QO
         TaskDatabase.close();
     }
 
+    PreferredVideoFormat = preferred_format;
     NetworkAccessManager = network_access_manager;
     MetadataReply        = NULL;
     DownloadReply        = NULL;
@@ -62,6 +63,11 @@ YTVideoManager::~YTVideoManager()
     if (DownloadReply != NULL) {
         DownloadReply->deleteLater();
     }
+}
+
+void YTVideoManager::setPreferredVideoFormat(const int &format)
+{
+    PreferredVideoFormat = format;
 }
 
 QString YTVideoManager::getVideoId(const QString &url)
@@ -310,12 +316,19 @@ void YTVideoManager::networkRequestFinished(QNetworkReply *reply)
                 CurrentTask.Title = video_title;
 
                 if (CurrentTask.Fmt == 0) {
-                    if (fmt_url_map.contains(22)) {
-                        CurrentTask.Fmt      = 22;
-                        CurrentTask.MimeType = "video/mp4";
-                    } else if (fmt_url_map.contains(18)) {
-                        CurrentTask.Fmt      = 18;
-                        CurrentTask.MimeType = "video/mp4";
+                    if (PreferredVideoFormat == 18) {
+                        if (fmt_url_map.contains(18)) {
+                            CurrentTask.Fmt      = 18;
+                            CurrentTask.MimeType = "video/mp4";
+                        }
+                    } else {
+                        if (fmt_url_map.contains(22)) {
+                            CurrentTask.Fmt      = 22;
+                            CurrentTask.MimeType = "video/mp4";
+                        } else if (fmt_url_map.contains(18)) {
+                            CurrentTask.Fmt      = 18;
+                            CurrentTask.MimeType = "video/mp4";
+                        }
                     }
                 }
 

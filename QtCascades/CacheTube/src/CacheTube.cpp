@@ -24,6 +24,7 @@ using namespace bb::cascades;
 CacheTube::CacheTube(bb::cascades::Application *app) : QObject(app)
 {
     QNetworkAccessManager *network_access_manager = new QNetworkAccessManager(this);
+    AppSettings           *app_settings           = new AppSettings(this);
 
     qmlRegisterType<PlayerLauncher>("PlayerLauncher", 1, 0, "PlayerLauncher");
 
@@ -32,8 +33,8 @@ CacheTube::CacheTube(bb::cascades::Application *app) : QObject(app)
 
     QmlDocument *qml = QmlDocument::create("asset:///main.qml").parent(this);
 
-    qml->setContextProperty("AppSettings", new AppSettings(this));
-    qml->setContextProperty("YTVideoManager", new YTVideoManager(network_access_manager, this));
+    qml->setContextProperty("AppSettings", app_settings);
+    qml->setContextProperty("YTVideoManager", new YTVideoManager(network_access_manager, app_settings->preferredVideoFormat(), this));
 
     AbstractPane *root = qml->createRootObject<AbstractPane>();
 
