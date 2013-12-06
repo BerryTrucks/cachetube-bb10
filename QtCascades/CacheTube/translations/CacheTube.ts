@@ -59,10 +59,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Could not start video player</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>QUEUED</source>
         <translation type="unfinished"></translation>
     </message>
@@ -104,6 +100,21 @@
     </message>
     <message>
         <source>Preferred Video Format:</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>playerPage</name>
+    <message>
+        <source>Play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pause</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>An error occured during video playback</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

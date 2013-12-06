@@ -1,6 +1,5 @@
 import bb.cascades 1.0
 import bb.system 1.0
-import PlayerLauncher 1.0
 import YTVideoManagement 1.0
 
 TabbedPane {
@@ -219,18 +218,53 @@ TabbedPane {
                                             enabled:     itemRoot.itemState === YTDownloadState.StateCompleted
 
                                             onTriggered: {
-                                                if (!playerLauncher.launchPlayer(itemRoot.ListItem.view.ytVideoManager.getTaskVideoURI(itemRoot.itemVideoId), itemRoot.itemMimeType, itemRoot.itemTitle)) {
-                                                    videoPlayerFailedToast.show();                                                    
-                                                }
+                                                playerNavigationPane.push(playerPageDefinition.createObject());
+
+                                                playerSheet.open();
                                             }
                                             
                                             attachedObjects: [
-                                                PlayerLauncher {
-                                                    id: playerLauncher
-                                                },
-                                                SystemToast {
-                                                    id:   videoPlayerFailedToast
-                                                    body: qsTr("Could not start video player")
+                                                Sheet {
+                                                    id:          playerSheet
+                                                    peekEnabled: false
+
+                                                    onOpened: {
+                                                        var page = playerNavigationPane.top;
+                                                        
+                                                        if (page.objectName === "playerPage") {
+                                                            page.playVideo(itemRoot.ListItem.view.ytVideoManager.getTaskVideoURI(itemRoot.itemVideoId), itemRoot.itemTitle);
+                                                        }
+                                                    }
+
+                                                    NavigationPane {
+                                                        id:          playerNavigationPane
+                                                        peekEnabled: false
+
+                                                        onTopChanged: {
+                                                            if (page.objectName === "playerEmptyPage") {
+                                                                playerSheet.close();
+                                                            }
+                                                        }
+                                                        
+                                                        onPopTransitionEnded: {
+                                                            page.destroy();
+                                                        }
+                                                        
+                                                        Page {
+                                                            objectName: "playerEmptyPage"
+                                                            
+                                                            Container {
+                                                                background: Color.White
+                                                            }
+                                                        }
+                                                    }
+                                                    
+                                                    attachedObjects: [
+                                                        ComponentDefinition {
+                                                            id:     playerPageDefinition
+                                                            source: "playerPage.qml"
+                                                        }
+                                                    ]
                                                 }
                                             ]
                                         }

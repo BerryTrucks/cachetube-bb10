@@ -13,7 +13,7 @@
 #include <bb/cascades/AbstractPane>
 
 #include "appsettings.h"
-#include "playerlauncher.h"
+#include "customtimer.h"
 #include "ytvideomanager.h"
 #include "ytarraydatamodel.h"
 
@@ -26,7 +26,7 @@ CacheTube::CacheTube(bb::cascades::Application *app) : QObject(app)
     QNetworkAccessManager *network_access_manager = new QNetworkAccessManager(this);
     AppSettings           *app_settings           = new AppSettings(this);
 
-    qmlRegisterType<PlayerLauncher>("PlayerLauncher", 1, 0, "PlayerLauncher");
+    qmlRegisterType<CustomTimer>("CustomTimer", 1, 0, "CustomTimer");
 
     qmlRegisterType<YTDownloadState>("YTVideoManagement", 1, 0, "YTDownloadState");
     qmlRegisterType<YTArrayDataModel>("YTVideoManagement", 1, 0, "YTArrayDataModel");

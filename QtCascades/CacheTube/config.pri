@@ -5,14 +5,14 @@ device {
     CONFIG(debug, debug|release) {
         SOURCES +=  $$quote($$BASEDIR/src/CacheTube.cpp) \
                  $$quote($$BASEDIR/src/appsettings.cpp) \
+                 $$quote($$BASEDIR/src/customtimer.cpp) \
                  $$quote($$BASEDIR/src/main.cpp) \
-                 $$quote($$BASEDIR/src/playerlauncher.cpp) \
                  $$quote($$BASEDIR/src/ytarraydatamodel.cpp) \
                  $$quote($$BASEDIR/src/ytvideomanager.cpp)
 
         HEADERS +=  $$quote($$BASEDIR/src/CacheTube.hpp) \
                  $$quote($$BASEDIR/src/appsettings.h) \
-                 $$quote($$BASEDIR/src/playerlauncher.h) \
+                 $$quote($$BASEDIR/src/customtimer.h) \
                  $$quote($$BASEDIR/src/ytarraydatamodel.h) \
                  $$quote($$BASEDIR/src/ytvideomanager.h)
     }
@@ -20,14 +20,14 @@ device {
     CONFIG(release, debug|release) {
         SOURCES +=  $$quote($$BASEDIR/src/CacheTube.cpp) \
                  $$quote($$BASEDIR/src/appsettings.cpp) \
+                 $$quote($$BASEDIR/src/customtimer.cpp) \
                  $$quote($$BASEDIR/src/main.cpp) \
-                 $$quote($$BASEDIR/src/playerlauncher.cpp) \
                  $$quote($$BASEDIR/src/ytarraydatamodel.cpp) \
                  $$quote($$BASEDIR/src/ytvideomanager.cpp)
 
         HEADERS +=  $$quote($$BASEDIR/src/CacheTube.hpp) \
                  $$quote($$BASEDIR/src/appsettings.h) \
-                 $$quote($$BASEDIR/src/playerlauncher.h) \
+                 $$quote($$BASEDIR/src/customtimer.h) \
                  $$quote($$BASEDIR/src/ytarraydatamodel.h) \
                  $$quote($$BASEDIR/src/ytvideomanager.h)
     }
@@ -37,14 +37,14 @@ simulator {
     CONFIG(debug, debug|release) {
         SOURCES +=  $$quote($$BASEDIR/src/CacheTube.cpp) \
                  $$quote($$BASEDIR/src/appsettings.cpp) \
+                 $$quote($$BASEDIR/src/customtimer.cpp) \
                  $$quote($$BASEDIR/src/main.cpp) \
-                 $$quote($$BASEDIR/src/playerlauncher.cpp) \
                  $$quote($$BASEDIR/src/ytarraydatamodel.cpp) \
                  $$quote($$BASEDIR/src/ytvideomanager.cpp)
 
         HEADERS +=  $$quote($$BASEDIR/src/CacheTube.hpp) \
                  $$quote($$BASEDIR/src/appsettings.h) \
-                 $$quote($$BASEDIR/src/playerlauncher.h) \
+                 $$quote($$BASEDIR/src/customtimer.h) \
                  $$quote($$BASEDIR/src/ytarraydatamodel.h) \
                  $$quote($$BASEDIR/src/ytvideomanager.h)
     }
