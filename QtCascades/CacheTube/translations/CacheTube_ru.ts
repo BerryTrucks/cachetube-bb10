@@ -84,10 +84,6 @@
         <translation>Воспроизведение</translation>
     </message>
     <message>
-        <source>Could not start video player</source>
-        <translation type="obsolete">Невозможно запустить видеоплеер</translation>
-    </message>
-    <message>
         <location filename="../assets/main.qml" line="309"/>
         <source>QUEUED</source>
         <translation>ОЖИДАНИЕ</translation>
@@ -138,24 +134,20 @@
 <context>
     <name>playerPage</name>
     <message>
-        <source>Could not start video player</source>
-        <translation type="obsolete">Невозможно запустить видеоплеер</translation>
-    </message>
-    <message>
         <location filename="../assets/playerPage.qml" line="38"/>
         <location filename="../assets/playerPage.qml" line="46"/>
         <source>Play</source>
-        <translation type="unfinished"></translation>
+        <translation>Воспроизвести</translation>
     </message>
     <message>
         <location filename="../assets/playerPage.qml" line="49"/>
         <source>Pause</source>
-        <translation type="unfinished"></translation>
+        <translation>Пауза</translation>
     </message>
     <message>
         <location filename="../assets/playerPage.qml" line="215"/>
         <source>An error occured during video playback</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка воспроизведения видео</translation>
     </message>
 </context>
 </TS>
