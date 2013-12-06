@@ -145,7 +145,7 @@
         <translation>Пауза</translation>
     </message>
     <message>
-        <location filename="../assets/playerPage.qml" line="215"/>
+        <location filename="../assets/playerPage.qml" line="217"/>
         <source>An error occured during video playback</source>
         <translation>Ошибка воспроизведения видео</translation>
     </message>

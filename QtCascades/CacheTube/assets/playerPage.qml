@@ -130,7 +130,7 @@ Page {
                         var height = videoContainerLayoutUpdateHandler.layoutFrame.height;
 
                         if (videoWidth !== 0 && videoHeight !== 0) {
-                            if (width < height) {
+                            if (videoWidth > videoHeight) {
                                 videoForeignWindowControl.preferredWidth  = width;
                                 videoForeignWindowControl.preferredHeight = (videoHeight * width) / videoWidth;
                             } else {
@@ -196,7 +196,7 @@ Page {
                     var height = layoutFrame.height;
 
                     if (videoPlayer.videoWidth !== 0 && videoPlayer.videoHeight !== 0) {
-                        if (width < height) {
+                        if (videoPlayer.videoWidth > videoPlayer.videoHeight) {
                             videoForeignWindowControl.preferredWidth  = width;
                             videoForeignWindowControl.preferredHeight = (videoPlayer.videoHeight * width)  / videoPlayer.videoWidth;
                         } else {
