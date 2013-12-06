@@ -98,6 +98,7 @@ Page {
                     repeatMode:  RepeatMode.None
 
                     property bool playbackActive: false
+                    property bool videoSeeking:   false
                     property int  videoWidth:     0
                     property int  videoHeight:    0
 
@@ -111,9 +112,12 @@ Page {
                         } else {
                             playbackActive = false;
 
-                            playerPage.controlsVisible     = true;
-                            playPauseActionItem.playAction = true;
-                            
+                            if (!videoSeeking) {
+                                playPauseActionItem.playAction = true;
+                            }
+
+                            playerPage.controlsVisible = true;
+
                             idleTimer.stop();
                         }
                     }
@@ -137,7 +141,7 @@ Page {
                     }
                     
                     onPositionChanged: {
-                        if (!videoSlider.seeking) {
+                        if (!videoSeeking) {
                             videoSlider.value = position;
                         }
                     }
@@ -158,21 +162,21 @@ Page {
             enabled:             videoPlayer.seekable
             visible:             playerPage.controlsVisible
 
-            property bool playbackActive: false
-            property bool seeking:        false
+            property bool playbackWasActive: false
 
             onTouch: {
                 if (event.touchType === TouchType.Down) {
-                    playbackActive = videoPlayer.playbackActive; 
-                    seeking        = true;
+                    playbackWasActive = videoPlayer.playbackActive; 
+                    
+                    videoPlayer.videoSeeking = true;
 
                     if (videoPlayer.pause() !== MediaError.None) {
                         videoPlaybackErrorToast.show();
                     }
                 } else if (event.touchType === TouchType.Up || event.touchType === TouchType.Cancel) {
-                    seeking = false;
+                    videoPlayer.videoSeeking = false;
 
-                    if (playbackActive) {
+                    if (playbackWasActive) {
                         if (videoPlayer.play() !== MediaError.None) {
                             videoPlaybackErrorToast.show();
                         }
@@ -181,7 +185,7 @@ Page {
             }
 
             onImmediateValueChanged: {
-                if (seeking) {
+                if (videoPlayer.videoSeeking) {
                     videoPlayer.seekTime(immediateValue);
                 }
             }
