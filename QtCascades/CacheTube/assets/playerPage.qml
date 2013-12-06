@@ -130,13 +130,10 @@ Page {
                         var height = videoContainerLayoutUpdateHandler.layoutFrame.height;
 
                         if (videoWidth !== 0 && videoHeight !== 0) {
-                            if (videoWidth > videoHeight) {
-                                videoForeignWindowControl.preferredWidth  = width;
-                                videoForeignWindowControl.preferredHeight = (videoHeight * width) / videoWidth;
-                            } else {
-                                videoForeignWindowControl.preferredWidth  = (videoWidth * height) / videoHeight;
-                                videoForeignWindowControl.preferredHeight = height;
-                            }
+                            var ratio = Math.min(width / videoWidth, height / videoHeight);
+
+                            videoForeignWindowControl.preferredWidth  = videoWidth  * ratio;
+                            videoForeignWindowControl.preferredHeight = videoHeight * ratio;
                         }
                     }
                     
@@ -196,13 +193,10 @@ Page {
                     var height = layoutFrame.height;
 
                     if (videoPlayer.videoWidth !== 0 && videoPlayer.videoHeight !== 0) {
-                        if (videoPlayer.videoWidth > videoPlayer.videoHeight) {
-                            videoForeignWindowControl.preferredWidth  = width;
-                            videoForeignWindowControl.preferredHeight = (videoPlayer.videoHeight * width)  / videoPlayer.videoWidth;
-                        } else {
-                            videoForeignWindowControl.preferredWidth  = (videoPlayer.videoWidth  * height) / videoPlayer.videoHeight;
-                            videoForeignWindowControl.preferredHeight = height;
-                        }
+                        var ratio = Math.min(width / videoPlayer.videoWidth, height / videoPlayer.videoHeight);
+
+                        videoForeignWindowControl.preferredWidth  = videoPlayer.videoWidth  * ratio;
+                        videoForeignWindowControl.preferredHeight = videoPlayer.videoHeight * ratio;
                     }
                 }
             }
