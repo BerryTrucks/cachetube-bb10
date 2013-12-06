@@ -51,7 +51,6 @@ void YTArrayDataModel::setVideoManager(QObject *video_manager)
                 map["size"]     = task_list.at(i).Size;
                 map["done"]     = task_list.at(i).Done;
                 map["videoId"]  = task_list.at(i).VideoId;
-                map["mimeType"] = task_list.at(i).MimeType;
                 map["title"]    = task_list.at(i).Title;
                 map["errorMsg"] = task_list.at(i).ErrorMsg;
 
@@ -77,7 +76,6 @@ void YTArrayDataModel::taskAdded(const YTDownloadTask &task)
     map["size"]     = task.Size;
     map["done"]     = task.Done;
     map["videoId"]  = task.VideoId;
-    map["mimeType"] = task.MimeType;
     map["title"]    = task.Title;
     map["errorMsg"] = task.ErrorMsg;
 
@@ -110,7 +108,6 @@ void YTArrayDataModel::taskChanged(const YTDownloadTask &task)
             map["state"]    = task.State;
             map["size"]     = task.Size;
             map["done"]     = task.Done;
-            map["mimeType"] = task.MimeType;
             map["title"]    = task.Title;
             map["errorMsg"] = task.ErrorMsg;
 

@@ -4,13 +4,13 @@
 <context>
     <name>YTVideoManager</name>
     <message>
-        <location filename="../src/ytvideomanager.cpp" line="359"/>
-        <location filename="../src/ytvideomanager.cpp" line="367"/>
+        <location filename="../src/ytvideomanager.cpp" line="353"/>
+        <location filename="../src/ytvideomanager.cpp" line="361"/>
         <source>No suitable video formats available</source>
         <translation>Нет подходящих видеоформатов</translation>
     </message>
     <message>
-        <location filename="../src/ytvideomanager.cpp" line="436"/>
+        <location filename="../src/ytvideomanager.cpp" line="430"/>
         <source>Invalid file size, retrying download</source>
         <translation>Некорректный размер файла, повтор закачки</translation>
     </message>
@@ -64,69 +64,69 @@
         <translation>Нет загруженного видео</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="193"/>
+        <location filename="../assets/main.qml" line="192"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="202"/>
+        <location filename="../assets/main.qml" line="201"/>
         <source>Pause/Resume</source>
         <translation>Пауза/Продолжить</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="275"/>
+        <location filename="../assets/main.qml" line="274"/>
         <source>Open YouTube Page</source>
         <translation>Открыть страницу YouTube</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="216"/>
+        <location filename="../assets/main.qml" line="215"/>
         <source>Play Video</source>
         <translation>Воспроизведение</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="309"/>
+        <location filename="../assets/main.qml" line="308"/>
         <source>QUEUED</source>
         <translation>ОЖИДАНИЕ</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="310"/>
+        <location filename="../assets/main.qml" line="309"/>
         <source>PAUSED</source>
         <translation>ПАУЗА</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="324"/>
-        <location filename="../assets/main.qml" line="329"/>
+        <location filename="../assets/main.qml" line="323"/>
+        <location filename="../assets/main.qml" line="328"/>
         <source>Settings</source>
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="351"/>
+        <location filename="../assets/main.qml" line="350"/>
         <source>Preferred Video Format:</source>
         <translation>Предпочитаемый формат видео:</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="383"/>
+        <location filename="../assets/main.qml" line="382"/>
         <source>720p H.264 MP4</source>
         <translation>720p H.264 MP4</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="387"/>
+        <location filename="../assets/main.qml" line="386"/>
         <source>360p H.264 MP4</source>
         <translation>360p H.264 MP4</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="401"/>
+        <location filename="../assets/main.qml" line="400"/>
         <source>Help</source>
         <translation>Справка</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="407"/>
+        <location filename="../assets/main.qml" line="406"/>
         <source>Review App</source>
         <translation>Отзыв</translation>
     </message>
     <message>
         <location filename="../assets/main.qml" line="10"/>
-        <location filename="../assets/main.qml" line="438"/>
+        <location filename="../assets/main.qml" line="437"/>
         <source>local:///assets/doc/help.html</source>
         <translation>local:///assets/doc/help_ru.html</translation>
     </message>

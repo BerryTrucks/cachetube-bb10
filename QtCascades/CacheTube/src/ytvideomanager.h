@@ -31,7 +31,7 @@ struct YTDownloadTask
 {
     int     State, Fmt;
     qint64  Size, Done;
-    QString VideoId, MimeType, Title, ErrorMsg, VisitorInfo1LiveCookie;
+    QString VideoId, Title, ErrorMsg, VisitorInfo1LiveCookie;
 };
 
 class YTVideoManager : public QObject

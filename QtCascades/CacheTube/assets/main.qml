@@ -179,7 +179,6 @@ TabbedPane {
                                 property int    itemSize:     ListItemData.size
                                 property int    itemDone:     ListItemData.done
                                 property string itemVideoId:  ListItemData.videoId
-                                property string itemMimeType: ListItemData.mimeType
                                 property string itemTitle:    ListItemData.title
                                 property string itemErrorMsg: ListItemData.errorMsg
 
