@@ -11,11 +11,24 @@ Page {
     property bool controlsVisible: true
 
     function playVideo(video_uri, video_title) {
-        videoPlayer.sourceUrl = video_uri;
-        videoLabel.text       = video_title;
-        
+        playerPageTitleBar.title = video_title;
+        videoPlayer.sourceUrl    = video_uri;
+
         if (videoPlayer.play() !== MediaError.None) {
             videoPlaybackErrorToast.show();
+        }
+    }
+
+    titleBar: TitleBar {
+        id:         playerPageTitleBar
+        visibility: controlsVisible ? ChromeVisibility.Default : ChromeVisibility.Hidden
+    }
+
+    paneProperties: NavigationPaneProperties {
+        backButton: ActionItem {
+            onTriggered: {
+                playerNavigationPane.pop();
+            }
         }
     }
 
@@ -134,15 +147,6 @@ Page {
                     }
                 }
             ]
-        }
-
-        Label {
-            id:                  videoLabel
-            horizontalAlignment: HorizontalAlignment.Left
-            verticalAlignment:   VerticalAlignment.Top
-            textStyle.color:     Color.White
-            textStyle.fontSize:  FontSize.XLarge
-            visible:             playerPage.controlsVisible
         }
 
         Slider {

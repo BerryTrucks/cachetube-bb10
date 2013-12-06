@@ -200,7 +200,7 @@ TabbedPane {
 
                                         ActionItem {
                                             title:       qsTr("Pause/Resume")
-                                            imageSource: "images/pause_resume.png"
+                                            imageSource: "images/pause.png"
                                             enabled:     itemRoot.itemState !== YTDownloadState.StateCompleted
 
                                             onTriggered: {
@@ -214,7 +214,7 @@ TabbedPane {
 
                                         ActionItem {
                                             title:       qsTr("Play Video")
-                                            imageSource: "images/play_video.png"
+                                            imageSource: "images/play.png"
                                             enabled:     itemRoot.itemState === YTDownloadState.StateCompleted
 
                                             onTriggered: {
@@ -241,8 +241,12 @@ TabbedPane {
                                                         peekEnabled: false
 
                                                         onTopChanged: {
-                                                            if (page.objectName === "playerEmptyPage") {
-                                                                playerSheet.close();
+                                                            if (playerSheet.opened) {
+                                                                if (page.objectName === "playerPage") {
+                                                                    page.playVideo(itemRoot.ListItem.view.ytVideoManager.getTaskVideoURI(itemRoot.itemVideoId), itemRoot.itemTitle);
+                                                                } else {
+                                                                    playerSheet.close();
+                                                                }
                                                             }
                                                         }
                                                         
@@ -251,8 +255,6 @@ TabbedPane {
                                                         }
                                                         
                                                         Page {
-                                                            objectName: "playerEmptyPage"
-                                                            
                                                             Container {
                                                                 background: Color.White
                                                             }
