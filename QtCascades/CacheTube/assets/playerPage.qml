@@ -174,6 +174,8 @@ Page {
                         videoPlaybackErrorToast.show();
                     }
                 } else if (event.touchType === TouchType.Up || event.touchType === TouchType.Cancel) {
+                    videoPlayer.seekTime(immediateValue);
+
                     videoPlayer.videoSeeking = false;
 
                     if (playbackWasActive) {
@@ -181,12 +183,6 @@ Page {
                             videoPlaybackErrorToast.show();
                         }
                     }
-                }
-            }
-
-            onImmediateValueChanged: {
-                if (videoPlayer.videoSeeking) {
-                    videoPlayer.seekTime(immediateValue);
                 }
             }
         }
