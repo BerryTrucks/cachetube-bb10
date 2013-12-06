@@ -19,6 +19,17 @@ Page {
         }
     }
 
+    function onAppInBackground() {
+        if (videoPlayer.pause() !== MediaError.None) {
+            videoPlaybackErrorToast.show();
+        }
+    }
+
+    onCreationCompleted: {
+        Application.invisible.connect(onAppInBackground);
+        Application.thumbnail.connect(onAppInBackground);
+    }
+
     titleBar: TitleBar {
         id:         playerPageTitleBar
         visibility: controlsVisible ? ChromeVisibility.Default : ChromeVisibility.Hidden
