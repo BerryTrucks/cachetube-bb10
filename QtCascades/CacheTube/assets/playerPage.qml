@@ -98,8 +98,34 @@ Page {
             windowId:            "videoForeignWindowControl"
             horizontalAlignment: HorizontalAlignment.Center
             verticalAlignment:   VerticalAlignment.Center
-            visible:             boundToWindow
+            preferredWidth:      0
+            preferredHeight:     0
+            visible:             false
             updatedProperties:   WindowProperty.Size | WindowProperty.Position | WindowProperty.Visible
+
+            onBoundToWindowChanged: {
+                if (boundToWindow && preferredWidth !== 0 && preferredHeight !== 0) {
+                    visible = true;
+                } else {
+                    visible = false;
+                }
+            }
+
+            onPreferredWidthChanged: {
+                if (boundToWindow && preferredWidth !== 0 && preferredHeight !== 0) {
+                    visible = true;
+                } else {
+                    visible = false;
+                }
+            }
+
+            onPreferredHeightChanged: {
+                if (boundToWindow && preferredWidth !== 0 && preferredHeight !== 0) {
+                    visible = true;
+                } else {
+                    visible = false;
+                }
+            }
 
             attachedObjects: [
                 MediaPlayer {
