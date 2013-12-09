@@ -8,10 +8,10 @@
 
 YTVideoManager::YTVideoManager(QNetworkAccessManager *network_access_manager, int preferred_format, QObject *parent) : QObject(parent)
 {
-    DestinationDir = QDir(QDir::currentPath() + QDir::separator() + "shared" + QDir::separator() + "downloads" + QDir::separator() + "CacheTube");
+    DestinationDir = QDir(QDir::homePath() + QDir::separator() + "ytvideo");
 
     if (!DestinationDir.exists()) {
-        QDir::current().mkpath(QString("shared") + QDir::separator() + "downloads" + QDir::separator() + "CacheTube");
+        QDir::home().mkpath("ytvideo");
     }
 
     TaskDatabase = QSqlDatabase::addDatabase("QSQLITE");
