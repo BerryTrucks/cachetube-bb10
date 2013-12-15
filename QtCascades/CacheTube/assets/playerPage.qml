@@ -226,7 +226,7 @@ Page {
                     property string videoTitle: ""
                     
                     onAcquired: {
-                        var metadata = {"title": videoTitle};
+                        var metadata = {"title": videoTitle, "artist": "CacheTube"};
                         
                         setMetaData(metadata);
                         setOverlayStyle(OverlayStyle.Fancy);
