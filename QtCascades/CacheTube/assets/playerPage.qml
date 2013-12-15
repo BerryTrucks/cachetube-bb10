@@ -11,10 +11,11 @@ Page {
     property bool controlsVisible: true
 
     function playVideo(video_uri, video_title) {
-        playerPageTitleBar.title = video_title;
-        videoPlayer.sourceUrl    = video_uri;
+        playerPageTitleBar.title             = video_title;
+        videoPlayer.sourceUrl                = video_uri;
+        videoNowPlayingConnection.videoTitle = video_title;
 
-        if (videoPlayer.play() !== MediaError.None) {
+        if (videoNowPlayingConnection.acquire() !== MediaError.None) {
             videoPlaybackErrorToast.show();
         }
     }
@@ -53,8 +54,14 @@ Page {
             
             onTriggered: {
                 if (playAction) {
-                    if (videoPlayer.play() !== MediaError.None) {
-                        videoPlaybackErrorToast.show();
+                    if (videoNowPlayingConnection.acquired) {
+                        if (videoPlayer.play() !== MediaError.None) {
+                            videoPlaybackErrorToast.show();
+                        }
+                    } else {
+                        if (videoNowPlayingConnection.acquire() !== MediaError.None) {
+                            videoPlaybackErrorToast.show();
+                        }
                     }
                 } else {
                     if (videoPlayer.pause() !== MediaError.None) {
@@ -178,11 +185,11 @@ Page {
                     
                     onShortPress: {
                         if (videoPlayer.playbackActive) {
-                            if (videoPlayer.pause() !== MediaError.None) {
+                            if (videoNowPlayingConnection.acquired && videoPlayer.pause() !== MediaError.None) {
                                 videoPlaybackErrorToast.show();
                             }
                         } else {
-                            if (videoPlayer.play() !== MediaError.None) {
+                            if (videoNowPlayingConnection.acquired && videoPlayer.play() !== MediaError.None) {
                                 videoPlaybackErrorToast.show();
                             }
                         }
@@ -192,10 +199,8 @@ Page {
                     key: MediaKey.Play
 
                     onShortPress: {
-                        if (!videoPlayer.playbackActive) {
-                            if (videoPlayer.play() !== MediaError.None) {
-                                videoPlaybackErrorToast.show();
-                            }
+                        if (videoNowPlayingConnection.acquired && videoPlayer.play() !== MediaError.None) {
+                            videoPlaybackErrorToast.show();
                         }
                     }
                 },
@@ -203,10 +208,49 @@ Page {
                     key: MediaKey.Pause
 
                     onShortPress: {
-                        if (videoPlayer.playbackActive) {
-                            if (videoPlayer.pause() !== MediaError.None) {
-                                videoPlaybackErrorToast.show();
-                            }
+                        if (videoNowPlayingConnection.acquired && videoPlayer.pause() !== MediaError.None) {
+                            videoPlaybackErrorToast.show();
+                        }
+                    }
+                },
+                NowPlayingConnection {
+                    id:              videoNowPlayingConnection
+                    connectionName:  "CacheTube"
+                    iconUrl:         "images/cachetube.png"
+                    previousEnabled: false
+                    nextEnabled:     false
+                    duration:        videoPlayer.duration
+                    position:        videoPlayer.position
+                    mediaState:      videoPlayer.mediaState
+
+                    property string videoTitle: ""
+                    
+                    onAcquired: {
+                        var metadata = {"title": videoTitle};
+                        
+                        setMetaData(metadata);
+                        setOverlayStyle(OverlayStyle.Fancy);
+
+                        if (videoPlayer.play() !== MediaError.None) {
+                            videoPlaybackErrorToast.show();
+                        }
+                    }
+
+                    onPlay: {
+                        if (videoPlayer.play() !== MediaError.None) {
+                            videoPlaybackErrorToast.show();
+                        }
+                    }
+                    
+                    onPause: {
+                        if (videoPlayer.pause() !== MediaError.None) {
+                            videoPlaybackErrorToast.show();
+                        }
+                    }
+                    
+                    onRevoked: {
+                        if (videoPlayer.pause() !== MediaError.None) {
+                            videoPlaybackErrorToast.show();
                         }
                     }
                 }
@@ -239,8 +283,14 @@ Page {
                     videoPlayer.videoSeeking = false;
 
                     if (playbackWasActive) {
-                        if (videoPlayer.play() !== MediaError.None) {
-                            videoPlaybackErrorToast.show();
+                        if (videoNowPlayingConnection.acquired) {
+                            if (videoPlayer.play() !== MediaError.None) {
+                                videoPlaybackErrorToast.show();
+                            }
+                        } else {
+                            if (videoNowPlayingConnection.acquire() !== MediaError.None) {
+                                videoPlaybackErrorToast.show();
+                            }
                         }
                     }
                 }
