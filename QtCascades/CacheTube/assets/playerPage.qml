@@ -19,17 +19,6 @@ Page {
         }
     }
 
-    function onAppInBackground() {
-        if (videoPlayer.pause() !== MediaError.None) {
-            videoPlaybackErrorToast.show();
-        }
-    }
-
-    onCreationCompleted: {
-        Application.invisible.connect(onAppInBackground);
-        Application.thumbnail.connect(onAppInBackground);
-    }
-
     titleBar: TitleBar {
         id:         playerPageTitleBar
         visibility: controlsVisible ? ChromeVisibility.Default : ChromeVisibility.Hidden
@@ -182,6 +171,43 @@ Page {
                     
                     onError: {
                         videoPlaybackErrorToast.show();
+                    }
+                },
+                MediaKeyWatcher {
+                    key: MediaKey.PlayPause
+                    
+                    onShortPress: {
+                        if (videoPlayer.playbackActive) {
+                            if (videoPlayer.pause() !== MediaError.None) {
+                                videoPlaybackErrorToast.show();
+                            }
+                        } else {
+                            if (videoPlayer.play() !== MediaError.None) {
+                                videoPlaybackErrorToast.show();
+                            }
+                        }
+                    }
+                },
+                MediaKeyWatcher {
+                    key: MediaKey.Play
+
+                    onShortPress: {
+                        if (!videoPlayer.playbackActive) {
+                            if (videoPlayer.play() !== MediaError.None) {
+                                videoPlaybackErrorToast.show();
+                            }
+                        }
+                    }
+                },
+                MediaKeyWatcher {
+                    key: MediaKey.Pause
+
+                    onShortPress: {
+                        if (videoPlayer.playbackActive) {
+                            if (videoPlayer.pause() !== MediaError.None) {
+                                videoPlaybackErrorToast.show();
+                            }
+                        }
                     }
                 }
             ]

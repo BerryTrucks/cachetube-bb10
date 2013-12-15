@@ -134,18 +134,18 @@
 <context>
     <name>playerPage</name>
     <message>
-        <location filename="../assets/playerPage.qml" line="49"/>
-        <location filename="../assets/playerPage.qml" line="57"/>
+        <location filename="../assets/playerPage.qml" line="38"/>
+        <location filename="../assets/playerPage.qml" line="46"/>
         <source>Play</source>
         <translation>Воспроизвести</translation>
     </message>
     <message>
-        <location filename="../assets/playerPage.qml" line="60"/>
+        <location filename="../assets/playerPage.qml" line="49"/>
         <source>Pause</source>
         <translation>Пауза</translation>
     </message>
     <message>
-        <location filename="../assets/playerPage.qml" line="246"/>
+        <location filename="../assets/playerPage.qml" line="272"/>
         <source>An error occured during video playback</source>
         <translation>Ошибка воспроизведения видео</translation>
     </message>
