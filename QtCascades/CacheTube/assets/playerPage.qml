@@ -8,6 +8,7 @@ Page {
     objectName:          "playerPage"
     actionBarVisibility: controlsVisible ? ChromeVisibility.Default : ChromeVisibility.Hidden 
 
+    property bool appInForeground: true
     property bool controlsVisible: true
 
     function playVideo(video_uri, video_title) {
@@ -18,6 +19,28 @@ Page {
         if (videoNowPlayingConnection.acquire() !== MediaError.None) {
             videoPlaybackErrorToast.show();
         }
+    }
+
+    function onAppInForeground() {
+        appInForeground = true;
+        
+        if (videoNowPlayingConnection.acquired) {
+            videoNowPlayingConnection.setOverlayStyle(OverlayStyle.Plain);
+        }
+    }
+
+    function onAppInBackground() {
+        appInForeground = false;
+        
+        if (videoNowPlayingConnection.acquired) {
+            videoNowPlayingConnection.setOverlayStyle(OverlayStyle.Fancy);
+        }
+    }
+
+    onCreationCompleted: {
+        Application.fullscreen.connect(onAppInForeground);
+        Application.invisible.connect(onAppInBackground);
+        Application.thumbnail.connect(onAppInBackground);
     }
 
     titleBar: TitleBar {
@@ -229,7 +252,12 @@ Page {
                         var metadata = {"title": videoTitle, "artist": "CacheTube"};
                         
                         setMetaData(metadata);
-                        setOverlayStyle(OverlayStyle.Fancy);
+
+                        if (playerPage.appInForeground) {
+                            setOverlayStyle(OverlayStyle.Plain);
+                        } else {
+                            setOverlayStyle(OverlayStyle.Fancy);
+                        }
 
                         if (videoPlayer.play() !== MediaError.None) {
                             videoPlaybackErrorToast.show();
