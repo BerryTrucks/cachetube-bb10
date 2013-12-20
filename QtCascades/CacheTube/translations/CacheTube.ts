@@ -2,6 +2,21 @@
 <!DOCTYPE TS>
 <TS version="2.0">
 <context>
+    <name>PlayerPage</name>
+    <message>
+        <source>Play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pause</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>An error occured during video playback</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>YTVideoManager</name>
     <message>
         <source>Invalid file size, retrying download</source>
@@ -55,10 +70,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Play Video</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>QUEUED</source>
         <translation type="unfinished"></translation>
     </message>
@@ -68,14 +79,6 @@
     </message>
     <message>
         <source>Help</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Review App</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>local:///assets/doc/help.html</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -102,19 +105,20 @@
         <source>Preferred Video Format:</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>playerPage</name>
     <message>
-        <source>Play</source>
+        <source>local:///assets/doc/help.html</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Pause</source>
+        <source>Review App</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>An error occured during video playback</source>
+        <source>OK</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

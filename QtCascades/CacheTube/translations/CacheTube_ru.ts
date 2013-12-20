@@ -2,6 +2,36 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="ru_RU">
 <context>
+    <name>HelpPage</name>
+    <message>
+        <source>Review App</source>
+        <translation type="obsolete">Отзыв</translation>
+    </message>
+    <message>
+        <source>local:///assets/doc/help.html</source>
+        <translation type="obsolete">local:///assets/doc/help_ru.html</translation>
+    </message>
+</context>
+<context>
+    <name>PlayerPage</name>
+    <message>
+        <location filename="../assets/PlayerPage.qml" line="62"/>
+        <location filename="../assets/PlayerPage.qml" line="70"/>
+        <source>Play</source>
+        <translation type="unfinished">Воспроизвести</translation>
+    </message>
+    <message>
+        <location filename="../assets/PlayerPage.qml" line="73"/>
+        <source>Pause</source>
+        <translation type="unfinished">Пауза</translation>
+    </message>
+    <message>
+        <location filename="../assets/PlayerPage.qml" line="350"/>
+        <source>An error occured during video playback</source>
+        <translation type="unfinished">Ошибка воспроизведения видео</translation>
+    </message>
+</context>
+<context>
     <name>YTVideoManager</name>
     <message>
         <location filename="../src/ytvideomanager.cpp" line="353"/>
@@ -18,136 +48,141 @@
 <context>
     <name>main</name>
     <message>
-        <location filename="../assets/main.qml" line="16"/>
+        <location filename="../assets/main.qml" line="178"/>
         <source>YouTube</source>
         <translation>YouTube</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="22"/>
+        <location filename="../assets/main.qml" line="184"/>
         <source>Back</source>
         <translation>Назад</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="31"/>
+        <location filename="../assets/main.qml" line="193"/>
         <source>Home</source>
         <translation>Домой</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="68"/>
+        <location filename="../assets/main.qml" line="230"/>
         <source>Reload</source>
         <translation>Обновить</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="40"/>
+        <location filename="../assets/main.qml" line="202"/>
         <source>Cache</source>
         <translation>Загрузить</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="59"/>
+        <location filename="../assets/main.qml" line="35"/>
+        <location filename="../assets/main.qml" line="126"/>
+        <source>OK</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../assets/main.qml" line="55"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../assets/main.qml" line="221"/>
         <source>Video caching started</source>
         <translation>Загрузка видео начата</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="63"/>
+        <location filename="../assets/main.qml" line="225"/>
         <source>Could not cache this video. May be it is already cached?</source>
         <translation>Не могу загрузить это видео. Возможно, оно уже загружено?</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="114"/>
-        <location filename="../assets/main.qml" line="119"/>
+        <location filename="../assets/main.qml" line="276"/>
+        <location filename="../assets/main.qml" line="281"/>
         <source>Cached Video</source>
         <translation>Загруженное видео</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="146"/>
+        <location filename="../assets/main.qml" line="308"/>
         <source>No cached video</source>
         <translation>Нет загруженного видео</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="192"/>
+        <location filename="../assets/main.qml" line="436"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="201"/>
+        <location filename="../assets/main.qml" line="413"/>
         <source>Pause/Resume</source>
         <translation>Пауза/Продолжить</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="274"/>
+        <location filename="../assets/main.qml" line="427"/>
         <source>Open YouTube Page</source>
         <translation>Открыть страницу YouTube</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="215"/>
         <source>Play Video</source>
-        <translation>Воспроизведение</translation>
+        <translation type="obsolete">Воспроизведение</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="308"/>
+        <location filename="../assets/main.qml" line="470"/>
         <source>QUEUED</source>
         <translation>ОЖИДАНИЕ</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="309"/>
+        <location filename="../assets/main.qml" line="471"/>
         <source>PAUSED</source>
         <translation>ПАУЗА</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="323"/>
-        <location filename="../assets/main.qml" line="328"/>
+        <location filename="../assets/main.qml" line="32"/>
         <source>Settings</source>
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="350"/>
+        <location filename="../assets/main.qml" line="82"/>
         <source>Preferred Video Format:</source>
         <translation>Предпочитаемый формат видео:</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="382"/>
+        <location filename="../assets/main.qml" line="92"/>
         <source>720p H.264 MP4</source>
         <translation>720p H.264 MP4</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="386"/>
+        <location filename="../assets/main.qml" line="96"/>
         <source>360p H.264 MP4</source>
         <translation>360p H.264 MP4</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="400"/>
+        <location filename="../assets/main.qml" line="123"/>
         <source>Help</source>
         <translation>Справка</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="406"/>
+        <location filename="../assets/main.qml" line="136"/>
         <source>Review App</source>
-        <translation>Отзыв</translation>
+        <translation type="unfinished">Отзыв</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="10"/>
-        <location filename="../assets/main.qml" line="437"/>
+        <location filename="../assets/main.qml" line="112"/>
+        <location filename="../assets/main.qml" line="167"/>
         <source>local:///assets/doc/help.html</source>
-        <translation>local:///assets/doc/help_ru.html</translation>
+        <translation type="unfinished">local:///assets/doc/help_ru.html</translation>
     </message>
 </context>
 <context>
     <name>playerPage</name>
     <message>
-        <location filename="../assets/playerPage.qml" line="62"/>
-        <location filename="../assets/playerPage.qml" line="70"/>
         <source>Play</source>
-        <translation>Воспроизвести</translation>
+        <translation type="obsolete">Воспроизвести</translation>
     </message>
     <message>
-        <location filename="../assets/playerPage.qml" line="73"/>
         <source>Pause</source>
-        <translation>Пауза</translation>
+        <translation type="obsolete">Пауза</translation>
     </message>
     <message>
-        <location filename="../assets/playerPage.qml" line="350"/>
         <source>An error occured during video playback</source>
-        <translation>Ошибка воспроизведения видео</translation>
+        <translation type="obsolete">Ошибка воспроизведения видео</translation>
     </message>
 </context>
 </TS>

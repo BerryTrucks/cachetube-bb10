@@ -5,12 +5,174 @@ import YTVideoManagement 1.0
 TabbedPane {
     id: tabbedPane
 
-    onActiveTabChanged: {
-        if (activeTab === helpTab) {
-            helpWebView.url = qsTr("local:///assets/doc/help.html");
+    Menu.definition: MenuDefinition {
+        settingsAction: SettingsActionItem {
+            onTriggered: {
+                var format = AppSettings.preferredVideoFormat;
+
+                if (format === 22) {
+                    preferredVideoFormatRadioGroup.selectedIndex = 0;
+                } else if (format === 18) {
+                    preferredVideoFormatRadioGroup.selectedIndex = 1;
+                } else {
+                    preferredVideoFormatRadioGroup.selectedIndex = 0;
+                }
+
+                settingsSheet.open();
+            }
+            
+            attachedObjects: [
+                Sheet {
+                    id: settingsSheet
+
+                    Page {
+                        id: settingsPage
+                        
+                        titleBar: TitleBar {
+                            title: qsTr("Settings")
+
+                            acceptAction: ActionItem {
+                                title: qsTr("OK")
+
+                                onTriggered: {
+                                    var format = AppSettings.preferredVideoFormat;
+
+                                    if (preferredVideoFormatRadioGroup.selectedIndex === 0) {
+                                        format = 22;
+                                    } else if (preferredVideoFormatRadioGroup.selectedIndex === 1) {
+                                        format = 18;
+                                    }
+
+                                    AppSettings.preferredVideoFormat = format;
+
+                                    YTVideoManager.setPreferredVideoFormat(format);
+                                    
+                                    settingsSheet.close();
+                                }
+                            }
+
+                            dismissAction: ActionItem {
+                                title: qsTr("Cancel")
+
+                                onTriggered: {
+                                    settingsSheet.close();
+                                }
+                            }
+                        }
+
+                        Container {
+                            background: Color.White
+
+                            ScrollView {
+                                scrollViewProperties {
+                                    scrollMode: ScrollMode.Vertical
+                                }
+
+                                Container {
+                                    background:   Color.Transparent
+                                    leftPadding:  12
+                                    rightPadding: 12
+
+                                    layout: StackLayout {
+                                    }
+
+                                    Label {
+                                        textStyle.color:    Color.Black
+                                        textStyle.fontSize: FontSize.Large
+                                        text:               qsTr("Preferred Video Format:")
+                                    }
+
+                                    Divider {
+                                    }
+
+                                    RadioGroup {
+                                        id: preferredVideoFormatRadioGroup
+                                        
+                                        Option {
+                                            text: qsTr("720p H.264 MP4")
+                                        }
+
+                                        Option {
+                                            text: qsTr("360p H.264 MP4")
+                                        }
+                                    }
+
+                                    Divider {
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+        
+        helpAction: HelpActionItem {
+            onTriggered: {
+                helpWebView.url = qsTr("local:///assets/doc/help.html");
+                
+                helpSheet.open();
+            }
+            
+            attachedObjects: [
+                Sheet {
+                    id: helpSheet
+
+                    Page {
+                        titleBar: TitleBar {
+                            title: qsTr("Help")
+                            
+                            acceptAction: ActionItem {
+                                title: qsTr("OK")
+                                
+                                onTriggered: {
+                                    helpSheet.close();
+                                }
+                            }
+                        }
+
+                        actions: [
+                            ActionItem {
+                                title:               qsTr("Review App")
+                                imageSource:         "images/review.png"
+                                ActionBar.placement: ActionBarPlacement.OnBar
+
+                                onTriggered: {
+                                    appWorldInvocation.trigger("bb.action.OPEN");
+                                }
+
+                                attachedObjects: [
+                                    Invocation {
+                                        id: appWorldInvocation
+
+                                        query: InvokeQuery {
+                                            mimeType: "application/x-bb-appworld"
+                                            uri:      "appworld://content/42093887"
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+
+                        ScrollView {
+                            scrollViewProperties {
+                                scrollMode:         ScrollMode.Both
+                                pinchToZoomEnabled: true
+                                minContentScale:    1.0
+                                maxContentScale:    4.0
+                            }
+
+                            WebView {
+                                id:  helpWebView
+                                url: qsTr("local:///assets/doc/help.html")
+                            }
+                        }
+                    }
+                }
+            ]
         }
     }
-    
+
     Tab {
         id:          youTubeTab
         title:       qsTr("YouTube")
@@ -186,17 +348,67 @@ TabbedPane {
                                     orientation: LayoutOrientation.TopToBottom
                                 }
 
-                                contextActions: [
-                                    ActionSet {
-                                        ActionItem {
-                                            title:       qsTr("Delete")
-                                            imageSource: "images/delete.png"
-                                            
-                                            onTriggered: {
-                                                itemRoot.ListItem.view.ytVideoManager.delTask(itemRoot.itemVideoId);
+                                gestureHandlers: [
+                                    TapHandler {
+                                        onTapped: {
+                                            if (itemRoot.itemState === YTDownloadState.StateCompleted) {
+                                                playerNavigationPane.push(playerPageDefinition.createObject());
+
+                                                playerSheet.open();
                                             }
                                         }
 
+                                        attachedObjects: [
+                                            Sheet {
+                                                id:          playerSheet
+                                                peekEnabled: false
+
+                                                onOpened: {
+                                                    var page = playerNavigationPane.top;
+
+                                                    if (page.objectName === "playerPage") {
+                                                        page.playVideo(itemRoot.ListItem.view.ytVideoManager.getTaskVideoURI(itemRoot.itemVideoId), itemRoot.itemTitle);
+                                                    }
+                                                }
+
+                                                NavigationPane {
+                                                    id:          playerNavigationPane
+                                                    peekEnabled: false
+
+                                                    onTopChanged: {
+                                                        if (playerSheet.opened) {
+                                                            if (page.objectName === "playerPage") {
+                                                                page.playVideo(itemRoot.ListItem.view.ytVideoManager.getTaskVideoURI(itemRoot.itemVideoId), itemRoot.itemTitle);
+                                                            } else {
+                                                                playerSheet.close();
+                                                            }
+                                                        }
+                                                    }
+
+                                                    onPopTransitionEnded: {
+                                                        page.destroy();
+                                                    }
+
+                                                    Page {
+                                                        Container {
+                                                            background: Color.White
+                                                        }
+                                                    }
+                                                }
+
+                                                attachedObjects: [
+                                                    ComponentDefinition {
+                                                        id:     playerPageDefinition
+                                                        source: "PlayerPage.qml"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+
+                                contextActions: [
+                                    ActionSet {
                                         ActionItem {
                                             title:       qsTr("Pause/Resume")
                                             imageSource: "images/pause.png"
@@ -212,70 +424,20 @@ TabbedPane {
                                         }
 
                                         ActionItem {
-                                            title:       qsTr("Play Video")
-                                            imageSource: "images/play.png"
-                                            enabled:     itemRoot.itemState === YTDownloadState.StateCompleted
-
-                                            onTriggered: {
-                                                playerNavigationPane.push(playerPageDefinition.createObject());
-
-                                                playerSheet.open();
-                                            }
-                                            
-                                            attachedObjects: [
-                                                Sheet {
-                                                    id:          playerSheet
-                                                    peekEnabled: false
-
-                                                    onOpened: {
-                                                        var page = playerNavigationPane.top;
-                                                        
-                                                        if (page.objectName === "playerPage") {
-                                                            page.playVideo(itemRoot.ListItem.view.ytVideoManager.getTaskVideoURI(itemRoot.itemVideoId), itemRoot.itemTitle);
-                                                        }
-                                                    }
-
-                                                    NavigationPane {
-                                                        id:          playerNavigationPane
-                                                        peekEnabled: false
-
-                                                        onTopChanged: {
-                                                            if (playerSheet.opened) {
-                                                                if (page.objectName === "playerPage") {
-                                                                    page.playVideo(itemRoot.ListItem.view.ytVideoManager.getTaskVideoURI(itemRoot.itemVideoId), itemRoot.itemTitle);
-                                                                } else {
-                                                                    playerSheet.close();
-                                                                }
-                                                            }
-                                                        }
-                                                        
-                                                        onPopTransitionEnded: {
-                                                            page.destroy();
-                                                        }
-                                                        
-                                                        Page {
-                                                            Container {
-                                                                background: Color.White
-                                                            }
-                                                        }
-                                                    }
-                                                    
-                                                    attachedObjects: [
-                                                        ComponentDefinition {
-                                                            id:     playerPageDefinition
-                                                            source: "playerPage.qml"
-                                                        }
-                                                    ]
-                                                }
-                                            ]
-                                        }
-
-                                        ActionItem {
                                             title:       qsTr("Open YouTube Page")
                                             imageSource: "images/youtube.png"
 
                                             onTriggered: {
                                                 itemRoot.ListItem.view.navigateToWebPage(itemRoot.ListItem.view.ytVideoManager.getTaskWebURL(itemRoot.itemVideoId));
+                                            }
+                                        }
+
+                                        DeleteActionItem {
+                                            title:       qsTr("Delete")
+                                            imageSource: "images/delete.png"
+
+                                            onTriggered: {
+                                                itemRoot.ListItem.view.ytVideoManager.delTask(itemRoot.itemVideoId);
                                             }
                                         }
                                     }
@@ -314,127 +476,6 @@ TabbedPane {
                             }
                         }
                     ]
-                }
-            }
-        }
-    }
-    
-    Tab {
-        title:       qsTr("Settings")
-        imageSource: "images/settings.png"
-
-        Page {
-            titleBar: TitleBar {
-                title: qsTr("Settings")
-            }
-
-            Container {
-                background: Color.White
-
-                ScrollView {
-                    scrollViewProperties {
-                        scrollMode: ScrollMode.Vertical
-                    }
-
-                    Container {
-                        background:   Color.Transparent
-                        leftPadding:  12
-                        rightPadding: 12
-
-                        layout: StackLayout {
-                        }
-
-                        Label {
-                            textStyle.color:    Color.Black
-                            textStyle.fontSize: FontSize.Large
-                            text:               qsTr("Preferred Video Format:")
-                        }
-
-                        Divider {
-                        }
-
-                        RadioGroup {
-                            onCreationCompleted: {
-                                var format = AppSettings.preferredVideoFormat;
-                                
-                                if (format === 22) {
-                                    selectedIndex = 0;
-                                } else if (format === 18) {
-                                    selectedIndex = 1;
-                                } else {
-                                    selectedIndex = 0;
-                                }
-                            }
-                            
-                            onSelectedIndexChanged: {
-                                if (selectedIndex === 0) {
-                                    AppSettings.preferredVideoFormat = 22;
-
-                                    YTVideoManager.setPreferredVideoFormat(22);
-                                } else if (selectedIndex === 1) {
-                                    AppSettings.preferredVideoFormat = 18;
-
-                                    YTVideoManager.setPreferredVideoFormat(18);
-                                }
-                            }
-                            
-                            Option {
-                                text: qsTr("720p H.264 MP4")
-                            }
-
-                            Option {
-                                text: qsTr("360p H.264 MP4")
-                            }
-                        }
-                        
-                        Divider {
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
-    Tab {
-        id:          helpTab
-        title:       qsTr("Help")
-        imageSource: "images/help.png" 
-        
-        Page {
-            actions: [
-                ActionItem {
-                    title:               qsTr("Review App")
-                    imageSource:         "images/review.png"
-                    ActionBar.placement: ActionBarPlacement.OnBar
-
-                    onTriggered: {
-                        appWorldInvocation.trigger("bb.action.OPEN");
-                    }
-
-                    attachedObjects: [
-                        Invocation {
-                            id: appWorldInvocation
-
-                            query: InvokeQuery {
-                                mimeType: "application/x-bb-appworld"
-                                uri:      "appworld://content/42093887"
-                            }
-                        }
-                    ]
-                }
-            ]
-
-            ScrollView {
-                scrollViewProperties {
-                    scrollMode:         ScrollMode.Both
-                    pinchToZoomEnabled: true
-                    minContentScale:    1.0
-                    maxContentScale:    4.0
-                }
-
-                WebView {
-                    id:  helpWebView
-                    url: qsTr("local:///assets/doc/help.html")
                 }
             }
         }
