@@ -2,33 +2,22 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="ru_RU">
 <context>
-    <name>HelpPage</name>
-    <message>
-        <source>Review App</source>
-        <translation type="obsolete">Отзыв</translation>
-    </message>
-    <message>
-        <source>local:///assets/doc/help.html</source>
-        <translation type="obsolete">local:///assets/doc/help_ru.html</translation>
-    </message>
-</context>
-<context>
     <name>PlayerPage</name>
     <message>
         <location filename="../assets/PlayerPage.qml" line="62"/>
         <location filename="../assets/PlayerPage.qml" line="70"/>
         <source>Play</source>
-        <translation type="unfinished">Воспроизвести</translation>
+        <translation>Воспроизвести</translation>
     </message>
     <message>
         <location filename="../assets/PlayerPage.qml" line="73"/>
         <source>Pause</source>
-        <translation type="unfinished">Пауза</translation>
+        <translation>Пауза</translation>
     </message>
     <message>
         <location filename="../assets/PlayerPage.qml" line="350"/>
         <source>An error occured during video playback</source>
-        <translation type="unfinished">Ошибка воспроизведения видео</translation>
+        <translation>Ошибка воспроизведения видео</translation>
     </message>
 </context>
 <context>
@@ -76,12 +65,12 @@
         <location filename="../assets/main.qml" line="35"/>
         <location filename="../assets/main.qml" line="126"/>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../assets/main.qml" line="55"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Отмена</translation>
     </message>
     <message>
         <location filename="../assets/main.qml" line="221"/>
@@ -118,10 +107,6 @@
         <location filename="../assets/main.qml" line="427"/>
         <source>Open YouTube Page</source>
         <translation>Открыть страницу YouTube</translation>
-    </message>
-    <message>
-        <source>Play Video</source>
-        <translation type="obsolete">Воспроизведение</translation>
     </message>
     <message>
         <location filename="../assets/main.qml" line="470"/>
@@ -161,28 +146,13 @@
     <message>
         <location filename="../assets/main.qml" line="136"/>
         <source>Review App</source>
-        <translation type="unfinished">Отзыв</translation>
+        <translation>Отзыв</translation>
     </message>
     <message>
         <location filename="../assets/main.qml" line="112"/>
         <location filename="../assets/main.qml" line="167"/>
         <source>local:///assets/doc/help.html</source>
-        <translation type="unfinished">local:///assets/doc/help_ru.html</translation>
-    </message>
-</context>
-<context>
-    <name>playerPage</name>
-    <message>
-        <source>Play</source>
-        <translation type="obsolete">Воспроизвести</translation>
-    </message>
-    <message>
-        <source>Pause</source>
-        <translation type="obsolete">Пауза</translation>
-    </message>
-    <message>
-        <source>An error occured during video playback</source>
-        <translation type="obsolete">Ошибка воспроизведения видео</translation>
+        <translation>local:///assets/doc/help_ru.html</translation>
     </message>
 </context>
 </TS>
