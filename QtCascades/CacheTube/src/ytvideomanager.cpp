@@ -208,6 +208,12 @@ bool YTVideoManager::restTask(const QString &video_id)
 {
     for (int i = 0; i < DeletedTasks.size(); i++) {
         if (DeletedTasks.at(i).VideoId == video_id) {
+            for (int j = 0; j < ActiveTasks.size(); j++) {
+                if (ActiveTasks.at(j).VideoId == video_id) {
+                    return false;
+                }
+            }
+
             YTDownloadTask task = DeletedTasks.at(i);
 
             if (task.State == YTDownloadState::StateActive) {
