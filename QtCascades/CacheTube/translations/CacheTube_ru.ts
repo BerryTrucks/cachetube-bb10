@@ -23,13 +23,13 @@
 <context>
     <name>YTVideoManager</name>
     <message>
-        <location filename="../src/ytvideomanager.cpp" line="353"/>
-        <location filename="../src/ytvideomanager.cpp" line="361"/>
+        <location filename="../src/ytvideomanager.cpp" line="433"/>
+        <location filename="../src/ytvideomanager.cpp" line="441"/>
         <source>No suitable video formats available</source>
         <translation>Нет подходящих видеоформатов</translation>
     </message>
     <message>
-        <location filename="../src/ytvideomanager.cpp" line="430"/>
+        <location filename="../src/ytvideomanager.cpp" line="510"/>
         <source>Invalid file size, retrying download</source>
         <translation>Некорректный размер файла, повтор закачки</translation>
     </message>
@@ -99,6 +99,26 @@
         <translation>Удалить</translation>
     </message>
     <message>
+        <location filename="../assets/main.qml" line="449"/>
+        <source>Video deleted successfully</source>
+        <translation>Видео успешно удалено</translation>
+    </message>
+    <message>
+        <location filename="../assets/main.qml" line="450"/>
+        <source>Undo</source>
+        <translation>Отменить</translation>
+    </message>
+    <message>
+        <location filename="../assets/main.qml" line="467"/>
+        <source>Video restored successfully</source>
+        <translation>Видео успешно восстановлено</translation>
+    </message>
+    <message>
+        <location filename="../assets/main.qml" line="471"/>
+        <source>Could not restore video</source>
+        <translation>Невозможно восстановить видео</translation>
+    </message>
+    <message>
         <location filename="../assets/main.qml" line="413"/>
         <source>Pause/Resume</source>
         <translation>Пауза/Продолжить</translation>
@@ -109,12 +129,12 @@
         <translation>Открыть страницу YouTube</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="470"/>
+        <location filename="../assets/main.qml" line="502"/>
         <source>QUEUED</source>
         <translation>ОЖИДАНИЕ</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="471"/>
+        <location filename="../assets/main.qml" line="503"/>
         <source>PAUSED</source>
         <translation>ПАУЗА</translation>
     </message>

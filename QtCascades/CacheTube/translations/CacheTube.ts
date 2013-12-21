@@ -121,5 +121,21 @@
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Video deleted successfully</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Undo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video restored successfully</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not restore video</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

@@ -438,7 +438,39 @@ TabbedPane {
 
                                             onTriggered: {
                                                 itemRoot.ListItem.view.ytVideoManager.delTask(itemRoot.itemVideoId);
+
+                                                videoDeletedToast.deletedVideoId = itemRoot.itemVideoId;
+                                                videoDeletedToast.show();
                                             }
+
+                                            attachedObjects: [
+                                                SystemToast {
+                                                    id:             videoDeletedToast
+                                                    body:           qsTr("Video deleted successfully")
+                                                    button.label:   qsTr("Undo")
+                                                    button.enabled: true
+                                                    
+                                                    property string deletedVideoId: ""
+                                                    
+                                                    onFinished: {
+                                                        if (buttonSelection() === button) {
+                                                            if (itemRoot.ListItem.view.ytVideoManager.restTask(deletedVideoId)) {
+                                                                videoRestoredToast.show();
+                                                            } else {
+                                                                videoRestoreFailedToast.show();
+                                                            }
+                                                        }
+                                                    }
+                                                },
+                                                SystemToast {
+                                                    id:   videoRestoredToast
+                                                    body: qsTr("Video restored successfully")
+                                                },
+                                                SystemToast {
+                                                    id: videoRestoreFailedToast
+                                                    body: qsTr("Could not restore video")
+                                                }
+                                            ]
                                         }
                                     }
                                 ]

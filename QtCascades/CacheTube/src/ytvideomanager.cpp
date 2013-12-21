@@ -36,6 +36,10 @@ YTVideoManager::YTVideoManager(QNetworkAccessManager *network_access_manager, in
                     task.ErrorMsg               = "";
                     task.VisitorInfo1LiveCookie = "";
 
+                    if (task.State == YTDownloadState::StateActive) {
+                        task.State = YTDownloadState::StateQueued;
+                    }
+
                     DownloadTasks.append(task);
                 }
             }
@@ -56,6 +60,10 @@ YTVideoManager::YTVideoManager(QNetworkAccessManager *network_access_manager, in
 
 YTVideoManager::~YTVideoManager()
 {
+    for (int i = 0; i < DeletedTasks.size(); i++) {
+        QFile::remove(DestinationDir.path() + QDir::separator() + DeletedTasks.at(i).VideoId);
+    }
+
     if (MetadataReply != NULL) {
         delete MetadataReply;
     }
@@ -141,6 +149,16 @@ void YTVideoManager::delTask(const QString &video_id)
 {
     for (int i = 0; i < DownloadTasks.size(); i++) {
         if (DownloadTasks.at(i).VideoId == video_id) {
+            for (int j = 0; j < DeletedTasks.size(); j++) {
+                if (DeletedTasks.at(j).VideoId == video_id) {
+                    QFile::remove(DestinationDir.path() + QDir::separator() + DeletedTasks.at(j).VideoId);
+
+                    DeletedTasks.removeAt(j);
+
+                    break;
+                }
+            }
+
             if (CurrentTask.VideoId == video_id) {
                 if (MetadataReply != NULL) {
                     MetadataReply->abort();
@@ -152,7 +170,7 @@ void YTVideoManager::delTask(const QString &video_id)
 
             YTDownloadTask task = DownloadTasks.at(i);
 
-            ClearTask(task);
+            DeletedTasks.append(task);
 
             DownloadTasks.removeAt(i);
 
@@ -175,6 +193,67 @@ void YTVideoManager::delTask(const QString &video_id)
     }
 
     QTimer::singleShot(QUEUE_RUN_AFTER, this, SLOT(runQueue()));
+}
+
+bool YTVideoManager::restTask(const QString &video_id)
+{
+    for (int i = 0; i < DeletedTasks.size(); i++) {
+        if (DeletedTasks.at(i).VideoId == video_id) {
+            for (int j = 0; j < DownloadTasks.size(); j++) {
+                if (DownloadTasks.at(j).VideoId == video_id) {
+                    return false;
+                }
+            }
+
+            YTDownloadTask task = DeletedTasks.at(i);
+
+            if (task.State == YTDownloadState::StateActive) {
+                task.State = YTDownloadState::StateQueued;
+            }
+
+            DownloadTasks.append(task);
+
+            DeletedTasks.removeAt(i);
+
+            emit taskAdded(task);
+
+            if (TaskDatabase.open()) {
+                QSqlQuery query(TaskDatabase);
+
+                query.prepare("INSERT INTO TASKS(VIDEO_ID, STATE, FMT, SIZE, DONE, TITLE) VALUES (:VIDEO_ID, :STATE, :FMT, :SIZE, :DONE, :TITLE)");
+
+                query.bindValue(":VIDEO_ID", task.VideoId);
+                query.bindValue(":STATE",    task.State);
+                query.bindValue(":FMT",      task.Fmt);
+                query.bindValue(":SIZE",     task.Size);
+                query.bindValue(":DONE",     task.Done);
+                query.bindValue(":TITLE",    task.Title);
+
+                query.exec();
+
+                TaskDatabase.close();
+            }
+
+            QTimer::singleShot(QUEUE_RUN_AFTER, this, SLOT(runQueue()));
+
+            return true;
+        }
+    }
+
+    return false;
+}
+
+void YTVideoManager::wipeTask(const QString &video_id)
+{
+    for (int i = 0; i < DeletedTasks.size(); i++) {
+        if (DeletedTasks.at(i).VideoId == video_id) {
+            QFile::remove(DestinationDir.path() + QDir::separator() + DeletedTasks.at(i).VideoId);
+
+            DeletedTasks.removeAt(i);
+
+            break;
+        }
+    }
 }
 
 void YTVideoManager::pauseTask(const QString &video_id)
@@ -554,11 +633,6 @@ void YTVideoManager::UpdateTask(const YTDownloadTask &task)
             break;
         }
     }
-}
-
-void YTVideoManager::ClearTask(const YTDownloadTask &task)
-{
-    QFile::remove(DestinationDir.path() + QDir::separator() + task.VideoId);
 }
 
 bool YTVideoManager::ParseMetadata(const QByteArray &raw_data, QString *video_title, QHash<int, QString> *fmt_url_map)

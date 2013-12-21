@@ -49,6 +49,9 @@ public:
     Q_INVOKABLE bool addTask(const QString &video_id);
     Q_INVOKABLE void delTask(const QString &video_id);
 
+    Q_INVOKABLE bool restTask(const QString &video_id);
+    Q_INVOKABLE void wipeTask(const QString &video_id);
+
     Q_INVOKABLE void pauseTask(const QString &video_id);
     Q_INVOKABLE void resumeTask(const QString &video_id);
 
@@ -74,7 +77,6 @@ private:
     bool ReopenCurrentFile(bool *file_valid);
 
     void UpdateTask(const YTDownloadTask &task);
-    void ClearTask(const YTDownloadTask &task);
 
     bool ParseMetadata(const QByteArray &raw_data, QString *video_title, QHash<int, QString> *fmt_url_map);
 
@@ -84,7 +86,7 @@ private:
 
     int                   PreferredVideoFormat;
     QDir                  DestinationDir;
-    QList<YTDownloadTask> DownloadTasks;
+    QList<YTDownloadTask> DownloadTasks, DeletedTasks;
     YTDownloadTask        CurrentTask;
     QFile                 CurrentFile;
     QSqlDatabase          TaskDatabase;
