@@ -106,6 +106,15 @@ bool YTVideoManager::addTask(const QString &video_id)
                 return false;
             }
         }
+        for (int i = 0; i < DeletedTasks.size(); i++) {
+            if (DeletedTasks.at(i).VideoId == video_id) {
+                QFile::remove(DestinationDir.path() + QDir::separator() + DeletedTasks.at(i).VideoId);
+
+                DeletedTasks.removeAt(i);
+
+                break;
+            }
+        }
 
         YTDownloadTask task;
 
@@ -199,12 +208,6 @@ bool YTVideoManager::restTask(const QString &video_id)
 {
     for (int i = 0; i < DeletedTasks.size(); i++) {
         if (DeletedTasks.at(i).VideoId == video_id) {
-            for (int j = 0; j < DownloadTasks.size(); j++) {
-                if (DownloadTasks.at(j).VideoId == video_id) {
-                    return false;
-                }
-            }
-
             YTDownloadTask task = DeletedTasks.at(i);
 
             if (task.State == YTDownloadState::StateActive) {

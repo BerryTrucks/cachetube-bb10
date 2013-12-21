@@ -23,13 +23,13 @@
 <context>
     <name>YTVideoManager</name>
     <message>
-        <location filename="../src/ytvideomanager.cpp" line="433"/>
-        <location filename="../src/ytvideomanager.cpp" line="441"/>
+        <location filename="../src/ytvideomanager.cpp" line="435"/>
+        <location filename="../src/ytvideomanager.cpp" line="443"/>
         <source>No suitable video formats available</source>
         <translation>Нет подходящих видеоформатов</translation>
     </message>
     <message>
-        <location filename="../src/ytvideomanager.cpp" line="510"/>
+        <location filename="../src/ytvideomanager.cpp" line="512"/>
         <source>Invalid file size, retrying download</source>
         <translation>Некорректный размер файла, повтор закачки</translation>
     </message>
