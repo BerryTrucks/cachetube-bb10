@@ -137,5 +137,9 @@
         <source>Could not restore video</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Close</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

@@ -122,8 +122,8 @@ TabbedPane {
                         titleBar: TitleBar {
                             title: qsTr("Help")
                             
-                            acceptAction: ActionItem {
-                                title: qsTr("OK")
+                            dismissAction: ActionItem {
+                                title: qsTr("Close")
                                 
                                 onTriggered: {
                                     helpSheet.close();

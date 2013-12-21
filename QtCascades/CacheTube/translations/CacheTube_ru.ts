@@ -63,7 +63,6 @@
     </message>
     <message>
         <location filename="../assets/main.qml" line="35"/>
-        <location filename="../assets/main.qml" line="126"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -71,6 +70,11 @@
         <location filename="../assets/main.qml" line="55"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
+    </message>
+    <message>
+        <location filename="../assets/main.qml" line="126"/>
+        <source>Close</source>
+        <translation>Закрыть</translation>
     </message>
     <message>
         <location filename="../assets/main.qml" line="221"/>
