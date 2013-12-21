@@ -40,7 +40,7 @@ YTVideoManager::YTVideoManager(QNetworkAccessManager *network_access_manager, in
                         task.State = YTDownloadState::StateQueued;
                     }
 
-                    DownloadTasks.append(task);
+                    ActiveTasks.append(task);
                 }
             }
         }
@@ -101,8 +101,8 @@ bool YTVideoManager::addTask(const QString &video_id)
     if (video_id.isEmpty()) {
         return false;
     } else {
-        for (int i = 0; i < DownloadTasks.size(); i++) {
-            if (DownloadTasks.at(i).VideoId == video_id) {
+        for (int i = 0; i < ActiveTasks.size(); i++) {
+            if (ActiveTasks.at(i).VideoId == video_id) {
                 return false;
             }
         }
@@ -127,7 +127,7 @@ bool YTVideoManager::addTask(const QString &video_id)
         task.ErrorMsg               = "";
         task.VisitorInfo1LiveCookie = "";
 
-        DownloadTasks.append(task);
+        ActiveTasks.append(task);
 
         emit taskAdded(task);
 
@@ -156,8 +156,8 @@ bool YTVideoManager::addTask(const QString &video_id)
 
 void YTVideoManager::delTask(const QString &video_id)
 {
-    for (int i = 0; i < DownloadTasks.size(); i++) {
-        if (DownloadTasks.at(i).VideoId == video_id) {
+    for (int i = 0; i < ActiveTasks.size(); i++) {
+        if (ActiveTasks.at(i).VideoId == video_id) {
             for (int j = 0; j < DeletedTasks.size(); j++) {
                 if (DeletedTasks.at(j).VideoId == video_id) {
                     QFile::remove(DestinationDir.path() + QDir::separator() + DeletedTasks.at(j).VideoId);
@@ -177,11 +177,11 @@ void YTVideoManager::delTask(const QString &video_id)
                 }
             }
 
-            YTDownloadTask task = DownloadTasks.at(i);
+            YTDownloadTask task = ActiveTasks.at(i);
 
             DeletedTasks.append(task);
 
-            DownloadTasks.removeAt(i);
+            ActiveTasks.removeAt(i);
 
             emit taskDeleted(task);
 
@@ -214,7 +214,7 @@ bool YTVideoManager::restTask(const QString &video_id)
                 task.State = YTDownloadState::StateQueued;
             }
 
-            DownloadTasks.append(task);
+            ActiveTasks.append(task);
 
             DeletedTasks.removeAt(i);
 
@@ -261,9 +261,9 @@ void YTVideoManager::wipeTask(const QString &video_id)
 
 void YTVideoManager::pauseTask(const QString &video_id)
 {
-    for (int i = 0; i < DownloadTasks.size(); i++) {
-        if (DownloadTasks.at(i).VideoId == video_id && DownloadTasks.at(i).State != YTDownloadState::StateCompleted &&
-                                                       DownloadTasks.at(i).State != YTDownloadState::StatePaused) {
+    for (int i = 0; i < ActiveTasks.size(); i++) {
+        if (ActiveTasks.at(i).VideoId == video_id && ActiveTasks.at(i).State != YTDownloadState::StateCompleted &&
+                                                     ActiveTasks.at(i).State != YTDownloadState::StatePaused) {
             if (CurrentTask.VideoId == video_id) {
                 if (MetadataReply != NULL) {
                     MetadataReply->abort();
@@ -273,11 +273,11 @@ void YTVideoManager::pauseTask(const QString &video_id)
                 }
             }
 
-            YTDownloadTask task = DownloadTasks.at(i);
+            YTDownloadTask task = ActiveTasks.at(i);
 
             task.State = YTDownloadState::StatePaused;
 
-            DownloadTasks.replace(i, task);
+            ActiveTasks.replace(i, task);
 
             emit taskChanged(task);
 
@@ -303,13 +303,13 @@ void YTVideoManager::pauseTask(const QString &video_id)
 
 void YTVideoManager::resumeTask(const QString &video_id)
 {
-    for (int i = 0; i < DownloadTasks.size(); i++) {
-        if (DownloadTasks.at(i).VideoId == video_id && DownloadTasks.at(i).State == YTDownloadState::StatePaused) {
-            YTDownloadTask task = DownloadTasks.at(i);
+    for (int i = 0; i < ActiveTasks.size(); i++) {
+        if (ActiveTasks.at(i).VideoId == video_id && ActiveTasks.at(i).State == YTDownloadState::StatePaused) {
+            YTDownloadTask task = ActiveTasks.at(i);
 
             task.State = YTDownloadState::StateQueued;
 
-            DownloadTasks.replace(i, task);
+            ActiveTasks.replace(i, task);
 
             emit taskChanged(task);
 
@@ -340,9 +340,9 @@ QString YTVideoManager::getTaskWebURL(const QString &video_id)
 
 QString YTVideoManager::getTaskVideoURI(const QString &video_id)
 {
-    for (int i = 0; i < DownloadTasks.size(); i++) {
-        if (DownloadTasks.at(i).VideoId == video_id) {
-            return QUrl::fromLocalFile(DestinationDir.path() + QDir::separator() + DownloadTasks.at(i).VideoId).toString();
+    for (int i = 0; i < ActiveTasks.size(); i++) {
+        if (ActiveTasks.at(i).VideoId == video_id) {
+            return QUrl::fromLocalFile(DestinationDir.path() + QDir::separator() + ActiveTasks.at(i).VideoId).toString();
         }
     }
 
@@ -351,15 +351,15 @@ QString YTVideoManager::getTaskVideoURI(const QString &video_id)
 
 QList<YTDownloadTask> YTVideoManager::getTaskList()
 {
-    return DownloadTasks;
+    return ActiveTasks;
 }
 
 void YTVideoManager::runQueue()
 {
     if (MetadataReply == NULL && DownloadReply == NULL) {
-        for (int i = 0; i < DownloadTasks.size(); i++) {
-            if (DownloadTasks.at(i).State != YTDownloadState::StateCompleted && DownloadTasks.at(i).State != YTDownloadState::StatePaused) {
-                CurrentTask = DownloadTasks.at(i);
+        for (int i = 0; i < ActiveTasks.size(); i++) {
+            if (ActiveTasks.at(i).State != YTDownloadState::StateCompleted && ActiveTasks.at(i).State != YTDownloadState::StatePaused) {
+                CurrentTask = ActiveTasks.at(i);
 
                 QNetworkRequest request(QUrl::fromEncoded(QString("http://www.youtube.com/get_video_info?&video_id=%1&el=detailpage&ps=default&eurl=&gl=US&hl=en").arg(CurrentTask.VideoId).toAscii()));
 
@@ -610,9 +610,9 @@ bool YTVideoManager::ReopenCurrentFile(bool *file_valid)
 
 void YTVideoManager::UpdateTask(const YTDownloadTask &task)
 {
-    for (int i = 0; i < DownloadTasks.size(); i++) {
-        if (DownloadTasks.at(i).VideoId == task.VideoId) {
-            DownloadTasks.replace(i, task);
+    for (int i = 0; i < ActiveTasks.size(); i++) {
+        if (ActiveTasks.at(i).VideoId == task.VideoId) {
+            ActiveTasks.replace(i, task);
 
             emit taskChanged(task);
 

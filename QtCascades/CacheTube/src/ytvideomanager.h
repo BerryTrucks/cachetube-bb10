@@ -86,7 +86,7 @@ private:
 
     int                   PreferredVideoFormat;
     QDir                  DestinationDir;
-    QList<YTDownloadTask> DownloadTasks, DeletedTasks;
+    QList<YTDownloadTask> ActiveTasks, DeletedTasks;
     YTDownloadTask        CurrentTask;
     QFile                 CurrentFile;
     QSqlDatabase          TaskDatabase;
