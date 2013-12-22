@@ -333,10 +333,11 @@ TabbedPane {
                             
                             Container {
                                 id:           itemRoot
-                                background:   Color.Transparent 
+                                background:   itemSelected ? Color.create("#00A7DE") : Color.White 
                                 leftPadding:  12
                                 rightPadding: 12
 
+                                property bool   itemSelected: ListItem.active || ListItem.selected
                                 property int    itemState:    ListItemData.state
                                 property int    itemSize:     ListItemData.size
                                 property int    itemDone:     ListItemData.done
@@ -386,6 +387,10 @@ TabbedPane {
                                                     }
 
                                                     onPopTransitionEnded: {
+                                                        if (page.objectName === "playerPage") {
+                                                            page.disconnectSignals();
+                                                        }
+                                                        
                                                         page.destroy();
                                                     }
 
@@ -478,7 +483,7 @@ TabbedPane {
                                 Label {
                                     multiline:            true
                                     textFormat:           TextFormat.Plain
-                                    textStyle.color:      Color.Black
+                                    textStyle.color:      itemRoot.itemSelected ? Color.White : Color.Black
                                     textStyle.fontWeight: FontWeight.Bold
                                     textStyle.fontSize:   FontSize.Medium
                                     text:                 itemRoot.itemTitle
@@ -494,7 +499,7 @@ TabbedPane {
                                 Label {
                                     visible:             itemRoot.itemState !== YTDownloadState.StateActive
                                     multiline:           true
-                                    textStyle.color:     itemRoot.itemState === YTDownloadState.StateError ? Color.Red : Color.Grey
+                                    textStyle.color:     itemRoot.itemState === YTDownloadState.StateError ? Color.Red : (itemRoot.itemSelected ? Color.LightGray : Color.DarkGray)
                                     textStyle.fontStyle: FontStyle.Italic
                                     textStyle.fontSize:  FontSize.Small
                                     text:                itemRoot.itemState === YTDownloadState.StateCompleted ? (itemRoot.itemSize / 1048576).toFixed(2) + " MiB" :

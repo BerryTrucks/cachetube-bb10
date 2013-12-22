@@ -4,18 +4,18 @@
 <context>
     <name>PlayerPage</name>
     <message>
-        <location filename="../assets/PlayerPage.qml" line="62"/>
-        <location filename="../assets/PlayerPage.qml" line="70"/>
+        <location filename="../assets/PlayerPage.qml" line="68"/>
+        <location filename="../assets/PlayerPage.qml" line="76"/>
         <source>Play</source>
         <translation>Воспроизвести</translation>
     </message>
     <message>
-        <location filename="../assets/PlayerPage.qml" line="73"/>
+        <location filename="../assets/PlayerPage.qml" line="79"/>
         <source>Pause</source>
         <translation>Пауза</translation>
     </message>
     <message>
-        <location filename="../assets/PlayerPage.qml" line="350"/>
+        <location filename="../assets/PlayerPage.qml" line="356"/>
         <source>An error occured during video playback</source>
         <translation>Ошибка воспроизведения видео</translation>
     </message>
@@ -98,47 +98,47 @@
         <translation>Нет загруженного видео</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="436"/>
+        <location filename="../assets/main.qml" line="441"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="449"/>
+        <location filename="../assets/main.qml" line="454"/>
         <source>Video deleted successfully</source>
         <translation>Видео успешно удалено</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="450"/>
+        <location filename="../assets/main.qml" line="455"/>
         <source>Undo</source>
         <translation>Отменить</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="467"/>
+        <location filename="../assets/main.qml" line="472"/>
         <source>Video restored successfully</source>
         <translation>Видео успешно восстановлено</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="471"/>
+        <location filename="../assets/main.qml" line="476"/>
         <source>Could not restore video</source>
         <translation>Невозможно восстановить видео</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="413"/>
+        <location filename="../assets/main.qml" line="418"/>
         <source>Pause/Resume</source>
         <translation>Пауза/Продолжить</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="427"/>
+        <location filename="../assets/main.qml" line="432"/>
         <source>Open YouTube Page</source>
         <translation>Открыть страницу YouTube</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="502"/>
+        <location filename="../assets/main.qml" line="507"/>
         <source>QUEUED</source>
         <translation>ОЖИДАНИЕ</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="503"/>
+        <location filename="../assets/main.qml" line="508"/>
         <source>PAUSED</source>
         <translation>ПАУЗА</translation>
     </message>

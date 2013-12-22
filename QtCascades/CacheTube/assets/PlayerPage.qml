@@ -21,6 +21,12 @@ Page {
         }
     }
 
+    function disconnectSignals() {
+        Application.fullscreen.disconnect(onAppInForeground);
+        Application.invisible.disconnect(onAppInBackground);
+        Application.thumbnail.disconnect(onAppInBackground);
+    }
+
     function onAppInForeground() {
         appInForeground = true;
         
