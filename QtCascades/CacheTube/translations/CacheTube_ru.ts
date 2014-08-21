@@ -15,7 +15,7 @@
         <translation>Пауза</translation>
     </message>
     <message>
-        <location filename="../assets/PlayerPage.qml" line="413"/>
+        <location filename="../assets/PlayerPage.qml" line="412"/>
         <source>An error occured during video playback</source>
         <translation>Ошибка воспроизведения видео</translation>
     </message>
@@ -89,7 +89,7 @@
     <message>
         <location filename="../assets/main.qml" line="116"/>
         <source>Auto Repeat Playback:</source>
-        <translation type="unfinished"></translation>
+        <translation>Автоповтор воспроизведения:</translation>
     </message>
     <message>
         <location filename="../assets/main.qml" line="158"/>
