@@ -153,5 +153,9 @@
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Auto Repeat Playback:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

@@ -18,6 +18,8 @@ TabbedPane {
                     preferredVideoFormatRadioGroup.selectedIndex = 0;
                 }
 
+                autoRepeatPlaybackCheckBox.checked = AppSettings.autoRepeatPlayback;
+
                 settingsSheet.open();
             }
             
@@ -44,6 +46,7 @@ TabbedPane {
                                     }
 
                                     AppSettings.preferredVideoFormat = format;
+                                    AppSettings.autoRepeatPlayback   = autoRepeatPlaybackCheckBox.checked;
 
                                     YTVideoManager.setPreferredVideoFormat(format);
                                     
@@ -97,6 +100,35 @@ TabbedPane {
                                         }
                                     }
 
+                                    Divider {
+                                    }
+                                    
+                                    Container {
+                                        background: Color.Transparent
+                                        
+                                        layout: StackLayout {
+                                            orientation: LayoutOrientation.LeftToRight
+                                        }
+                                        
+                                        Label {
+                                            textStyle.color:    Color.Black
+                                            textStyle.fontSize: FontSize.Large
+                                            text:               qsTr("Auto Repeat Playback:")
+                                            
+                                            layoutProperties: StackLayoutProperties {
+                                                spaceQuota: 1
+                                            }
+                                        }
+                                        
+                                        CheckBox {
+                                            id: autoRepeatPlaybackCheckBox
+                                            
+                                            layoutProperties: StackLayoutProperties {
+                                                spaceQuota: -1
+                                            }
+                                        }
+                                    }
+                                    
                                     Divider {
                                     }
                                 }
@@ -314,7 +346,8 @@ TabbedPane {
                     verticalAlignment:   VerticalAlignment.Fill
                     visible:             cacheListViewDataModel.itemsCount > 0
 
-                    property variant ytVideoManager: YTVideoManager 
+                    property variant appSettings:    AppSettings 
+                    property variant ytVideoManager: YTVideoManager
 
                     dataModel: YTArrayDataModel {
                         id:           cacheListViewDataModel
@@ -367,7 +400,7 @@ TabbedPane {
                                                     var page = playerNavigationPane.top;
 
                                                     if (page.objectName === "playerPage") {
-                                                        page.playVideo(itemRoot.ListItem.view.ytVideoManager.getTaskVideoURI(itemRoot.itemVideoId), itemRoot.itemTitle);
+                                                        page.playVideo(itemRoot.ListItem.view.ytVideoManager.getTaskVideoURI(itemRoot.itemVideoId), itemRoot.itemTitle, itemRoot.ListItem.view.appSettings.autoRepeatPlayback);
                                                     }
                                                 }
 
@@ -378,7 +411,7 @@ TabbedPane {
                                                     onTopChanged: {
                                                         if (playerSheet.opened) {
                                                             if (page.objectName === "playerPage") {
-                                                                page.playVideo(itemRoot.ListItem.view.ytVideoManager.getTaskVideoURI(itemRoot.itemVideoId), itemRoot.itemTitle);
+                                                                page.playVideo(itemRoot.ListItem.view.ytVideoManager.getTaskVideoURI(itemRoot.itemVideoId), itemRoot.itemTitle, itemRoot.ListItem.view.appSettings.autoRepeatPlayback);
                                                             } else {
                                                                 playerSheet.close();
                                                             }

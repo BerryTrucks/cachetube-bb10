@@ -23,3 +23,17 @@ void AppSettings::setPreferredVideoFormat(const int &format)
 {
     Settings->setValue("PreferredVideoFormat", format);
 }
+
+bool AppSettings::autoRepeatPlayback() const
+{
+    if (Settings->contains("AutoRepeatPlayback")) {
+        return Settings->value("AutoRepeatPlayback").toBool();
+    } else {
+        return false;
+    }
+}
+
+void AppSettings::setAutoRepeatPlayback(const bool &repeat)
+{
+    Settings->setValue("AutoRepeatPlayback", repeat);
+}

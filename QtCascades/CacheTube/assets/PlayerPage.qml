@@ -11,10 +11,16 @@ Page {
     property bool appInForeground: true
     property bool controlsVisible: true
 
-    function playVideo(video_uri, video_title) {
+    function playVideo(video_uri, video_title, auto_repeat) {
         playerPageTitleBar.title             = video_title;
         videoPlayer.sourceUrl                = video_uri;
         videoNowPlayingConnection.videoTitle = video_title;
+
+        if (auto_repeat) {
+            videoPlayer.repeatMode = RepeatMode.Track;
+        } else {
+            videoPlayer.repeatMode = RepeatMode.None;
+        }
 
         if (videoNowPlayingConnection.acquire() !== MediaError.None) {
             videoPlaybackErrorToast.show();
@@ -157,7 +163,6 @@ Page {
                     id:          videoPlayer
                     videoOutput: VideoOutput.PrimaryDisplay
                     windowId:    videoForeignWindowControl.windowId
-                    repeatMode:  RepeatMode.None
 
                     property bool playbackActive: false
                     property bool videoSeeking:   false
