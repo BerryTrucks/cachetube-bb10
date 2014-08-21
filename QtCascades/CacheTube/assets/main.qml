@@ -222,7 +222,7 @@ TabbedPane {
                         },
                         SystemToast {
                             id:   cachingFailedToast
-                            body: qsTr("Could not cache this video. May be it is already cached?")
+                            body: qsTr("Cannot cache this video. May be it is already cached?")
                         }
                     ]
                 },
@@ -473,7 +473,7 @@ TabbedPane {
                                                 },
                                                 SystemToast {
                                                     id: videoRestoreFailedToast
-                                                    body: qsTr("Could not restore video")
+                                                    body: qsTr("Cannot restore video")
                                                 }
                                             ]
                                         }

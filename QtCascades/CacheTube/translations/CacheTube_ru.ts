@@ -31,17 +31,17 @@
     <message>
         <location filename="../src/ytvideomanager.cpp" line="444"/>
         <source>Cannot extract video information</source>
-        <translation type="unfinished"></translation>
+        <translation>Невозможно извлечь информацию о видео</translation>
     </message>
     <message>
         <location filename="../src/ytvideomanager.cpp" line="517"/>
-        <source>Video information incomplete</source>
-        <translation type="unfinished"></translation>
+        <source>Cannot download signature decoder</source>
+        <translation>Невозможно загрузить дешифровщик сигнатур</translation>
     </message>
     <message>
         <location filename="../src/ytvideomanager.cpp" line="611"/>
         <source>Cannot decode video signature</source>
-        <translation type="unfinished"></translation>
+        <translation>Невозможно расшифровать сигнатуру видео</translation>
     </message>
     <message>
         <location filename="../src/ytvideomanager.cpp" line="680"/>
@@ -98,7 +98,7 @@
     </message>
     <message>
         <location filename="../assets/main.qml" line="225"/>
-        <source>Could not cache this video. May be it is already cached?</source>
+        <source>Cannot cache this video. May be it is already cached?</source>
         <translation>Не могу загрузить это видео. Возможно, оно уже загружено?</translation>
     </message>
     <message>
@@ -134,7 +134,7 @@
     </message>
     <message>
         <location filename="../assets/main.qml" line="476"/>
-        <source>Could not restore video</source>
+        <source>Cannot restore video</source>
         <translation>Невозможно восстановить видео</translation>
     </message>
     <message>

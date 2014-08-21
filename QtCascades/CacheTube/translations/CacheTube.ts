@@ -35,7 +35,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Video information incomplete</source>
+        <source>Cannot download signature decoder</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -62,7 +62,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Could not cache this video. May be it is already cached?</source>
+        <source>Cannot cache this video. May be it is already cached?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -146,7 +146,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Could not restore video</source>
+        <source>Cannot restore video</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

@@ -514,7 +514,7 @@ void YTVideoManager::networkRequestFinished(QNetworkReply *reply)
                             JSPlayerReply = NetworkAccessManager->get(request);
                         } else {
                             CurrentTask.State    = YTDownloadState::StateError;
-                            CurrentTask.ErrorMsg = tr("Video information incomplete");
+                            CurrentTask.ErrorMsg = tr("Cannot download signature decoder");
 
                             UpdateTask(CurrentTask);
 
