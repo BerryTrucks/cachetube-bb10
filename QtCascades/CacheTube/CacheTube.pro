@@ -2,7 +2,7 @@ APP_NAME = CacheTube
 
 CONFIG += qt warn_on cascades10
 
-LIBS += -lbb -lbbsystem -lbbmultimedia
+LIBS += -lbb -lbbsystem -lbbdata -lbbmultimedia
 
 TRANSLATIONS = $${TARGET}_ru.ts \
                $${TARGET}.ts

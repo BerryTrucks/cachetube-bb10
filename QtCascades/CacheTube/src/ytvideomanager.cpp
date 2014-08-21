@@ -3,6 +3,10 @@
 #include <QtCore/QTimer>
 #include <QtSql/QSqlQuery>
 #include <QtNetwork/QNetworkRequest>
+#include <QtScript/QScriptEngine>
+#include <QtScript/QScriptValue>
+
+#include <bb/data/JsonDataAccess>
 
 #include "ytvideomanager.h"
 
@@ -34,9 +38,12 @@ YTVideoManager::YTVideoManager(QNetworkAccessManager *network_access_manager, in
                     task.VideoId                = query.value(0).toString();
                     task.Title                  = query.value(5).toString();
                     task.ErrorMsg               = "";
+                    task.JSPlayerURL            = "";
+                    task.VideoURL               = "";
+                    task.Signature              = "";
                     task.VisitorInfo1LiveCookie = "";
 
-                    if (task.State == YTDownloadState::StateActive) {
+                    if (task.State != YTDownloadState::StateCompleted && task.State != YTDownloadState::StatePaused) {
                         task.State = YTDownloadState::StateQueued;
                     }
 
@@ -50,7 +57,9 @@ YTVideoManager::YTVideoManager(QNetworkAccessManager *network_access_manager, in
 
     PreferredVideoFormat = preferred_format;
     NetworkAccessManager = network_access_manager;
+    VideoPageReply       = NULL;
     MetadataReply        = NULL;
+    JSPlayerReply        = NULL;
     DownloadReply        = NULL;
 
     QObject::connect(NetworkAccessManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(networkRequestFinished(QNetworkReply*)));
@@ -64,8 +73,14 @@ YTVideoManager::~YTVideoManager()
         QFile::remove(DestinationDir.path() + QDir::separator() + DeletedTasks.at(i).VideoId);
     }
 
+    if (VideoPageReply != NULL) {
+        delete VideoPageReply;
+    }
     if (MetadataReply != NULL) {
         delete MetadataReply;
+    }
+    if (JSPlayerReply != NULL) {
+        delete JSPlayerReply;
     }
     if (DownloadReply != NULL) {
         delete DownloadReply;
@@ -125,6 +140,9 @@ bool YTVideoManager::addTask(const QString &video_id)
         task.VideoId                = video_id;
         task.Title                  = getTaskWebURL(video_id);
         task.ErrorMsg               = "";
+        task.JSPlayerURL            = "";
+        task.VideoURL               = "";
+        task.Signature              = "";
         task.VisitorInfo1LiveCookie = "";
 
         ActiveTasks.append(task);
@@ -169,8 +187,14 @@ void YTVideoManager::delTask(const QString &video_id)
             }
 
             if (CurrentTask.VideoId == video_id) {
+                if (VideoPageReply != NULL) {
+                    VideoPageReply->abort();
+                }
                 if (MetadataReply != NULL) {
                     MetadataReply->abort();
+                }
+                if (JSPlayerReply != NULL) {
+                    JSPlayerReply->abort();
                 }
                 if (DownloadReply != NULL) {
                     DownloadReply->abort();
@@ -216,7 +240,7 @@ bool YTVideoManager::restTask(const QString &video_id)
 
             YTDownloadTask task = DeletedTasks.at(i);
 
-            if (task.State == YTDownloadState::StateActive) {
+            if (task.State != YTDownloadState::StateCompleted && task.State != YTDownloadState::StatePaused) {
                 task.State = YTDownloadState::StateQueued;
             }
 
@@ -271,8 +295,14 @@ void YTVideoManager::pauseTask(const QString &video_id)
         if (ActiveTasks.at(i).VideoId == video_id && ActiveTasks.at(i).State != YTDownloadState::StateCompleted &&
                                                      ActiveTasks.at(i).State != YTDownloadState::StatePaused) {
             if (CurrentTask.VideoId == video_id) {
+                if (VideoPageReply != NULL) {
+                    VideoPageReply->abort();
+                }
                 if (MetadataReply != NULL) {
                     MetadataReply->abort();
+                }
+                if (JSPlayerReply != NULL) {
+                    JSPlayerReply->abort();
                 }
                 if (DownloadReply != NULL) {
                     DownloadReply->abort();
@@ -362,16 +392,16 @@ QList<YTDownloadTask> YTVideoManager::getTaskList()
 
 void YTVideoManager::runQueue()
 {
-    if (MetadataReply == NULL && DownloadReply == NULL) {
+    if (VideoPageReply == NULL && MetadataReply == NULL && JSPlayerReply == NULL && DownloadReply == NULL) {
         for (int i = 0; i < ActiveTasks.size(); i++) {
             if (ActiveTasks.at(i).State != YTDownloadState::StateCompleted && ActiveTasks.at(i).State != YTDownloadState::StatePaused) {
                 CurrentTask = ActiveTasks.at(i);
 
-                QNetworkRequest request(QUrl::fromEncoded(QString("http://www.youtube.com/get_video_info?&video_id=%1&el=detailpage&ps=default&eurl=&gl=US&hl=en").arg(CurrentTask.VideoId).toAscii()));
+                QNetworkRequest request(QUrl::fromEncoded(QString("https://www.youtube.com/watch?v=%1&gl=US&hl=en&has_verified=1").arg(CurrentTask.VideoId).toAscii()));
 
                 request.setAttribute(QNetworkRequest::CookieLoadControlAttribute, QNetworkRequest::Manual);
 
-                MetadataReply = NetworkAccessManager->get(request);
+                VideoPageReply = NetworkAccessManager->get(request);
 
                 break;
             }
@@ -381,10 +411,10 @@ void YTVideoManager::runQueue()
 
 void YTVideoManager::networkRequestFinished(QNetworkReply *reply)
 {
-    if (reply == MetadataReply) {
+    if (reply == VideoPageReply) {
         if (reply->error() == QNetworkReply::NoError) {
-            QString             video_title;
-            QHash<int, QString> fmt_url_map;
+            QString sts;
+            QString js_player_url;
 
             if (reply->hasRawHeader("Set-Cookie")) {
                 QString cookie                       = reply->rawHeader("Set-Cookie");
@@ -397,7 +427,58 @@ void YTVideoManager::networkRequestFinished(QNetworkReply *reply)
                 }
             }
 
-            if (ParseMetadata(reply->readAll(), &video_title, &fmt_url_map)) {
+            if (ParseVideoPage(reply->readAll(), &sts, &js_player_url)) {
+                CurrentTask.JSPlayerURL = js_player_url;
+
+                UpdateTask(CurrentTask);
+
+                QNetworkRequest request(QUrl::fromEncoded(QString("https://www.youtube.com/get_video_info?&video_id=%1&eurl=%2&sts=%3").arg(CurrentTask.VideoId, QString(QUrl::toPercentEncoding(QString("https://youtube.googleapis.com/v/%1").arg(CurrentTask.VideoId))), sts).toAscii()));
+
+                if (!CurrentTask.VisitorInfo1LiveCookie.isEmpty()) {
+                    request.setRawHeader("Cookie", QString("VISITOR_INFO1_LIVE=%1").arg(CurrentTask.VisitorInfo1LiveCookie).toAscii());
+                }
+
+                MetadataReply = NetworkAccessManager->get(request);
+            } else {
+                CurrentTask.State    = YTDownloadState::StateError;
+                CurrentTask.ErrorMsg = tr("Cannot extract video information");
+
+                UpdateTask(CurrentTask);
+
+                QTimer::singleShot(QUEUE_RUN_AFTER, this, SLOT(runQueue()));
+            }
+        } else {
+            if (reply->error() != QNetworkReply::OperationCanceledError) {
+                CurrentTask.State    = YTDownloadState::StateError;
+                CurrentTask.ErrorMsg = FormatNetworkError(reply->error());
+
+                UpdateTask(CurrentTask);
+            }
+
+            QTimer::singleShot(QUEUE_RUN_AFTER, this, SLOT(runQueue()));
+        }
+
+        VideoPageReply = NULL;
+
+        reply->deleteLater();
+    } else if (reply == MetadataReply) {
+        if (reply->error() == QNetworkReply::NoError) {
+            QString             video_title;
+            QHash<int, QString> fmt_url_map;
+            QHash<int, QString> fmt_sig_map;
+
+            if (reply->hasRawHeader("Set-Cookie")) {
+                QString cookie                       = reply->rawHeader("Set-Cookie");
+                QRegExp visitor_info1_live_extractor = QRegExp("VISITOR_INFO1_LIVE=([^;]+)");
+
+                if (visitor_info1_live_extractor.indexIn(cookie) != -1) {
+                    CurrentTask.VisitorInfo1LiveCookie = visitor_info1_live_extractor.cap(1);
+
+                    UpdateTask(CurrentTask);
+                }
+            }
+
+            if (ParseMetadata(reply->readAll(), &video_title, &fmt_url_map, &fmt_sig_map)) {
                 CurrentTask.Title = video_title;
 
                 if (CurrentTask.Fmt == 0) {
@@ -417,24 +498,48 @@ void YTVideoManager::networkRequestFinished(QNetworkReply *reply)
                 UpdateTask(CurrentTask);
 
                 if (CurrentTask.Fmt != 0 && fmt_url_map.contains(CurrentTask.Fmt)) {
-                    bool file_valid;
+                    if (fmt_sig_map.contains(CurrentTask.Fmt)) {
+                        if (!CurrentTask.JSPlayerURL.isEmpty()) {
+                            CurrentTask.VideoURL  = fmt_url_map[CurrentTask.Fmt];
+                            CurrentTask.Signature = fmt_sig_map[CurrentTask.Fmt];
 
-                    if (ReopenCurrentFile(&file_valid)) {
-                        QNetworkRequest request(QUrl::fromEncoded(fmt_url_map[CurrentTask.Fmt].toAscii()));
+                            UpdateTask(CurrentTask);
 
-                        if (!CurrentTask.VisitorInfo1LiveCookie.isEmpty()) {
-                            request.setRawHeader("Cookie", QString("VISITOR_INFO1_LIVE=%1").arg(CurrentTask.VisitorInfo1LiveCookie).toAscii());
+                            QNetworkRequest request(QUrl::fromEncoded(CurrentTask.JSPlayerURL.toAscii()));
+
+                            if (!CurrentTask.VisitorInfo1LiveCookie.isEmpty()) {
+                                request.setRawHeader("Cookie", QString("VISITOR_INFO1_LIVE=%1").arg(CurrentTask.VisitorInfo1LiveCookie).toAscii());
+                            }
+
+                            JSPlayerReply = NetworkAccessManager->get(request);
+                        } else {
+                            CurrentTask.State    = YTDownloadState::StateError;
+                            CurrentTask.ErrorMsg = tr("Video information incomplete");
+
+                            UpdateTask(CurrentTask);
+
+                            QTimer::singleShot(QUEUE_RUN_AFTER, this, SLOT(runQueue()));
                         }
-                        if (file_valid) {
-                            request.setRawHeader("Range", QString("bytes=%1-").arg(CurrentTask.Done).toAscii());
-                        }
-
-                        DownloadReply = NetworkAccessManager->get(request);
-
-                        QObject::connect(DownloadReply, SIGNAL(downloadProgress(qint64, qint64)), this, SLOT(downloadProgress(qint64, qint64)));
-                        QObject::connect(DownloadReply, SIGNAL(readyRead()),                      this, SLOT(downloadDataReady()));
                     } else {
-                        QTimer::singleShot(QUEUE_RUN_AFTER, this, SLOT(runQueue()));
+                        bool file_valid;
+
+                        if (ReopenCurrentFile(&file_valid)) {
+                            QNetworkRequest request(QUrl::fromEncoded(fmt_url_map[CurrentTask.Fmt].toAscii()));
+
+                            if (!CurrentTask.VisitorInfo1LiveCookie.isEmpty()) {
+                                request.setRawHeader("Cookie", QString("VISITOR_INFO1_LIVE=%1").arg(CurrentTask.VisitorInfo1LiveCookie).toAscii());
+                            }
+                            if (file_valid) {
+                                request.setRawHeader("Range", QString("bytes=%1-").arg(CurrentTask.Done).toAscii());
+                            }
+
+                            DownloadReply = NetworkAccessManager->get(request);
+
+                            QObject::connect(DownloadReply, SIGNAL(downloadProgress(qint64, qint64)), this, SLOT(downloadProgress(qint64, qint64)));
+                            QObject::connect(DownloadReply, SIGNAL(readyRead()),                      this, SLOT(downloadDataReady()));
+                        } else {
+                            QTimer::singleShot(QUEUE_RUN_AFTER, this, SLOT(runQueue()));
+                        }
                     }
                 } else {
                     CurrentTask.State    = YTDownloadState::StateError;
@@ -464,6 +569,63 @@ void YTVideoManager::networkRequestFinished(QNetworkReply *reply)
         }
 
         MetadataReply = NULL;
+
+        reply->deleteLater();
+    } else if (reply == JSPlayerReply) {
+        if (reply->error() == QNetworkReply::NoError) {
+            QString signature;
+
+            if (reply->hasRawHeader("Set-Cookie")) {
+                QString cookie                       = reply->rawHeader("Set-Cookie");
+                QRegExp visitor_info1_live_extractor = QRegExp("VISITOR_INFO1_LIVE=([^;]+)");
+
+                if (visitor_info1_live_extractor.indexIn(cookie) != -1) {
+                    CurrentTask.VisitorInfo1LiveCookie = visitor_info1_live_extractor.cap(1);
+
+                    UpdateTask(CurrentTask);
+                }
+            }
+
+            if (DecodeSignature(reply->readAll(), CurrentTask.Signature, &signature)) {
+                bool file_valid;
+
+                if (ReopenCurrentFile(&file_valid)) {
+                    QNetworkRequest request(QUrl::fromEncoded(QString(CurrentTask.VideoURL + "&signature=" + QUrl::toPercentEncoding(signature)).toAscii()));
+
+                    if (!CurrentTask.VisitorInfo1LiveCookie.isEmpty()) {
+                        request.setRawHeader("Cookie", QString("VISITOR_INFO1_LIVE=%1").arg(CurrentTask.VisitorInfo1LiveCookie).toAscii());
+                    }
+                    if (file_valid) {
+                        request.setRawHeader("Range", QString("bytes=%1-").arg(CurrentTask.Done).toAscii());
+                    }
+
+                    DownloadReply = NetworkAccessManager->get(request);
+
+                    QObject::connect(DownloadReply, SIGNAL(downloadProgress(qint64, qint64)), this, SLOT(downloadProgress(qint64, qint64)));
+                    QObject::connect(DownloadReply, SIGNAL(readyRead()),                      this, SLOT(downloadDataReady()));
+                } else {
+                    QTimer::singleShot(QUEUE_RUN_AFTER, this, SLOT(runQueue()));
+                }
+            } else {
+                CurrentTask.State    = YTDownloadState::StateError;
+                CurrentTask.ErrorMsg = tr("Cannot decode video signature");
+
+                UpdateTask(CurrentTask);
+
+                QTimer::singleShot(QUEUE_RUN_AFTER, this, SLOT(runQueue()));
+            }
+        } else {
+            if (reply->error() != QNetworkReply::OperationCanceledError) {
+                CurrentTask.State    = YTDownloadState::StateError;
+                CurrentTask.ErrorMsg = FormatNetworkError(reply->error());
+
+                UpdateTask(CurrentTask);
+            }
+
+            QTimer::singleShot(QUEUE_RUN_AFTER, this, SLOT(runQueue()));
+        }
+
+        JSPlayerReply = NULL;
 
         reply->deleteLater();
     } else if (reply == DownloadReply) {
@@ -644,7 +806,7 @@ void YTVideoManager::UpdateTask(const YTDownloadTask &task)
     }
 }
 
-bool YTVideoManager::ParseMetadata(const QByteArray &raw_data, QString *video_title, QHash<int, QString> *fmt_url_map)
+bool YTVideoManager::ParseMetadata(const QByteArray &raw_data, QString *video_title, QHash<int, QString> *fmt_url_map, QHash<int, QString> *fmt_sig_map)
 {
     QRegExp title_extractor                      = QRegExp("title=([^&]+)",                      Qt::CaseInsensitive);
     QRegExp url_encoded_fmt_stream_map_extractor = QRegExp("url_encoded_fmt_stream_map=([^&]+)", Qt::CaseInsensitive);
@@ -661,6 +823,8 @@ bool YTVideoManager::ParseMetadata(const QByteArray &raw_data, QString *video_ti
                 QRegExp url_extractor  = QRegExp("url=([^&]+)");
                 QRegExp itag_extractor = QRegExp("itag=(\\d+)");
                 QRegExp sig_extractor  = QRegExp("sig=([^&]+)");
+                QRegExp s_extractor_1  = QRegExp("^s=([^&]+)");
+                QRegExp s_extractor_2  = QRegExp("&s=([^&]+)");
 
                 if (url_extractor.indexIn(splitted.at(i)) != -1 && itag_extractor.indexIn(splitted.at(i)) != -1) {
                     bool ok  = false;
@@ -673,6 +837,10 @@ bool YTVideoManager::ParseMetadata(const QByteArray &raw_data, QString *video_ti
                         if (signature_mask.indexIn(url) == -1) {
                             if (sig_extractor.indexIn(splitted.at(i)) != -1) {
                                 url = url + "&signature=" + sig_extractor.cap(1);
+                            } else if (s_extractor_1.indexIn(splitted.at(i)) != -1) {
+                                (*fmt_sig_map)[fmt] = QUrl::fromPercentEncoding(s_extractor_1.cap(1).toUtf8());
+                            } else if (s_extractor_2.indexIn(splitted.at(i)) != -1) {
+                                (*fmt_sig_map)[fmt] = QUrl::fromPercentEncoding(s_extractor_2.cap(1).toUtf8());
                             }
                         }
 
@@ -682,6 +850,90 @@ bool YTVideoManager::ParseMetadata(const QByteArray &raw_data, QString *video_ti
             }
 
             return true;
+        } else {
+            return false;
+        }
+    } else {
+        return false;
+    }
+}
+
+bool YTVideoManager::ParseVideoPage(const QByteArray &raw_data, QString *sts, QString *js_player_url)
+{
+    QRegExp sts_extractor       = QRegExp("\"sts\"\\s*:\\s*(\\d+)");
+    QRegExp js_player_extractor = QRegExp("\"assets\"\\s*:.*\"js\"\\s*:\\s*(\"[^\"]+\")");
+
+    QString data = QString::fromUtf8(raw_data.data());
+
+    if (sts_extractor.indexIn(data) != -1) {
+        *sts = sts_extractor.cap(1);
+
+        if (js_player_extractor.indexIn(data) != -1) {
+            bb::data::JsonDataAccess jda;
+
+            QVariant json_data = jda.loadFromBuffer(QString("{ \"js\" : %1 }").arg(js_player_extractor.cap(1)));
+
+            if (!jda.hasError()) {
+                QVariantMap json_map = json_data.value<QVariantMap>();
+
+                if (json_map.contains("js")) {
+                    QString url = json_map["js"].toString();
+
+                    if (url.startsWith("//")) {
+                        *js_player_url = QString("https:") + url;
+                    } else {
+                        *js_player_url = url;
+                    }
+                } else {
+                    *js_player_url = "";
+                }
+            } else {
+                *js_player_url = "";
+            }
+        } else {
+            *js_player_url = "";
+        }
+
+        return true;
+    } else {
+        return false;
+    }
+}
+
+bool YTVideoManager::DecodeSignature(const QByteArray &raw_js_code, const QString &encoded_signature, QString *decoded_signature)
+{
+    QRegExp js_function_extractor = QRegExp("signature=([$a-zA-Z]+)");
+
+    QString js_code = QString::fromUtf8(raw_js_code.data());
+
+    js_code = js_code.remove(QRegExp("^\\s*\\(\\s*function\\s*\\(\\s*\\)\\s*\\{"));
+    js_code = js_code.remove(QRegExp("\\}\\s*\\)\\s*\\(\\s*\\)\\s*;\\s*$"));
+
+    js_code = "var window = {location: 0}; var document = {m: 0}; var navigator = {m: 0};" + js_code;
+
+    if (js_function_extractor.indexIn(js_code) != -1) {
+        QScriptEngine js_engine;
+
+        QString function_name = js_function_extractor.cap(1);
+
+        js_engine.evaluate(js_code);
+
+        if (!js_engine.hasUncaughtException()) {
+            QScriptValue js_function = js_engine.globalObject().property(function_name);
+
+            if (js_function.isFunction()) {
+                QScriptValue result = js_function.call(js_engine.globalObject(), QScriptValueList() << encoded_signature);
+
+                if (result.isString()) {
+                    *decoded_signature = result.toString();
+
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
         } else {
             return false;
         }

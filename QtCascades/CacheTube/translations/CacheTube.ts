@@ -26,6 +26,18 @@
         <source>No suitable video formats available</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Cannot extract video information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot decode video signature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video information incomplete</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>main</name>

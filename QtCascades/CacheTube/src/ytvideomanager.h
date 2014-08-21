@@ -31,7 +31,7 @@ struct YTDownloadTask
 {
     int     State, Fmt;
     qint64  Size, Done;
-    QString VideoId, Title, ErrorMsg, VisitorInfo1LiveCookie;
+    QString VideoId, Title, ErrorMsg, JSPlayerURL, VideoURL, Signature, VisitorInfo1LiveCookie;
 };
 
 class YTVideoManager : public QObject
@@ -78,7 +78,9 @@ private:
 
     void UpdateTask(const YTDownloadTask &task);
 
-    bool ParseMetadata(const QByteArray &raw_data, QString *video_title, QHash<int, QString> *fmt_url_map);
+    bool ParseMetadata(const QByteArray &raw_data, QString *video_title, QHash<int, QString> *fmt_url_map, QHash<int, QString> *fmt_sig_map);
+    bool ParseVideoPage(const QByteArray &raw_data, QString *sts, QString *js_player_url);
+    bool DecodeSignature(const QByteArray &raw_js_code, const QString &encoded_signature, QString *decoded_signature);
 
     QString FormatNetworkError(QNetworkReply::NetworkError error);
 
@@ -91,7 +93,7 @@ private:
     QFile                 CurrentFile;
     QSqlDatabase          TaskDatabase;
     QNetworkAccessManager *NetworkAccessManager;
-    QNetworkReply         *MetadataReply, *DownloadReply;
+    QNetworkReply         *VideoPageReply, *MetadataReply, *JSPlayerReply, *DownloadReply;
 };
 
 #endif // YTVIDEOMANAGER_H
