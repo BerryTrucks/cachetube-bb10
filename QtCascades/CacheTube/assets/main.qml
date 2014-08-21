@@ -346,7 +346,6 @@ TabbedPane {
                                 property string itemErrorMsg: ListItemData.errorMsg
 
                                 layout: StackLayout {
-                                    orientation: LayoutOrientation.TopToBottom
                                 }
 
                                 gestureHandlers: [

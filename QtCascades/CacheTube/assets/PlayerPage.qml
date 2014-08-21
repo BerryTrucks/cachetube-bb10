@@ -73,11 +73,11 @@ Page {
             
             onPlayActionChanged: {
                 if (playAction) {
-                    playPauseActionItem.title       = qsTr("Play");
-                    playPauseActionItem.imageSource = "images/play.png";
+                    title       = qsTr("Play");
+                    imageSource = "images/play.png";
                 } else {
-                    playPauseActionItem.title       = qsTr("Pause");
-                    playPauseActionItem.imageSource = "images/pause.png";
+                    title       = qsTr("Pause");
+                    imageSource = "images/pause.png";
                 }
             }
             
@@ -291,46 +291,97 @@ Page {
             ]
         }
 
-        Slider {
-            id:                  videoSlider
+        Container {
+            id:                  toolbarContainer
             horizontalAlignment: HorizontalAlignment.Fill
             verticalAlignment:   VerticalAlignment.Bottom
-            fromValue:           0.0
-            toValue:             videoPlayer.duration
-            enabled:             videoPlayer.seekable
+            background:          Color.Black
+            opacity:             0.5
             visible:             playerPage.controlsVisible
 
-            property bool playbackWasActive: false
+            layout: StackLayout {
+                orientation: LayoutOrientation.LeftToRight
+            }
 
-            onTouch: {
-                if (event.touchType === TouchType.Down) {
-                    playbackWasActive = videoPlayer.playbackActive; 
-                    
-                    videoPlayer.videoSeeking = true;
+            function msToTime(msec) {
+                var time = msec;
+                
+                var ms = time % 1000;
+                time   = (time - ms) / 1000;
+                
+                var ss = time % 60;
+                time   = (time - ss) / 60;
+                
+                var mm = time % 60;
+                var hh = (time - mm) / 60;
+                
+                return (hh < 10 ? '0' : '') + hh + ":" + (mm < 10 ? '0' : '') + mm + ":" + (ss < 10 ? '0' : '') + ss; 
+            }
 
-                    if (videoPlayer.pause() !== MediaError.None) {
-                        videoPlaybackErrorToast.show();
-                    }
-                } else if (event.touchType === TouchType.Up || event.touchType === TouchType.Cancel) {
-                    videoPlayer.seekTime(immediateValue);
+            Label {
+                text:               toolbarContainer.msToTime(videoPlayer.position)
+                textFormat:         TextFormat.Plain
+                textStyle.color:    Color.White
+                textStyle.fontSize: FontSize.Small 
+                
+                layoutProperties: StackLayoutProperties {
+                    spaceQuota: -1
+                } 
+            }
 
-                    videoPlayer.videoSeeking = false;
-
-                    if (playbackWasActive) {
-                        if (videoNowPlayingConnection.acquired) {
-                            if (videoPlayer.play() !== MediaError.None) {
-                                videoPlaybackErrorToast.show();
-                            }
-                        } else {
-                            if (videoNowPlayingConnection.acquire() !== MediaError.None) {
-                                videoPlaybackErrorToast.show();
+            Slider {
+                id:        videoSlider
+                fromValue: 0.0
+                toValue:   videoPlayer.duration
+                enabled:   videoPlayer.seekable
+                
+                property bool playbackWasActive: false
+                
+                layoutProperties: StackLayoutProperties {
+                    spaceQuota: 1
+                }
+                
+                onTouch: {
+                    if (event.touchType === TouchType.Down) {
+                        playbackWasActive = videoPlayer.playbackActive; 
+                        
+                        videoPlayer.videoSeeking = true;
+                        
+                        if (videoPlayer.pause() !== MediaError.None) {
+                            videoPlaybackErrorToast.show();
+                        }
+                    } else if (event.touchType === TouchType.Up || event.touchType === TouchType.Cancel) {
+                        videoPlayer.seekTime(immediateValue);
+                        
+                        videoPlayer.videoSeeking = false;
+                        
+                        if (playbackWasActive) {
+                            if (videoNowPlayingConnection.acquired) {
+                                if (videoPlayer.play() !== MediaError.None) {
+                                    videoPlaybackErrorToast.show();
+                                }
+                            } else {
+                                if (videoNowPlayingConnection.acquire() !== MediaError.None) {
+                                    videoPlaybackErrorToast.show();
+                                }
                             }
                         }
                     }
                 }
             }
+
+            Label {
+                text:               toolbarContainer.msToTime(videoPlayer.duration)
+                textFormat:         TextFormat.Plain
+                textStyle.color:    Color.White
+                textStyle.fontSize: FontSize.Small 
+                
+                layoutProperties: StackLayoutProperties {
+                    spaceQuota: -1
+                } 
+            }
         }
-        
+
         attachedObjects: [
             LayoutUpdateHandler {
                 id: videoContainerLayoutUpdateHandler
