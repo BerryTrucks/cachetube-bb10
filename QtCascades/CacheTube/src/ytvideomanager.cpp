@@ -904,12 +904,65 @@ bool YTVideoManager::DecodeSignature(const QByteArray &raw_js_code, const QStrin
 {
     QRegExp js_function_extractor = QRegExp("signature=([$a-zA-Z]+)");
 
+    QString browser_vars = QString() +
+                           "var window = {closed:        false,"  +
+                                         "defaultStatus: \"\","   +
+                                         "document:      {m: 0}," +
+                                         "frames:        [],"     +
+                                         "history:       {m: 0}," +
+                                         "innerHeight:   0,"      +
+                                         "innerWidth:    0,"      +
+                                         "length:        0,"      +
+                                         "location:      {m: 0}," +
+                                         "name:          \"\","   +
+                                         "navigator:     {m: 0}," +
+                                         "opener:        {m: 0}," +
+                                         "outerHeight:   0,"      +
+                                         "outerWidth:    0,"      +
+                                         "pageXOffset:   0,"      +
+                                         "pageYOffset:   0,"      +
+                                         "parent:        {m: 0}," +
+                                         "screen:        {m: 0}," +
+                                         "screenLeft:    0,"      +
+                                         "screenTop:     0,"      +
+                                         "screenX:       0,"      +
+                                         "screenY:       0,"      +
+                                         "self:          {m: 0}," +
+                                         "status:        \"\","   +
+                                         "top:           {m: 0}"  +
+                           "};" +
+                           "var closed         = false,"  +
+                                "defaultStatus = \"\","   +
+                                "document      = {m: 0}," +
+                                "frames        = [],"     +
+                                "history       = {m: 0}," +
+                                "innerHeight   = 0,"      +
+                                "innerWidth    = 0,"      +
+                                "length        = 0,"      +
+                                "location      = {m: 0}," +
+                                "name          = \"\","   +
+                                "navigator     = {m: 0}," +
+                                "opener        = {m: 0}," +
+                                "outerHeight   = 0,"      +
+                                "outerWidth    = 0,"      +
+                                "pageXOffset   = 0,"      +
+                                "pageYOffset   = 0,"      +
+                                "parent        = {m: 0}," +
+                                "screen        = {m: 0}," +
+                                "screenLeft    = 0,"      +
+                                "screenTop     = 0,"      +
+                                "screenX       = 0,"      +
+                                "screenY       = 0,"      +
+                                "self          = {m: 0}," +
+                                "status        = \"\","   +
+                                "top           = {m: 0};";
+
     QString js_code = QString::fromUtf8(raw_js_code.data());
 
     js_code = js_code.remove(QRegExp("^\\s*\\(\\s*function\\s*\\(\\s*\\)\\s*\\{"));
     js_code = js_code.remove(QRegExp("\\}\\s*\\)\\s*\\(\\s*\\)\\s*;\\s*$"));
 
-    js_code = "var window = {location: 0}; var document = {m: 0}; var navigator = {m: 0};" + js_code;
+    js_code = browser_vars + js_code;
 
     if (js_function_extractor.indexIn(js_code) != -1) {
         QScriptEngine js_engine;
