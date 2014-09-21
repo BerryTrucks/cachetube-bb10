@@ -905,57 +905,88 @@ bool YTVideoManager::DecodeSignature(const QByteArray &raw_js_code, const QStrin
     QRegExp js_function_extractor = QRegExp("signature=([$a-zA-Z]+)");
 
     QString browser_vars = QString() +
-                           "var window = {closed:        false,"  +
-                                         "defaultStatus: \"\","   +
-                                         "document:      {m: 0}," +
-                                         "frames:        [],"     +
-                                         "history:       {m: 0}," +
-                                         "innerHeight:   0,"      +
-                                         "innerWidth:    0,"      +
-                                         "length:        0,"      +
-                                         "location:      {m: 0}," +
-                                         "name:          \"\","   +
-                                         "navigator:     {m: 0}," +
-                                         "opener:        {m: 0}," +
-                                         "outerHeight:   0,"      +
-                                         "outerWidth:    0,"      +
-                                         "pageXOffset:   0,"      +
-                                         "pageYOffset:   0,"      +
-                                         "parent:        {m: 0}," +
-                                         "screen:        {m: 0}," +
-                                         "screenLeft:    0,"      +
-                                         "screenTop:     0,"      +
-                                         "screenX:       0,"      +
-                                         "screenY:       0,"      +
-                                         "self:          {m: 0}," +
-                                         "status:        \"\","   +
-                                         "top:           {m: 0}"  +
+                           "var window = {closed:        false,"    +
+                                         "defaultStatus: \"\","     +
+                                         "document:      {"         +
+                                             "m: 0"                 +
+                                         "},"                       +
+                                         "frames:        [],"       +
+                                         "history:       {"         +
+                                             "length: 0"            +
+                                         "},"                       +
+                                         "innerHeight:   0,"        +
+                                         "innerWidth:    0,"        +
+                                         "length:        0,"        +
+                                         "location:      {"         +
+                                             "hash:     \"\","      +
+                                             "host:     \"\","      +
+                                             "hostname: \"\","      +
+                                             "href:     \"\","      +
+                                             "origin:   \"\","      +
+                                             "pathname: \"\","      +
+                                             "port:     0,"         +
+                                             "protocol: \"\","      +
+                                             "search:   \"\""       +
+                                         "},"                       +
+                                         "name:          \"\","     +
+                                         "navigator:     {"         +
+                                             "appCodeName:   \"\"," +
+                                             "appName:       \"\"," +
+                                             "appVersion:    \"\"," +
+                                             "cookieEnabled: true," +
+                                             "language:      \"\"," +
+                                             "onLine:        true," +
+                                             "platform:      \"\"," +
+                                             "product:       \"\"," +
+                                             "userAgent:     \"\""  +
+                                         "},"                       +
+                                         "opener:        this,"     +
+                                         "outerHeight:   0,"        +
+                                         "outerWidth:    0,"        +
+                                         "pageXOffset:   0,"        +
+                                         "pageYOffset:   0,"        +
+                                         "parent:        this,"     +
+                                         "screen:        {"         +
+                                             "availHeight: 0,"      +
+                                             "availWidth:  0,"      +
+                                             "colorDepth:  0,"      +
+                                             "height:      0,"      +
+                                             "pixelDepth:  0,"      +
+                                             "width:       0"       +
+                                         "},"                       +
+                                         "screenLeft:    0,"        +
+                                         "screenTop:     0,"        +
+                                         "screenX:       0,"        +
+                                         "screenY:       0,"        +
+                                         "self:          this,"     +
+                                         "status:        \"\","     +
+                                         "top:           this"      +
                            "};" +
-                           "var closed         = false,"  +
-                                "defaultStatus = \"\","   +
-                                "document      = {m: 0}," +
-                                "frames        = [],"     +
-                                "history       = {m: 0}," +
-                                "innerHeight   = 0,"      +
-                                "innerWidth    = 0,"      +
-                                "length        = 0,"      +
-                                "location      = {m: 0}," +
-                                "name          = \"\","   +
-                                "navigator     = {m: 0}," +
-                                "opener        = {m: 0}," +
-                                "outerHeight   = 0,"      +
-                                "outerWidth    = 0,"      +
-                                "pageXOffset   = 0,"      +
-                                "pageYOffset   = 0,"      +
-                                "parent        = {m: 0}," +
-                                "screen        = {m: 0}," +
-                                "screenLeft    = 0,"      +
-                                "screenTop     = 0,"      +
-                                "screenX       = 0,"      +
-                                "screenY       = 0,"      +
-                                "self          = {m: 0}," +
-                                "status        = \"\","   +
-                                "top           = {m: 0};";
+                           "var closed         = window.closed,"        +
+                                "defaultStatus = window.defaultStatus," +
+                                "document      = window.document,"      +
+                                "frames        = window.frames,"        +
+                                "history       = window.history,"       +
+                                "innerHeight   = window.innerHeight,"   +
+                                "innerWidth    = window.innerWidth,"    +
+                                "length        = window.length,"        +
+                                "location      = window.location,"      +
+                                "name          = window.name,"          +
+                                "navigator     = window.navigator,"     +
+                                "opener        = window.opener,"        +
+                                "outerHeight   = window.outerHeight,"   +
+                                "outerWidth    = window.outerWidth,"    +
+                                "pageXOffset   = window.pageXOffset,"   +
+                                "pageYOffset   = window.pageYOffset,"   +
+                                "parent        = window.parent,"        +
+                                "screen        = window.screen,"        +
+                                "screenLeft    = window.screenLeft,"    +
+                                "screenTop     = window.screenTop,"     +
+                                "screenX       = window.screenX,"       +
+                                "screenY       = window.screenY,"       +
+                                "self          = window.self,"          +
+                                "status        = window.status,"        +
+                                "top           = window.top;";
 
     QString js_code = QString::fromUtf8(raw_js_code.data());
 
