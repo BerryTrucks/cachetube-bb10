@@ -11,14 +11,14 @@ TabbedPane {
                 var format = AppSettings.preferredVideoFormat;
 
                 if (format === 22) {
-                    preferredVideoFormatRadioGroup.selectedIndex = 0;
+                    preferredVideoFormatDropDown.selectedIndex = 0;
                 } else if (format === 18) {
-                    preferredVideoFormatRadioGroup.selectedIndex = 1;
+                    preferredVideoFormatDropDown.selectedIndex = 1;
                 } else {
-                    preferredVideoFormatRadioGroup.selectedIndex = 0;
+                    preferredVideoFormatDropDown.selectedIndex = 0;
                 }
 
-                autoRepeatPlaybackCheckBox.checked = AppSettings.autoRepeatPlayback;
+                autoRepeatPlaybackToggleButton.checked = AppSettings.autoRepeatPlayback;
 
                 settingsSheet.open();
             }
@@ -39,14 +39,14 @@ TabbedPane {
                                 onTriggered: {
                                     var format = AppSettings.preferredVideoFormat;
 
-                                    if (preferredVideoFormatRadioGroup.selectedIndex === 0) {
+                                    if (preferredVideoFormatDropDown.selectedIndex === 0) {
                                         format = 22;
-                                    } else if (preferredVideoFormatRadioGroup.selectedIndex === 1) {
+                                    } else if (preferredVideoFormatDropDown.selectedIndex === 1) {
                                         format = 18;
                                     }
 
                                     AppSettings.preferredVideoFormat = format;
-                                    AppSettings.autoRepeatPlayback   = autoRepeatPlaybackCheckBox.checked;
+                                    AppSettings.autoRepeatPlayback   = autoRepeatPlaybackToggleButton.checked;
 
                                     YTVideoManager.setPreferredVideoFormat(format);
                                     
@@ -79,17 +79,12 @@ TabbedPane {
                                     layout: StackLayout {
                                     }
 
-                                    Label {
-                                        textStyle.color:    Color.Black
-                                        textStyle.fontSize: FontSize.Large
-                                        text:               qsTr("Preferred Video Format:")
-                                    }
-
                                     Divider {
                                     }
 
-                                    RadioGroup {
-                                        id: preferredVideoFormatRadioGroup
+                                    DropDown {
+                                        id:    preferredVideoFormatDropDown
+                                        title: qsTr("Preferred Video Format")
                                         
                                         Option {
                                             text: qsTr("720p H.264 MP4")
@@ -111,17 +106,19 @@ TabbedPane {
                                         }
                                         
                                         Label {
+                                            verticalAlignment:  VerticalAlignment.Center
+                                            multiline:          true
                                             textStyle.color:    Color.Black
-                                            textStyle.fontSize: FontSize.Large
-                                            text:               qsTr("Auto Repeat Playback:")
-                                            
+                                            textStyle.fontSize: FontSize.Medium
+                                            text:               qsTr("Auto Repeat Playback")
+
                                             layoutProperties: StackLayoutProperties {
                                                 spaceQuota: 1
                                             }
                                         }
                                         
-                                        CheckBox {
-                                            id: autoRepeatPlaybackCheckBox
+                                        ToggleButton {
+                                            id: autoRepeatPlaybackToggleButton
                                             
                                             layoutProperties: StackLayoutProperties {
                                                 spaceQuota: -1

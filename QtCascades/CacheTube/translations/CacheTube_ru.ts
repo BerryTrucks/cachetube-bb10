@@ -52,27 +52,27 @@
 <context>
     <name>main</name>
     <message>
-        <location filename="../assets/main.qml" line="210"/>
+        <location filename="../assets/main.qml" line="207"/>
         <source>YouTube</source>
         <translation>YouTube</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="216"/>
+        <location filename="../assets/main.qml" line="213"/>
         <source>Back</source>
         <translation>Назад</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="225"/>
+        <location filename="../assets/main.qml" line="222"/>
         <source>Home</source>
         <translation>Домой</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="262"/>
+        <location filename="../assets/main.qml" line="259"/>
         <source>Reload</source>
         <translation>Обновить</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="234"/>
+        <location filename="../assets/main.qml" line="231"/>
         <source>Cache</source>
         <translation>Загрузить</translation>
     </message>
@@ -87,78 +87,83 @@
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="116"/>
-        <source>Auto Repeat Playback:</source>
-        <translation>Автоповтор воспроизведения:</translation>
+        <location filename="../assets/main.qml" line="87"/>
+        <source>Preferred Video Format</source>
+        <translation>Предпочитаемый формат видео</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="158"/>
+        <location filename="../assets/main.qml" line="113"/>
+        <source>Auto Repeat Playback</source>
+        <translation>Автоповтор воспроизведения</translation>
+    </message>
+    <message>
+        <location filename="../assets/main.qml" line="155"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="253"/>
+        <location filename="../assets/main.qml" line="250"/>
         <source>Video caching started</source>
         <translation>Загрузка видео начата</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="257"/>
+        <location filename="../assets/main.qml" line="254"/>
         <source>Cannot cache this video. May be it is already cached?</source>
         <translation>Не могу загрузить это видео. Возможно, оно уже загружено?</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="308"/>
-        <location filename="../assets/main.qml" line="313"/>
+        <location filename="../assets/main.qml" line="305"/>
+        <location filename="../assets/main.qml" line="310"/>
         <source>Cached Video</source>
         <translation>Загруженное видео</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="340"/>
+        <location filename="../assets/main.qml" line="337"/>
         <source>No cached video</source>
         <translation>Нет загруженного видео</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="473"/>
+        <location filename="../assets/main.qml" line="470"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="486"/>
+        <location filename="../assets/main.qml" line="483"/>
         <source>Video deleted successfully</source>
         <translation>Видео успешно удалено</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="487"/>
+        <location filename="../assets/main.qml" line="484"/>
         <source>Undo</source>
         <translation>Отменить</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="504"/>
+        <location filename="../assets/main.qml" line="501"/>
         <source>Video restored successfully</source>
         <translation>Видео успешно восстановлено</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="508"/>
+        <location filename="../assets/main.qml" line="505"/>
         <source>Cannot restore video</source>
         <translation>Невозможно восстановить видео</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="450"/>
+        <location filename="../assets/main.qml" line="447"/>
         <source>Pause/Resume</source>
         <translation>Пауза/Продолжить</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="464"/>
+        <location filename="../assets/main.qml" line="461"/>
         <source>Open YouTube Page</source>
         <translation>Открыть страницу YouTube</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="539"/>
+        <location filename="../assets/main.qml" line="536"/>
         <source>QUEUED</source>
         <translation>ОЖИДАНИЕ</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="540"/>
+        <location filename="../assets/main.qml" line="537"/>
         <source>PAUSED</source>
         <translation>ПАУЗА</translation>
     </message>
@@ -168,33 +173,28 @@
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="85"/>
-        <source>Preferred Video Format:</source>
-        <translation>Предпочитаемый формат видео:</translation>
-    </message>
-    <message>
-        <location filename="../assets/main.qml" line="95"/>
+        <location filename="../assets/main.qml" line="90"/>
         <source>720p H.264 MP4</source>
         <translation>720p H.264 MP4</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="99"/>
+        <location filename="../assets/main.qml" line="94"/>
         <source>360p H.264 MP4</source>
         <translation>360p H.264 MP4</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="155"/>
+        <location filename="../assets/main.qml" line="152"/>
         <source>Help</source>
         <translation>Справка</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="168"/>
+        <location filename="../assets/main.qml" line="165"/>
         <source>Review App</source>
         <translation>Отзыв</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="144"/>
-        <location filename="../assets/main.qml" line="199"/>
+        <location filename="../assets/main.qml" line="141"/>
+        <location filename="../assets/main.qml" line="196"/>
         <source>local:///assets/doc/help.html</source>
         <translation>local:///assets/doc/help_ru.html</translation>
     </message>

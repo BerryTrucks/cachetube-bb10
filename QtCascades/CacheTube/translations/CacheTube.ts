@@ -114,10 +114,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Preferred Video Format:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>local:///assets/doc/help.html</source>
         <translation type="unfinished"></translation>
     </message>
@@ -154,7 +150,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Auto Repeat Playback:</source>
+        <source>Preferred Video Format</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Auto Repeat Playback</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
