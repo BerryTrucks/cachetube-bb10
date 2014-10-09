@@ -208,7 +208,7 @@ TabbedPane {
         imageSource: "images/youtube.png"
         
         Page {
-            function onInvocationStarted() {
+            function onInvocationVideoUrlChanged() {
                 var video_id = YTVideoManager.getVideoId(InvocationHelper.videoUrl);
                 
                 if (video_id !== "") {
@@ -223,7 +223,7 @@ TabbedPane {
                     youTubeWebView.url = "http://m.youtube.com/watch?v=" + encodeURIComponent(video_id);
                 }
                 
-                InvocationHelper.invocationStarted.connect(onInvocationStarted);
+                InvocationHelper.videoUrlChanged.connect(onInvocationVideoUrlChanged);
             }
             
             actions: [

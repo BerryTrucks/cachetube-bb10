@@ -11,19 +11,20 @@ class InvocationHelper : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(QUrl videoUrl READ videoUrl)
+    Q_PROPERTY(QUrl videoUrl READ videoUrl WRITE setVideoUrl NOTIFY videoUrlChanged)
 
 public:
     explicit InvocationHelper(QObject *parent = 0);
     virtual ~InvocationHelper();
 
     QUrl videoUrl() const;
+    void setVideoUrl(const QUrl &video_url);
 
 private slots:
     void invoked(const bb::system::InvokeRequest &request);
 
 signals:
-    void invocationStarted();
+    void videoUrlChanged();
 
 private:
     QUrl                      VideoURL;

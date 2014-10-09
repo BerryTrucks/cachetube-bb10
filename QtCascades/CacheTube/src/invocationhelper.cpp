@@ -17,9 +17,18 @@ QUrl InvocationHelper::videoUrl() const
     return VideoURL;
 }
 
+void InvocationHelper::setVideoUrl(const QUrl &video_url)
+{
+    if (VideoURL != video_url) {
+        VideoURL = video_url;
+
+        emit videoUrlChanged();
+    }
+}
+
 void InvocationHelper::invoked(const bb::system::InvokeRequest &request)
 {
     VideoURL = request.uri();
 
-    emit invocationStarted();
+    emit videoUrlChanged();
 }
