@@ -13,6 +13,7 @@
 #include <bb/cascades/AbstractPane>
 
 #include "appsettings.h"
+#include "invocationhelper.h"
 #include "customtimer.h"
 #include "ytvideomanager.h"
 #include "ytarraydatamodel.h"
@@ -34,6 +35,7 @@ CacheTube::CacheTube(bb::cascades::Application *app) : QObject(app)
     QmlDocument *qml = QmlDocument::create("asset:///main.qml").parent(this);
 
     qml->setContextProperty("AppSettings", app_settings);
+    qml->setContextProperty("InvocationHelper", new InvocationHelper(this));
     qml->setContextProperty("YTVideoManager", new YTVideoManager(network_access_manager, app_settings->preferredVideoFormat(), this));
 
     AbstractPane *root = qml->createRootObject<AbstractPane>();

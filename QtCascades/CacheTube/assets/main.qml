@@ -4,12 +4,12 @@ import YTVideoManagement 1.0
 
 TabbedPane {
     id: tabbedPane
-
+    
     Menu.definition: MenuDefinition {
         settingsAction: SettingsActionItem {
             onTriggered: {
                 var format = AppSettings.preferredVideoFormat;
-
+                
                 if (format === 22) {
                     preferredVideoFormatDropDown.selectedIndex = 0;
                 } else if (format === 18) {
@@ -17,71 +17,71 @@ TabbedPane {
                 } else {
                     preferredVideoFormatDropDown.selectedIndex = 0;
                 }
-
+                
                 autoRepeatPlaybackToggleButton.checked = AppSettings.autoRepeatPlayback;
-
+                
                 settingsSheet.open();
             }
             
             attachedObjects: [
                 Sheet {
                     id: settingsSheet
-
+                    
                     Page {
                         id: settingsPage
                         
                         titleBar: TitleBar {
                             title: qsTr("Settings")
-
+                            
                             acceptAction: ActionItem {
                                 title: qsTr("OK")
-
+                                
                                 onTriggered: {
                                     var format = AppSettings.preferredVideoFormat;
-
+                                    
                                     if (preferredVideoFormatDropDown.selectedIndex === 0) {
                                         format = 22;
                                     } else if (preferredVideoFormatDropDown.selectedIndex === 1) {
                                         format = 18;
                                     }
-
+                                    
                                     AppSettings.preferredVideoFormat = format;
                                     AppSettings.autoRepeatPlayback   = autoRepeatPlaybackToggleButton.checked;
-
+                                    
                                     YTVideoManager.setPreferredVideoFormat(format);
                                     
                                     settingsSheet.close();
                                 }
                             }
-
+                            
                             dismissAction: ActionItem {
                                 title: qsTr("Cancel")
-
+                                
                                 onTriggered: {
                                     settingsSheet.close();
                                 }
                             }
                         }
-
+                        
                         Container {
                             background: Color.White
-
+                            
                             ScrollView {
                                 scrollViewProperties {
                                     scrollMode: ScrollMode.Vertical
                                 }
-
+                                
                                 Container {
                                     background:   Color.Transparent
                                     leftPadding:  12
                                     rightPadding: 12
-
+                                    
                                     layout: StackLayout {
                                     }
-
+                                    
                                     Divider {
                                     }
-
+                                    
                                     DropDown {
                                         id:    preferredVideoFormatDropDown
                                         title: qsTr("Preferred Video Format")
@@ -89,12 +89,12 @@ TabbedPane {
                                         Option {
                                             text: qsTr("720p H.264 MP4")
                                         }
-
+                                        
                                         Option {
                                             text: qsTr("360p H.264 MP4")
                                         }
                                     }
-
+                                    
                                     Divider {
                                     }
                                     
@@ -111,7 +111,7 @@ TabbedPane {
                                             textStyle.color:    Color.Black
                                             textStyle.fontSize: FontSize.Medium
                                             text:               qsTr("Auto Repeat Playback")
-
+                                            
                                             layoutProperties: StackLayoutProperties {
                                                 spaceQuota: 1
                                             }
@@ -146,7 +146,7 @@ TabbedPane {
             attachedObjects: [
                 Sheet {
                     id: helpSheet
-
+                    
                     Page {
                         titleBar: TitleBar {
                             title: qsTr("Help")
@@ -159,21 +159,21 @@ TabbedPane {
                                 }
                             }
                         }
-
+                        
                         actions: [
                             ActionItem {
                                 title:               qsTr("Review App")
                                 imageSource:         "images/review.png"
                                 ActionBar.placement: ActionBarPlacement.OnBar
-
+                                
                                 onTriggered: {
                                     appWorldInvocation.trigger("bb.action.OPEN");
                                 }
-
+                                
                                 attachedObjects: [
                                     Invocation {
                                         id: appWorldInvocation
-
+                                        
                                         query: InvokeQuery {
                                             mimeType: "application/x-bb-appworld"
                                             uri:      "appworld://content/42093887"
@@ -182,7 +182,7 @@ TabbedPane {
                                 ]
                             }
                         ]
-
+                        
                         ScrollView {
                             scrollViewProperties {
                                 scrollMode:         ScrollMode.Both
@@ -190,7 +190,7 @@ TabbedPane {
                                 minContentScale:    1.0
                                 maxContentScale:    4.0
                             }
-
+                            
                             WebView {
                                 id:  helpWebView
                                 url: qsTr("local:///assets/doc/help.html")
@@ -201,19 +201,37 @@ TabbedPane {
             ]
         }
     }
-
+    
     Tab {
         id:          youTubeTab
         title:       qsTr("YouTube")
         imageSource: "images/youtube.png"
-
+        
         Page {
+            function onInvocationStarted() {
+                var video_id = YTVideoManager.getVideoId(InvocationHelper.videoUrl);
+                
+                if (video_id !== "") {
+                    youTubeWebView.url = "http://m.youtube.com/watch?v=" + encodeURIComponent(video_id);
+                }
+            }
+            
+            onCreationCompleted: {
+                var video_id = YTVideoManager.getVideoId(InvocationHelper.videoUrl);
+                
+                if (video_id !== "") {
+                    youTubeWebView.url = "http://m.youtube.com/watch?v=" + encodeURIComponent(video_id);
+                }
+                
+                InvocationHelper.invocationStarted.connect(onInvocationStarted);
+            }
+            
             actions: [
                 ActionItem {
                     title:               qsTr("Back")
                     imageSource:         "images/back.png"
                     ActionBar.placement: ActionBarPlacement.OnBar
-
+                    
                     onTriggered: {
                         youTubeWebView.goBack();
                     }
@@ -222,7 +240,7 @@ TabbedPane {
                     title:               qsTr("Home")
                     imageSource:         "images/home.png"
                     ActionBar.placement: ActionBarPlacement.OnBar
-
+                    
                     onTriggered: {
                         youTubeWebView.url = "http://m.youtube.com/";
                     }
@@ -231,7 +249,7 @@ TabbedPane {
                     title:               qsTr("Cache")
                     imageSource:         "images/cache.png"
                     ActionBar.placement: ActionBarPlacement.OnBar
-
+                    
                     onTriggered: {
                         var video_id = YTVideoManager.getVideoId(youTubeWebView.url);
                         
@@ -259,19 +277,19 @@ TabbedPane {
                     title:               qsTr("Reload")
                     imageSource:         "images/reload.png"
                     ActionBar.placement: ActionBarPlacement.InOverflow
-
+                    
                     onTriggered: {
                         youTubeWebView.reload();
                     }
                 }
             ]
-
+            
             Container {
                 background: Color.White
                 
                 layout: DockLayout {
                 }
-
+                
                 ScrollView {
                     horizontalAlignment: HorizontalAlignment.Fill
                     verticalAlignment:   VerticalAlignment.Fill
@@ -282,7 +300,7 @@ TabbedPane {
                         minContentScale:    1.0
                         maxContentScale:    4.0
                     }
-
+                    
                     WebView {
                         id:  youTubeWebView
                         url: "http://m.youtube.com/"
@@ -304,18 +322,18 @@ TabbedPane {
     Tab {
         title:       qsTr("Cached Video")
         imageSource: "images/cache.png"
-
+        
         Page {
             titleBar: TitleBar {
                 title: qsTr("Cached Video")
             }
-
+            
             Container {
                 background: Color.White
-
+                
                 layout: DockLayout {
                 }
-
+                
                 Container {
                     horizontalAlignment: HorizontalAlignment.Center
                     verticalAlignment:   VerticalAlignment.Center
@@ -337,15 +355,15 @@ TabbedPane {
                         text:                qsTr("No cached video")
                     }
                 }
-
+                
                 ListView {
                     horizontalAlignment: HorizontalAlignment.Fill
                     verticalAlignment:   VerticalAlignment.Fill
                     visible:             cacheListViewDataModel.itemsCount > 0
-
+                    
                     property variant appSettings:    AppSettings 
                     property variant ytVideoManager: YTVideoManager
-
+                    
                     dataModel: YTArrayDataModel {
                         id:           cacheListViewDataModel
                         videoManager: YTVideoManager
@@ -353,7 +371,7 @@ TabbedPane {
                     
                     function navigateToWebPage(url) {
                         youTubeWebView.url = url;
-
+                        
                         tabbedPane.activeTab = youTubeTab;
                     } 
                     
@@ -366,7 +384,7 @@ TabbedPane {
                                 background:   itemSelected ? Color.create("#00A7DE") : Color.White 
                                 leftPadding:  12
                                 rightPadding: 12
-
+                                
                                 property bool   itemSelected: ListItem.active || ListItem.selected
                                 property int    itemState:    ListItemData.state
                                 property int    itemSize:     ListItemData.size
@@ -374,37 +392,37 @@ TabbedPane {
                                 property string itemVideoId:  ListItemData.videoId
                                 property string itemTitle:    ListItemData.title
                                 property string itemErrorMsg: ListItemData.errorMsg
-
+                                
                                 layout: StackLayout {
                                 }
-
+                                
                                 gestureHandlers: [
                                     TapHandler {
                                         onTapped: {
                                             if (itemRoot.itemState === YTDownloadState.StateCompleted) {
                                                 playerNavigationPane.push(playerPageDefinition.createObject());
-
+                                                
                                                 playerSheet.open();
                                             }
                                         }
-
+                                        
                                         attachedObjects: [
                                             Sheet {
                                                 id:          playerSheet
                                                 peekEnabled: false
-
+                                                
                                                 onOpened: {
                                                     var page = playerNavigationPane.top;
-
+                                                    
                                                     if (page.objectName === "playerPage") {
                                                         page.playVideo(itemRoot.ListItem.view.ytVideoManager.getTaskVideoURI(itemRoot.itemVideoId), itemRoot.itemTitle, itemRoot.ListItem.view.appSettings.autoRepeatPlayback);
                                                     }
                                                 }
-
+                                                
                                                 NavigationPane {
                                                     id:          playerNavigationPane
                                                     peekEnabled: false
-
+                                                    
                                                     onTopChanged: {
                                                         if (playerSheet.opened) {
                                                             if (page.objectName === "playerPage") {
@@ -414,7 +432,7 @@ TabbedPane {
                                                             }
                                                         }
                                                     }
-
+                                                    
                                                     onPopTransitionEnded: {
                                                         if (page.objectName === "playerPage") {
                                                             page.disconnectSignals();
@@ -422,14 +440,14 @@ TabbedPane {
                                                         
                                                         page.destroy();
                                                     }
-
+                                                    
                                                     Page {
                                                         Container {
                                                             background: Color.White
                                                         }
                                                     }
                                                 }
-
+                                                
                                                 attachedObjects: [
                                                     ComponentDefinition {
                                                         id:     playerPageDefinition
@@ -440,14 +458,14 @@ TabbedPane {
                                         ]
                                     }
                                 ]
-
+                                
                                 contextActions: [
                                     ActionSet {
                                         ActionItem {
                                             title:       qsTr("Pause/Resume")
                                             imageSource: "images/pause.png"
                                             enabled:     itemRoot.itemState !== YTDownloadState.StateCompleted
-
+                                            
                                             onTriggered: {
                                                 if (itemRoot.itemState === YTDownloadState.StatePaused) {
                                                     itemRoot.ListItem.view.ytVideoManager.resumeTask(itemRoot.itemVideoId);
@@ -456,27 +474,27 @@ TabbedPane {
                                                 }
                                             }
                                         }
-
+                                        
                                         ActionItem {
                                             title:       qsTr("Open YouTube Page")
                                             imageSource: "images/youtube.png"
-
+                                            
                                             onTriggered: {
                                                 itemRoot.ListItem.view.navigateToWebPage(itemRoot.ListItem.view.ytVideoManager.getTaskWebURL(itemRoot.itemVideoId));
                                             }
                                         }
-
+                                        
                                         DeleteActionItem {
                                             title:       qsTr("Delete")
                                             imageSource: "images/delete.png"
-
+                                            
                                             onTriggered: {
                                                 itemRoot.ListItem.view.ytVideoManager.delTask(itemRoot.itemVideoId);
-
+                                                
                                                 videoDeletedToast.deletedVideoId = itemRoot.itemVideoId;
                                                 videoDeletedToast.show();
                                             }
-
+                                            
                                             attachedObjects: [
                                                 SystemToast {
                                                     id:             videoDeletedToast
@@ -508,7 +526,7 @@ TabbedPane {
                                         }
                                     }
                                 ]
-
+                                
                                 Label {
                                     multiline:            true
                                     textFormat:           TextFormat.Plain
@@ -517,14 +535,14 @@ TabbedPane {
                                     textStyle.fontSize:   FontSize.Medium
                                     text:                 itemRoot.itemTitle
                                 }
-
+                                
                                 ProgressIndicator {
                                     visible:   itemRoot.itemState === YTDownloadState.StateActive
                                     fromValue: 0
                                     toValue:   itemRoot.itemSize
                                     value:     itemRoot.itemDone
                                 }
-
+                                
                                 Label {
                                     visible:             itemRoot.itemState !== YTDownloadState.StateActive
                                     multiline:           true
@@ -532,11 +550,11 @@ TabbedPane {
                                     textStyle.fontStyle: FontStyle.Italic
                                     textStyle.fontSize:  FontSize.Small
                                     text:                itemRoot.itemState === YTDownloadState.StateCompleted ? (itemRoot.itemSize / 1048576).toFixed(2) + " MiB" :
-                                                        (itemRoot.itemState === YTDownloadState.StateError     ? itemRoot.itemErrorMsg                             :
-                                                        (itemRoot.itemState === YTDownloadState.StateQueued    ? qsTr("QUEUED")                                    :
-                                                        (itemRoot.itemState === YTDownloadState.StatePaused    ? qsTr("PAUSED")                                    : "")))
+                                    (itemRoot.itemState === YTDownloadState.StateError     ? itemRoot.itemErrorMsg                             :
+                                    (itemRoot.itemState === YTDownloadState.StateQueued    ? qsTr("QUEUED")                                    :
+                                    (itemRoot.itemState === YTDownloadState.StatePaused    ? qsTr("PAUSED")                                    : "")))
                                 }
-
+                                
                                 Divider {
                                 }
                             }

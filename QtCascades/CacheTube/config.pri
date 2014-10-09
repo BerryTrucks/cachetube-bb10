@@ -59,6 +59,7 @@ config_pri_source_group1 {
         $$quote($$BASEDIR/src/CacheTube.cpp) \
         $$quote($$BASEDIR/src/appsettings.cpp) \
         $$quote($$BASEDIR/src/customtimer.cpp) \
+        $$quote($$BASEDIR/src/invocationhelper.cpp) \
         $$quote($$BASEDIR/src/main.cpp) \
         $$quote($$BASEDIR/src/ytarraydatamodel.cpp) \
         $$quote($$BASEDIR/src/ytvideomanager.cpp)
@@ -67,6 +68,7 @@ config_pri_source_group1 {
         $$quote($$BASEDIR/src/CacheTube.hpp) \
         $$quote($$BASEDIR/src/appsettings.h) \
         $$quote($$BASEDIR/src/customtimer.h) \
+        $$quote($$BASEDIR/src/invocationhelper.h) \
         $$quote($$BASEDIR/src/ytarraydatamodel.h) \
         $$quote($$BASEDIR/src/ytvideomanager.h)
 }
