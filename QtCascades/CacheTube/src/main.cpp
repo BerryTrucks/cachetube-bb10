@@ -5,7 +5,6 @@
 
 #include <bb/cascades/Application>
 
-#include "ytvideomanager.h"
 #include "CacheTube.hpp"
 
 using namespace bb::cascades;

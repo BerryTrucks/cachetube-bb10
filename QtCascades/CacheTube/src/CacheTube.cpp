@@ -1,13 +1,6 @@
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtDeclarative/QDeclarativeEngine>
 
-#include <bb/cascades/pickers/FilePicker>
-#include <bb/cascades/pickers/FilePickerMode>
-#include <bb/cascades/pickers/FilePickerSortFlag>
-#include <bb/cascades/pickers/FilePickerSortOrder>
-#include <bb/cascades/pickers/FilePickerViewMode>
-#include <bb/cascades/pickers/FileType>
-
 #include <bb/cascades/Application>
 #include <bb/cascades/QmlDocument>
 #include <bb/cascades/AbstractPane>
