@@ -114,7 +114,7 @@
     <env var="CASCADES_THEME" value="bright"/>
 
     <!-- Handle invocations -->
-    <invoke-target id="com.derevenetz.oleg.CacheTube.image.open">
+    <invoke-target id="com.derevenetz.oleg.CacheTube.http.open">
         <invoke-target-type>application</invoke-target-type>
         <filter>
             <action>bb.action.OPEN</action>
