@@ -902,7 +902,7 @@ bool YTVideoManager::ParseVideoPage(const QByteArray &raw_data, QString *sts, QS
 
 bool YTVideoManager::DecodeSignature(const QByteArray &raw_js_code, const QString &encoded_signature, QString *decoded_signature)
 {
-    QRegExp js_function_extractor = QRegExp("\\.sig\\s*\\|\\|\\s*([a-zA-Z0-9]+)\\(");
+    QRegExp js_function_extractor = QRegExp("\\.sig\\s*\\|\\|\\s*([a-zA-Z0-9_\\$]+)\\(");
 
     QString browser_vars = QString() +
                            "var window = {closed:        false,"    +
