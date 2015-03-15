@@ -171,7 +171,7 @@ TabbedPane {
                             ActionItem {
                                 title:               qsTr("Review App")
                                 imageSource:         "images/review.png"
-                                ActionBar.placement: ActionBarPlacement.OnBar
+                                ActionBar.placement: ActionBarPlacement.Signature
                                 
                                 onTriggered: {
                                     appWorldInvocation.trigger("bb.action.OPEN");
