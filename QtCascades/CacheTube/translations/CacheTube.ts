@@ -15,6 +15,14 @@
         <source>An error occured during video playback</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Video player</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video playback slider</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>YTVideoManager</name>
@@ -155,6 +163,30 @@
     </message>
     <message>
         <source>Auto Repeat Playback</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>List of cached video</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Page load progress: %1%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video load progress: %1%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Divider</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>YouTube browser</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Help browser</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

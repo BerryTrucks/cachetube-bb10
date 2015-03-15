@@ -1,5 +1,5 @@
-import bb.cascades 1.0
-import bb.system 1.0
+import bb.cascades 1.3
+import bb.system 1.2
 import YTVideoManagement 1.0
 
 TabbedPane {
@@ -67,19 +67,22 @@ TabbedPane {
                             background: Color.White
                             
                             ScrollView {
+                                accessibility.name: qsTr("Settings")
+                                
                                 scrollViewProperties {
                                     scrollMode: ScrollMode.Vertical
                                 }
                                 
                                 Container {
                                     background:   Color.Transparent
-                                    leftPadding:  12
-                                    rightPadding: 12
+                                    leftPadding:  ui.sdu(1)
+                                    rightPadding: ui.sdu(1)
                                     
                                     layout: StackLayout {
                                     }
                                     
                                     Divider {
+                                        accessibility.name: qsTr("Divider")
                                     }
                                     
                                     DropDown {
@@ -96,6 +99,7 @@ TabbedPane {
                                     }
                                     
                                     Divider {
+                                        accessibility.name: qsTr("Divider")
                                     }
                                     
                                     Container {
@@ -106,6 +110,7 @@ TabbedPane {
                                         }
                                         
                                         Label {
+                                            id:                 autoRepeatPlaybackLabel
                                             verticalAlignment:  VerticalAlignment.Center
                                             multiline:          true
                                             textStyle.color:    Color.Black
@@ -118,7 +123,8 @@ TabbedPane {
                                         }
                                         
                                         ToggleButton {
-                                            id: autoRepeatPlaybackToggleButton
+                                            id:                       autoRepeatPlaybackToggleButton
+                                            accessibility.labelledBy: autoRepeatPlaybackLabel
                                             
                                             layoutProperties: StackLayoutProperties {
                                                 spaceQuota: -1
@@ -127,6 +133,7 @@ TabbedPane {
                                     }
                                     
                                     Divider {
+                                        accessibility.name: qsTr("Divider")
                                     }
                                 }
                             }
@@ -184,6 +191,8 @@ TabbedPane {
                         ]
                         
                         ScrollView {
+                            accessibility.name: qsTr("Help browser")
+
                             scrollViewProperties {
                                 scrollMode:         ScrollMode.Both
                                 pinchToZoomEnabled: true
@@ -192,8 +201,9 @@ TabbedPane {
                             }
                             
                             WebView {
-                                id:  helpWebView
-                                url: qsTr("local:///assets/doc/help.html")
+                                id:                 helpWebView
+                                url:                qsTr("local:///assets/doc/help.html")
+                                accessibility.name: qsTr("Help browser")
                             }
                         }
                     }
@@ -237,18 +247,9 @@ TabbedPane {
                     }
                 },
                 ActionItem {
-                    title:               qsTr("Home")
-                    imageSource:         "images/home.png"
-                    ActionBar.placement: ActionBarPlacement.OnBar
-                    
-                    onTriggered: {
-                        youTubeWebView.url = "http://m.youtube.com/";
-                    }
-                },
-                ActionItem {
                     title:               qsTr("Cache")
                     imageSource:         "images/cache.png"
-                    ActionBar.placement: ActionBarPlacement.OnBar
+                    ActionBar.placement: ActionBarPlacement.Signature
                     
                     onTriggered: {
                         var video_id = YTVideoManager.getVideoId(youTubeWebView.url);
@@ -274,6 +275,15 @@ TabbedPane {
                     ]
                 },
                 ActionItem {
+                    title:               qsTr("Home")
+                    imageSource:         "images/home.png"
+                    ActionBar.placement: ActionBarPlacement.OnBar
+                    
+                    onTriggered: {
+                        youTubeWebView.url = "http://m.youtube.com/";
+                    }
+                },
+                ActionItem {
                     title:               qsTr("Reload")
                     imageSource:         "images/reload.png"
                     ActionBar.placement: ActionBarPlacement.InOverflow
@@ -293,7 +303,8 @@ TabbedPane {
                 ScrollView {
                     horizontalAlignment: HorizontalAlignment.Fill
                     verticalAlignment:   VerticalAlignment.Fill
-                    
+                    accessibility.name:  qsTr("YouTube browser")
+
                     scrollViewProperties {
                         scrollMode:         ScrollMode.Both
                         pinchToZoomEnabled: true
@@ -302,8 +313,9 @@ TabbedPane {
                     }
                     
                     WebView {
-                        id:  youTubeWebView
-                        url: "http://m.youtube.com/"
+                        id:                 youTubeWebView
+                        url:                "http://m.youtube.com/"
+                        accessibility.name: qsTr("YouTube browser")
                     }
                 }
                 
@@ -314,6 +326,7 @@ TabbedPane {
                     fromValue:           0
                     toValue:             100
                     value:               youTubeWebView.loadProgress
+                    accessibility.name:  qsTr("Page load progress: %1%").arg(value.toFixed())
                 }
             }
         }
@@ -344,11 +357,13 @@ TabbedPane {
                     }
                     
                     ImageView {
-                        horizontalAlignment: HorizontalAlignment.Center
-                        imageSource:         "images/cache_empty.png"
+                        horizontalAlignment:      HorizontalAlignment.Center
+                        imageSource:              "images/cache_empty.png"
+                        accessibility.labelledBy: cacheEmptyLabel
                     }
                     
                     Label {
+                        id:                  cacheEmptyLabel
                         horizontalAlignment: HorizontalAlignment.Center
                         textStyle.color:     Color.Black
                         textStyle.fontSize:  FontSize.XLarge
@@ -360,6 +375,7 @@ TabbedPane {
                     horizontalAlignment: HorizontalAlignment.Fill
                     verticalAlignment:   VerticalAlignment.Fill
                     visible:             cacheListViewDataModel.itemsCount > 0
+                    accessibility.name:  qsTr("List of cached video")
                     
                     property variant appSettings:    AppSettings 
                     property variant ytVideoManager: YTVideoManager
@@ -382,8 +398,8 @@ TabbedPane {
                             Container {
                                 id:           itemRoot
                                 background:   itemSelected ? Color.create("#00A7DE") : Color.White 
-                                leftPadding:  12
-                                rightPadding: 12
+                                leftPadding:  ui.sdu(1)
+                                rightPadding: ui.sdu(1)
                                 
                                 property bool   itemSelected: ListItem.active || ListItem.selected
                                 property int    itemState:    ListItemData.state
@@ -535,14 +551,15 @@ TabbedPane {
                                     textStyle.fontSize:   FontSize.Medium
                                     text:                 itemRoot.itemTitle
                                 }
-                                
+
                                 ProgressIndicator {
                                     visible:   itemRoot.itemState === YTDownloadState.StateActive
                                     fromValue: 0
                                     toValue:   itemRoot.itemSize
                                     value:     itemRoot.itemDone
+                                    accessibility.name:  qsTr("Video load progress: %1%").arg(value.toFixed())
                                 }
-                                
+
                                 Label {
                                     visible:             itemRoot.itemState !== YTDownloadState.StateActive
                                     multiline:           true
@@ -556,6 +573,7 @@ TabbedPane {
                                 }
                                 
                                 Divider {
+                                    accessibility.name: qsTr("Divider")
                                 }
                             }
                         }

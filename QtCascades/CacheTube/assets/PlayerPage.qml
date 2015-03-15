@@ -1,6 +1,6 @@
-import bb.cascades 1.0
-import bb.system 1.0
-import bb.multimedia 1.0
+import bb.cascades 1.3
+import bb.system 1.2
+import bb.multimedia 1.3
 import CustomTimer 1.0
 
 Page {
@@ -73,7 +73,7 @@ Page {
             id:                  playPauseActionItem
             title:               qsTr("Play")
             imageSource:         "images/play.png"
-            ActionBar.placement: ActionBarPlacement.OnBar
+            ActionBar.placement: ActionBarPlacement.Signature
 
             property bool playAction: true
             
@@ -129,10 +129,11 @@ Page {
             windowId:            "videoForeignWindowControl"
             horizontalAlignment: HorizontalAlignment.Center
             verticalAlignment:   VerticalAlignment.Center
-            preferredWidth:      0
-            preferredHeight:     0
+            preferredWidth:      ui.px(0)
+            preferredHeight:     ui.px(0)
             visible:             false
             updatedProperties:   WindowProperty.Size | WindowProperty.Position | WindowProperty.Visible
+            accessibility.name:  qsTr("Video player")
 
             onBoundToWindowChanged: {
                 if (boundToWindow && preferredWidth !== 0 && preferredHeight !== 0) {
@@ -335,11 +336,12 @@ Page {
             }
 
             Slider {
-                id:        videoSlider
-                fromValue: 0.0
-                toValue:   videoPlayer.duration
-                enabled:   videoPlayer.seekable
-                
+                id:                 videoSlider
+                fromValue:          0.0
+                toValue:            videoPlayer.duration
+                enabled:            videoPlayer.seekable
+                accessibility.name: qsTr("Video playback slider")
+
                 property bool playbackWasActive: false
                 
                 layoutProperties: StackLayoutProperties {
