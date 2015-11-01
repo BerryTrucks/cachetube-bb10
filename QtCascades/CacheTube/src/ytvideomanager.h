@@ -29,8 +29,9 @@ public:
 
 struct YTDownloadTask
 {
+    bool    Watched;
     int     State, Fmt;
-    qint64  Size, Done;
+    qint64  Size, Done, StartTime;
     QString VideoId, Title, ErrorMsg, JSPlayerURL, VideoURL, Signature, VisitorInfo1LiveCookie;
 };
 
@@ -54,6 +55,8 @@ public:
 
     Q_INVOKABLE void pauseTask(const QString &video_id);
     Q_INVOKABLE void resumeTask(const QString &video_id);
+
+    Q_INVOKABLE void setTaskWatched(const QString &video_id);
 
     Q_INVOKABLE QString getTaskWebURL(const QString &video_id);
     Q_INVOKABLE QString getTaskVideoURI(const QString &video_id);

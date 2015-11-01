@@ -3,8 +3,35 @@
 #include <QtCore/QVariant>
 #include <QtCore/QList>
 #include <QtCore/QVariantMap>
+#include <QtCore/QDateTime>
 
 #include "ytarraydatamodel.h"
+
+static bool compareByStartTime(QVariant &var1, QVariant &var2)
+{
+    QVariantMap map1 = var1.toMap();
+    QVariantMap map2 = var2.toMap();
+
+    if (map1.contains("startTime") && map2.contains("startTime")) {
+        return (map1["startTime"].toLongLong() > map2["startTime"].toLongLong());
+    } else {
+        return false;
+    }
+}
+
+static bool compareByStartTimeUnwatchedFirst(QVariant &var1, QVariant &var2)
+{
+    QVariantMap map1 = var1.toMap();
+    QVariantMap map2 = var2.toMap();
+
+    if (map1.contains("watched") && map2.contains("watched") && map1["watched"].toBool() != map2["watched"].toBool()) {
+        return (map1["watched"].toBool() < map2["watched"].toBool());
+    } else if (map1.contains("startTime") && map2.contains("startTime")) {
+        return (map1["startTime"].toLongLong() > map2["startTime"].toLongLong());
+    } else {
+        return false;
+    }
+}
 
 static bool compareByTitle(QVariant &var1, QVariant &var2)
 {
@@ -12,6 +39,20 @@ static bool compareByTitle(QVariant &var1, QVariant &var2)
     QVariantMap map2 = var2.toMap();
 
     if (map1.contains("title") && map2.contains("title")) {
+        return (map1["title"].toString() < map2["title"].toString());
+    } else {
+        return false;
+    }
+}
+
+static bool compareByTitleUnwatchedFirst(QVariant &var1, QVariant &var2)
+{
+    QVariantMap map1 = var1.toMap();
+    QVariantMap map2 = var2.toMap();
+
+    if (map1.contains("watched") && map2.contains("watched") && map1["watched"].toBool() != map2["watched"].toBool()) {
+        return (map1["watched"].toBool() < map2["watched"].toBool());
+    } else if (map1.contains("title") && map2.contains("title")) {
         return (map1["title"].toString() < map2["title"].toString());
     } else {
         return false;
@@ -30,10 +71,24 @@ static bool compareBySize(QVariant &var1, QVariant &var2)
     }
 }
 
+static bool compareBySizeUnwatchedFirst(QVariant &var1, QVariant &var2)
+{
+    QVariantMap map1 = var1.toMap();
+    QVariantMap map2 = var2.toMap();
+
+    if (map1.contains("watched") && map2.contains("watched") && map1["watched"].toBool() != map2["watched"].toBool()) {
+        return (map1["watched"].toBool() < map2["watched"].toBool());
+    } else if (map1.contains("size") && map2.contains("size")) {
+        return (map1["size"].toLongLong() > map2["size"].toLongLong());
+    } else {
+        return false;
+    }
+}
+
 YTArrayDataModel::YTArrayDataModel(QObject *parent) : bb::cascades::ArrayDataModel(parent)
 {
     UnwatchedFirst = true;
-    SortOrder      = SortByTitle;
+    SortOrder      = SortByStartTime;
     VideoManager   = NULL;
 }
 
@@ -132,8 +187,10 @@ void YTArrayDataModel::taskChanged(const YTDownloadTask &task)
         QVariantMap map = value(i).value<QVariantMap>();
 
         if (map.contains("videoId") && map["videoId"].toString() == task.VideoId) {
-            if (map.contains("title") && map["title"].toString()  == task.Title &&
-                map.contains("size")  && map["size"].toLongLong() == task.Size) {
+            if (map.contains("watched")   && map["watched"].toBool()       == task.Watched   &&
+                map.contains("size")      && map["size"].toLongLong()      == task.Size      &&
+                map.contains("startTime") && map["startTime"].toLongLong() == task.StartTime &&
+                map.contains("title")     && map["title"].toString()       == task.Title) {
                 map["state"]    = task.State;
                 map["done"]     = task.Done;
                 map["errorMsg"] = task.ErrorMsg;
@@ -160,23 +217,44 @@ void YTArrayDataModel::FullUpdate()
             if (Filter == "" || task_list.at(i).Title.contains(Filter, Qt::CaseInsensitive)) {
                 QVariantMap map;
 
-                map["state"]    = task_list.at(i).State;
-                map["size"]     = task_list.at(i).Size;
-                map["done"]     = task_list.at(i).Done;
-                map["videoId"]  = task_list.at(i).VideoId;
-                map["title"]    = task_list.at(i).Title;
-                map["errorMsg"] = task_list.at(i).ErrorMsg;
+                map["watched"]      = task_list.at(i).Watched;
+                map["state"]        = task_list.at(i).State;
+                map["size"]         = task_list.at(i).Size;
+                map["done"]         = task_list.at(i).Done;
+                map["startTime"]    = task_list.at(i).StartTime;
+                map["startTimeStr"] = QDateTime::fromMSecsSinceEpoch(task_list.at(i).StartTime).toString("dd MMM yyyy hh:mm:ss");
+                map["videoId"]      = task_list.at(i).VideoId;
+                map["title"]        = task_list.at(i).Title;
+                map["errorMsg"]     = task_list.at(i).ErrorMsg;
 
                 vmap_list.append(map);
             }
         }
 
-        if (SortOrder == SortByTitle) {
-            std::sort(vmap_list.begin(), vmap_list.end(), compareByTitle);
+        if (SortOrder == SortByStartTime) {
+            if (UnwatchedFirst) {
+                std::sort(vmap_list.begin(), vmap_list.end(), compareByStartTimeUnwatchedFirst);
+            } else {
+                std::sort(vmap_list.begin(), vmap_list.end(), compareByStartTime);
+            }
+        } else if (SortOrder == SortByTitle) {
+            if (UnwatchedFirst) {
+                std::sort(vmap_list.begin(), vmap_list.end(), compareByTitleUnwatchedFirst);
+            } else {
+                std::sort(vmap_list.begin(), vmap_list.end(), compareByTitle);
+            }
         } else if (SortOrder == SortBySize) {
-            std::sort(vmap_list.begin(), vmap_list.end(), compareBySize);
+            if (UnwatchedFirst) {
+                std::sort(vmap_list.begin(), vmap_list.end(), compareBySizeUnwatchedFirst);
+            } else {
+                std::sort(vmap_list.begin(), vmap_list.end(), compareBySize);
+            }
         } else {
-            std::sort(vmap_list.begin(), vmap_list.end(), compareByTitle);
+            if (UnwatchedFirst) {
+                std::sort(vmap_list.begin(), vmap_list.end(), compareByStartTimeUnwatchedFirst);
+            } else {
+                std::sort(vmap_list.begin(), vmap_list.end(), compareByStartTime);
+            }
         }
 
         append(vmap_list);

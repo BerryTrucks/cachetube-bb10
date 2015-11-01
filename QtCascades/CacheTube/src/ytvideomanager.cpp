@@ -1,5 +1,6 @@
 #include <QtCore/QStringList>
 #include <QtCore/QRegExp>
+#include <QtCore/QDateTime>
 #include <QtCore/QTimer>
 #include <QtSql/QSqlQuery>
 #include <QtNetwork/QNetworkRequest>
@@ -25,16 +26,41 @@ YTVideoManager::YTVideoManager(QNetworkAccessManager *network_access_manager, in
     if (TaskDatabase.open()) {
         QSqlQuery query(TaskDatabase);
 
-        if (query.exec("CREATE TABLE IF NOT EXISTS TASKS(VIDEO_ID TEXT, STATE INTEGER, FMT INTEGER, SIZE INTEGER, DONE INTEGER, TITLE TEXT)") &&
-            query.exec("CREATE INDEX IF NOT EXISTS TASKS_VIDEO_ID ON TASKS(VIDEO_ID)")) {
+        if (query.exec("SELECT VIDEO_ID, STATE, FMT, SIZE, DONE, TITLE, START_TIME, WATCHED FROM TASKS")) {
+            while(query.next()) {
+                YTDownloadTask task;
+
+                task.Watched                = query.value(7).toBool();
+                task.State                  = query.value(1).toInt();
+                task.Fmt                    = query.value(2).toInt();
+                task.Size                   = query.value(3).toLongLong();
+                task.Done                   = query.value(4).toLongLong();
+                task.StartTime              = query.value(6).toLongLong();
+                task.VideoId                = query.value(0).toString();
+                task.Title                  = query.value(5).toString();
+                task.ErrorMsg               = "";
+                task.JSPlayerURL            = "";
+                task.VideoURL               = "";
+                task.Signature              = "";
+                task.VisitorInfo1LiveCookie = "";
+
+                if (task.State != YTDownloadState::StateCompleted && task.State != YTDownloadState::StatePaused) {
+                    task.State = YTDownloadState::StateQueued;
+                }
+
+                ActiveTasks.append(task);
+            }
+        } else {
             if (query.exec("SELECT VIDEO_ID, STATE, FMT, SIZE, DONE, TITLE FROM TASKS")) {
                 while(query.next()) {
                     YTDownloadTask task;
 
+                    task.Watched                = true;
                     task.State                  = query.value(1).toInt();
                     task.Fmt                    = query.value(2).toInt();
                     task.Size                   = query.value(3).toLongLong();
                     task.Done                   = query.value(4).toLongLong();
+                    task.StartTime              = QDateTime::currentMSecsSinceEpoch();
                     task.VideoId                = query.value(0).toString();
                     task.Title                  = query.value(5).toString();
                     task.ErrorMsg               = "";
@@ -48,6 +74,27 @@ YTVideoManager::YTVideoManager(QNetworkAccessManager *network_access_manager, in
                     }
 
                     ActiveTasks.append(task);
+                }
+            }
+
+            if (query.exec("DROP TABLE IF EXISTS TASKS") &&
+                query.exec("CREATE TABLE IF NOT EXISTS TASKS(VIDEO_ID TEXT, STATE INTEGER, FMT INTEGER, SIZE INTEGER, DONE INTEGER, TITLE TEXT, START_TIME INTEGER, WATCHED INTEGER)") &&
+                query.exec("CREATE INDEX IF NOT EXISTS TASKS_VIDEO_ID ON TASKS(VIDEO_ID)")) {
+                for (int i = 0; i < ActiveTasks.size(); i++) {
+                    YTDownloadTask task = ActiveTasks.at(i);
+
+                    query.prepare("INSERT INTO TASKS(VIDEO_ID, STATE, FMT, SIZE, DONE, TITLE, START_TIME, WATCHED) VALUES (:VIDEO_ID, :STATE, :FMT, :SIZE, :DONE, :TITLE, :START_TIME, :WATCHED)");
+
+                    query.bindValue(":VIDEO_ID",   task.VideoId);
+                    query.bindValue(":STATE",      task.State);
+                    query.bindValue(":FMT",        task.Fmt);
+                    query.bindValue(":SIZE",       task.Size);
+                    query.bindValue(":DONE",       task.Done);
+                    query.bindValue(":TITLE",      task.Title);
+                    query.bindValue(":START_TIME", task.StartTime);
+                    query.bindValue(":WATCHED",    task.Watched);
+
+                    query.exec();
                 }
             }
         }
@@ -133,10 +180,12 @@ bool YTVideoManager::addTask(const QString &video_id)
 
         YTDownloadTask task;
 
+        task.Watched                = false;
         task.State                  = YTDownloadState::StateQueued;
         task.Fmt                    = 0;
         task.Size                   = 0;
         task.Done                   = 0;
+        task.StartTime              = QDateTime::currentMSecsSinceEpoch();
         task.VideoId                = video_id;
         task.Title                  = getTaskWebURL(video_id);
         task.ErrorMsg               = "";
@@ -152,14 +201,16 @@ bool YTVideoManager::addTask(const QString &video_id)
         if (TaskDatabase.open()) {
             QSqlQuery query(TaskDatabase);
 
-            query.prepare("INSERT INTO TASKS(VIDEO_ID, STATE, FMT, SIZE, DONE, TITLE) VALUES (:VIDEO_ID, :STATE, :FMT, :SIZE, :DONE, :TITLE)");
+            query.prepare("INSERT INTO TASKS(VIDEO_ID, STATE, FMT, SIZE, DONE, TITLE, START_TIME, WATCHED) VALUES (:VIDEO_ID, :STATE, :FMT, :SIZE, :DONE, :TITLE, :START_TIME, :WATCHED)");
 
-            query.bindValue(":VIDEO_ID", task.VideoId);
-            query.bindValue(":STATE",    task.State);
-            query.bindValue(":FMT",      task.Fmt);
-            query.bindValue(":SIZE",     task.Size);
-            query.bindValue(":DONE",     task.Done);
-            query.bindValue(":TITLE",    task.Title);
+            query.bindValue(":VIDEO_ID",   task.VideoId);
+            query.bindValue(":STATE",      task.State);
+            query.bindValue(":FMT",        task.Fmt);
+            query.bindValue(":SIZE",       task.Size);
+            query.bindValue(":DONE",       task.Done);
+            query.bindValue(":TITLE",      task.Title);
+            query.bindValue(":START_TIME", task.StartTime);
+            query.bindValue(":WATCHED",    task.Watched);
 
             query.exec();
 
@@ -253,14 +304,16 @@ bool YTVideoManager::restTask(const QString &video_id)
             if (TaskDatabase.open()) {
                 QSqlQuery query(TaskDatabase);
 
-                query.prepare("INSERT INTO TASKS(VIDEO_ID, STATE, FMT, SIZE, DONE, TITLE) VALUES (:VIDEO_ID, :STATE, :FMT, :SIZE, :DONE, :TITLE)");
+                query.prepare("INSERT INTO TASKS(VIDEO_ID, STATE, FMT, SIZE, DONE, TITLE, START_TIME, WATCHED) VALUES (:VIDEO_ID, :STATE, :FMT, :SIZE, :DONE, :TITLE, :START_TIME, :WATCHED)");
 
-                query.bindValue(":VIDEO_ID", task.VideoId);
-                query.bindValue(":STATE",    task.State);
-                query.bindValue(":FMT",      task.Fmt);
-                query.bindValue(":SIZE",     task.Size);
-                query.bindValue(":DONE",     task.Done);
-                query.bindValue(":TITLE",    task.Title);
+                query.bindValue(":VIDEO_ID",   task.VideoId);
+                query.bindValue(":STATE",      task.State);
+                query.bindValue(":FMT",        task.Fmt);
+                query.bindValue(":SIZE",       task.Size);
+                query.bindValue(":DONE",       task.Done);
+                query.bindValue(":TITLE",      task.Title);
+                query.bindValue(":START_TIME", task.StartTime);
+                query.bindValue(":WATCHED",    task.Watched);
 
                 query.exec();
 
@@ -367,6 +420,36 @@ void YTVideoManager::resumeTask(const QString &video_id)
     }
 
     QTimer::singleShot(QUEUE_RUN_AFTER, this, SLOT(runQueue()));
+}
+
+void YTVideoManager::setTaskWatched(const QString &video_id)
+{
+    for (int i = 0; i < ActiveTasks.size(); i++) {
+        if (ActiveTasks.at(i).VideoId == video_id) {
+            YTDownloadTask task = ActiveTasks.at(i);
+
+            task.Watched = true;
+
+            ActiveTasks.replace(i, task);
+
+            emit taskChanged(task);
+
+            if (TaskDatabase.open()) {
+                QSqlQuery query(TaskDatabase);
+
+                query.prepare("UPDATE TASKS SET WATCHED=:WATCHED WHERE VIDEO_ID=:VIDEO_ID");
+
+                query.bindValue(":WATCHED",  task.Watched);
+                query.bindValue(":VIDEO_ID", task.VideoId);
+
+                query.exec();
+
+                TaskDatabase.close();
+            }
+
+            break;
+        }
+    }
 }
 
 QString YTVideoManager::getTaskWebURL(const QString &video_id)
@@ -792,14 +875,16 @@ void YTVideoManager::UpdateTask(const YTDownloadTask &task)
             if (TaskDatabase.open()) {
                 QSqlQuery query(TaskDatabase);
 
-                query.prepare("UPDATE TASKS SET STATE=:STATE, FMT=:FMT, SIZE=:SIZE, DONE=:DONE, TITLE=:TITLE WHERE VIDEO_ID=:VIDEO_ID");
+                query.prepare("UPDATE TASKS SET STATE=:STATE, FMT=:FMT, SIZE=:SIZE, DONE=:DONE, TITLE=:TITLE, START_TIME=:START_TIME, WATCHED=:WATCHED WHERE VIDEO_ID=:VIDEO_ID");
 
-                query.bindValue(":STATE",    task.State);
-                query.bindValue(":FMT",      task.Fmt);
-                query.bindValue(":SIZE",     task.Size);
-                query.bindValue(":DONE",     task.Done);
-                query.bindValue(":TITLE",    task.Title);
-                query.bindValue(":VIDEO_ID", task.VideoId);
+                query.bindValue(":STATE",      task.State);
+                query.bindValue(":FMT",        task.Fmt);
+                query.bindValue(":SIZE",       task.Size);
+                query.bindValue(":DONE",       task.Done);
+                query.bindValue(":TITLE",      task.Title);
+                query.bindValue(":START_TIME", task.StartTime);
+                query.bindValue(":WATCHED",    task.Watched);
+                query.bindValue(":VIDEO_ID",   task.VideoId);
 
                 query.exec();
 

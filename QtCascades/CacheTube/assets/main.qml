@@ -19,10 +19,12 @@ TabbedPane {
                     preferredVideoFormatDropDown.selectedIndex = 0;
                 }
                 
-                if (order === YTArrayDataModel.SortByTitle) {
+                if (order === YTArrayDataModel.SortByStartTime) {
                     sortOrderDropDown.selectedIndex = 0;
-                } else if (order === YTArrayDataModel.SortBySize) {
+                } else if (order === YTArrayDataModel.SortByTitle) {
                     sortOrderDropDown.selectedIndex = 1;
+                } else if (order === YTArrayDataModel.SortBySize) {
+                    sortOrderDropDown.selectedIndex = 2;
                 } else {
                     sortOrderDropDown.selectedIndex = 0;
                 }
@@ -57,8 +59,10 @@ TabbedPane {
                                     }
                                     
                                     if (sortOrderDropDown.selectedIndex === 0) {
-                                        order = YTArrayDataModel.SortByTitle;
+                                        order = YTArrayDataModel.SortByStartTime;
                                     } else if (sortOrderDropDown.selectedIndex === 1) {
+                                        order = YTArrayDataModel.SortByTitle;
+                                    } else if (sortOrderDropDown.selectedIndex === 2) {
                                         order = YTArrayDataModel.SortBySize;
                                     }
                                     
@@ -122,6 +126,10 @@ TabbedPane {
                                     DropDown {
                                         id:    sortOrderDropDown
                                         title: qsTr("Sort Order")
+                                        
+                                        Option {
+                                            text: qsTr("By Date")
+                                        }
                                         
                                         Option {
                                             text: qsTr("By Title")
@@ -477,17 +485,19 @@ TabbedPane {
                                 
                                 Container {
                                     id:           itemRoot
-                                    background:   itemSelected ? Color.create("#00A7DE") : Color.White 
+                                    background:   itemSelected ? Color.create("#00A7DE") : (itemWatched ? Color.White : Color.LightGray)
                                     leftPadding:  ui.sdu(1)
                                     rightPadding: ui.sdu(1)
                                     
-                                    property bool   itemSelected: ListItem.active || ListItem.selected
-                                    property int    itemState:    ListItemData.state
-                                    property int    itemSize:     ListItemData.size
-                                    property int    itemDone:     ListItemData.done
-                                    property string itemVideoId:  ListItemData.videoId
-                                    property string itemTitle:    ListItemData.title
-                                    property string itemErrorMsg: ListItemData.errorMsg
+                                    property bool   itemSelected:  ListItem.active || ListItem.selected
+                                    property bool   itemWatched:   ListItemData.watched
+                                    property int    itemState:     ListItemData.state
+                                    property int    itemSize:      ListItemData.size
+                                    property int    itemDone:      ListItemData.done
+                                    property string itemStartTime: ListItemData.startTimeStr
+                                    property string itemVideoId:   ListItemData.videoId
+                                    property string itemTitle:     ListItemData.title
+                                    property string itemErrorMsg:  ListItemData.errorMsg
                                     
                                     layout: StackLayout {
                                     }
@@ -496,6 +506,8 @@ TabbedPane {
                                         TapHandler {
                                             onTapped: {
                                                 if (itemRoot.itemState === YTDownloadState.StateCompleted) {
+                                                    itemRoot.ListItem.view.ytVideoManager.setTaskWatched(itemRoot.itemVideoId);
+                                                    
                                                     playerNavigationPane.push(playerPageDefinition.createObject());
                                                     
                                                     playerSheet.open();
@@ -615,7 +627,7 @@ TabbedPane {
                                                         body: qsTr("Video restored successfully")
                                                     },
                                                     SystemToast {
-                                                        id: videoRestoreFailedToast
+                                                        id:   videoRestoreFailedToast
                                                         body: qsTr("Cannot restore video")
                                                     }
                                                 ]
@@ -633,23 +645,56 @@ TabbedPane {
                                     }
                                     
                                     ProgressIndicator {
-                                        visible:   itemRoot.itemState === YTDownloadState.StateActive
-                                        fromValue: 0
-                                        toValue:   itemRoot.itemSize
-                                        value:     itemRoot.itemDone
+                                        horizontalAlignment: HorizontalAlignment.Fill
+                                        visible:             itemRoot.itemState === YTDownloadState.StateActive
+                                        fromValue:           0
+                                        toValue:             itemRoot.itemSize
+                                        value:               itemRoot.itemDone
                                         accessibility.name:  qsTr("Video load progress: %1%").arg(value.toFixed())
                                     }
                                     
-                                    Label {
+                                    Container {
+                                        horizontalAlignment: HorizontalAlignment.Fill
                                         visible:             itemRoot.itemState !== YTDownloadState.StateActive
-                                        multiline:           true
-                                        textStyle.color:     itemRoot.itemState === YTDownloadState.StateError ? Color.Red : (itemRoot.itemSelected ? Color.LightGray : Color.DarkGray)
-                                        textStyle.fontStyle: FontStyle.Italic
-                                        textStyle.fontSize:  FontSize.Small
-                                        text:                itemRoot.itemState === YTDownloadState.StateCompleted ? (itemRoot.itemSize / 1048576).toFixed(2) + " MiB" :
-                                        (itemRoot.itemState === YTDownloadState.StateError     ? itemRoot.itemErrorMsg                             :
-                                        (itemRoot.itemState === YTDownloadState.StateQueued    ? qsTr("QUEUED")                                    :
-                                        (itemRoot.itemState === YTDownloadState.StatePaused    ? qsTr("PAUSED")                                    : "")))
+                                        
+                                        layout: StackLayout {
+                                            orientation: LayoutOrientation.LeftToRight
+                                        }
+                                        
+                                        Label {
+                                            multiline:           true
+                                            textStyle.color:     itemRoot.itemState === YTDownloadState.StateError ? Color.Red : (itemRoot.itemSelected ? Color.LightGray : Color.DarkGray)
+                                            textStyle.fontStyle: FontStyle.Italic
+                                            textStyle.fontSize:  FontSize.Small
+                                            text:                itemRoot.itemState === YTDownloadState.StateCompleted ? (itemRoot.itemSize / 1048576).toFixed(2) + " MiB" :
+                                                                (itemRoot.itemState === YTDownloadState.StateError     ? itemRoot.itemErrorMsg                             :
+                                                                (itemRoot.itemState === YTDownloadState.StateQueued    ? qsTr("QUEUED")                                    :
+                                                                (itemRoot.itemState === YTDownloadState.StatePaused    ? qsTr("PAUSED")                                    : "")))
+                                            
+                                            layoutProperties: StackLayoutProperties {
+                                                spaceQuota: -1
+                                            }
+                                        }
+                                        
+                                        Label {
+                                            text: ""
+                                            
+                                            layoutProperties: StackLayoutProperties {
+                                                spaceQuota: 1
+                                            }
+                                        }
+                                        
+                                        Label {
+                                            multiline:           true
+                                            textStyle.color:     itemRoot.itemSelected ? Color.LightGray : Color.DarkGray
+                                            textStyle.fontStyle: FontStyle.Italic
+                                            textStyle.fontSize:  FontSize.Small
+                                            text:                itemRoot.itemStartTime
+                                            
+                                            layoutProperties: StackLayoutProperties {
+                                                spaceQuota: -1
+                                            }
+                                        }
                                     }
                                     
                                     Divider {

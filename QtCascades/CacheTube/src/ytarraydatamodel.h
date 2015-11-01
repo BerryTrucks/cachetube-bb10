@@ -30,6 +30,7 @@ public:
     Q_INVOKABLE void setFilter(const QString &filter);
 
     enum SortOrder {
+        SortByStartTime,
         SortByTitle,
         SortBySize
     };

@@ -202,11 +202,15 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>By Size</source>
+        <source>Show Unwatched Video First</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Show Unwatched Video First</source>
+        <source>By Date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>By Size</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
