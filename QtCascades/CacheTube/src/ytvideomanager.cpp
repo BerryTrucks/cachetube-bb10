@@ -385,6 +385,11 @@ QString YTVideoManager::getTaskVideoURI(const QString &video_id)
     return "";
 }
 
+int YTVideoManager::getTaskCount()
+{
+    return ActiveTasks.count();
+}
+
 QList<YTDownloadTask> YTVideoManager::getTaskList()
 {
     return ActiveTasks;

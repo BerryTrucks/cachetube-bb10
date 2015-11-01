@@ -8,18 +8,26 @@ class AppSettings : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(int  preferredVideoFormat READ preferredVideoFormat WRITE setPreferredVideoFormat)
+    Q_PROPERTY(bool showUnwatchedFirst   READ showUnwatchedFirst   WRITE setShowUnwatchedFirst)
     Q_PROPERTY(bool autoRepeatPlayback   READ autoRepeatPlayback   WRITE setAutoRepeatPlayback)
+    Q_PROPERTY(int  preferredVideoFormat READ preferredVideoFormat WRITE setPreferredVideoFormat)
+    Q_PROPERTY(int  videoSortOrder       READ videoSortOrder       WRITE setVideoSortOrder)
 
 public:
     explicit AppSettings(QObject *parent = 0);
     virtual ~AppSettings();
 
-    int  preferredVideoFormat() const;
-    void setPreferredVideoFormat(const int &format);
+    bool showUnwatchedFirst() const;
+    void setShowUnwatchedFirst(const bool &show);
 
     bool autoRepeatPlayback() const;
     void setAutoRepeatPlayback(const bool &repeat);
+
+    int  preferredVideoFormat() const;
+    void setPreferredVideoFormat(const int &format);
+
+    int  videoSortOrder() const;
+    void setVideoSortOrder(const int &order);
 
 private:
     QSettings *Settings;

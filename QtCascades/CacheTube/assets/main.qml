@@ -9,6 +9,7 @@ TabbedPane {
         settingsAction: SettingsActionItem {
             onTriggered: {
                 var format = AppSettings.preferredVideoFormat;
+                var order  = AppSettings.videoSortOrder;
                 
                 if (format === 22) {
                     preferredVideoFormatDropDown.selectedIndex = 0;
@@ -18,6 +19,15 @@ TabbedPane {
                     preferredVideoFormatDropDown.selectedIndex = 0;
                 }
                 
+                if (order === YTArrayDataModel.SortByTitle) {
+                    sortOrderDropDown.selectedIndex = 0;
+                } else if (order === YTArrayDataModel.SortBySize) {
+                    sortOrderDropDown.selectedIndex = 1;
+                } else {
+                    sortOrderDropDown.selectedIndex = 0;
+                }
+                
+                showUnwatchedFirstToggleButton.checked = AppSettings.showUnwatchedFirst;
                 autoRepeatPlaybackToggleButton.checked = AppSettings.autoRepeatPlayback;
                 
                 settingsSheet.open();
@@ -38,6 +48,7 @@ TabbedPane {
                                 
                                 onTriggered: {
                                     var format = AppSettings.preferredVideoFormat;
+                                    var order  = AppSettings.videoSortOrder;
                                     
                                     if (preferredVideoFormatDropDown.selectedIndex === 0) {
                                         format = 22;
@@ -45,10 +56,20 @@ TabbedPane {
                                         format = 18;
                                     }
                                     
+                                    if (sortOrderDropDown.selectedIndex === 0) {
+                                        order = YTArrayDataModel.SortByTitle;
+                                    } else if (sortOrderDropDown.selectedIndex === 1) {
+                                        order = YTArrayDataModel.SortBySize;
+                                    }
+                                    
                                     AppSettings.preferredVideoFormat = format;
+                                    AppSettings.videoSortOrder       = order;
+                                    AppSettings.showUnwatchedFirst   = showUnwatchedFirstToggleButton.checked;
                                     AppSettings.autoRepeatPlayback   = autoRepeatPlaybackToggleButton.checked;
                                     
                                     YTVideoManager.setPreferredVideoFormat(format);
+                                    cacheListViewDataModel.setUnwatchedFirst(AppSettings.showUnwatchedFirst);
+                                    cacheListViewDataModel.setSortOrder(order);
                                     
                                     settingsSheet.close();
                                 }
@@ -98,8 +119,51 @@ TabbedPane {
                                         }
                                     }
                                     
+                                    DropDown {
+                                        id:    sortOrderDropDown
+                                        title: qsTr("Sort Order")
+                                        
+                                        Option {
+                                            text: qsTr("By Title")
+                                        }
+                                        
+                                        Option {
+                                            text: qsTr("By Size")
+                                        }
+                                    }
+                                    
                                     Divider {
                                         accessibility.name: qsTr("Divider")
+                                    }
+                                    
+                                    Container {
+                                        background: Color.Transparent
+                                        
+                                        layout: StackLayout {
+                                            orientation: LayoutOrientation.LeftToRight
+                                        }
+                                        
+                                        Label {
+                                            id:                 showUnwatchedFirstLabel
+                                            verticalAlignment:  VerticalAlignment.Center
+                                            multiline:          true
+                                            textStyle.color:    Color.Black
+                                            textStyle.fontSize: FontSize.Medium
+                                            text:               qsTr("Show Unwatched Video First")
+                                            
+                                            layoutProperties: StackLayoutProperties {
+                                                spaceQuota: 1
+                                            }
+                                        }
+                                        
+                                        ToggleButton {
+                                            id:                       showUnwatchedFirstToggleButton
+                                            accessibility.labelledBy: showUnwatchedFirstLabel
+                                            
+                                            layoutProperties: StackLayoutProperties {
+                                                spaceQuota: -1
+                                            }
+                                        }
                                     }
                                     
                                     Container {
@@ -192,7 +256,7 @@ TabbedPane {
                         
                         ScrollView {
                             accessibility.name: qsTr("Help browser")
-
+                            
                             scrollViewProperties {
                                 scrollMode:         ScrollMode.Both
                                 pinchToZoomEnabled: true
@@ -304,7 +368,7 @@ TabbedPane {
                     horizontalAlignment: HorizontalAlignment.Fill
                     verticalAlignment:   VerticalAlignment.Fill
                     accessibility.name:  qsTr("YouTube browser")
-
+                    
                     scrollViewProperties {
                         scrollMode:         ScrollMode.Both
                         pinchToZoomEnabled: true
@@ -351,7 +415,7 @@ TabbedPane {
                     horizontalAlignment: HorizontalAlignment.Center
                     verticalAlignment:   VerticalAlignment.Center
                     background:          Color.Transparent
-                    visible:             cacheListViewDataModel.itemsCount <= 0
+                    visible:             cacheListViewDataModel.taskCount <= 0
                     
                     layout: StackLayout {
                     }
@@ -371,213 +435,252 @@ TabbedPane {
                     }
                 }
                 
-                ListView {
+                Container {
                     horizontalAlignment: HorizontalAlignment.Fill
                     verticalAlignment:   VerticalAlignment.Fill
-                    visible:             cacheListViewDataModel.itemsCount > 0
-                    accessibility.name:  qsTr("List of cached video")
+                    background:          Color.Transparent
+                    visible:             cacheListViewDataModel.taskCount > 0
                     
-                    property variant appSettings:    AppSettings 
-                    property variant ytVideoManager: YTVideoManager
-                    
-                    dataModel: YTArrayDataModel {
-                        id:           cacheListViewDataModel
-                        videoManager: YTVideoManager
+                    layout: StackLayout {
                     }
                     
-                    function navigateToWebPage(url) {
-                        youTubeWebView.url = url;
+                    ListView {
+                        horizontalAlignment: HorizontalAlignment.Fill
+                        accessibility.name:  qsTr("List of cached video")
                         
-                        tabbedPane.activeTab = youTubeTab;
-                    } 
-                    
-                    listItemComponents: [
-                        ListItemComponent {
-                            type: ""
+                        property variant appSettings:    AppSettings 
+                        property variant ytVideoManager: YTVideoManager
+                        
+                        dataModel: YTArrayDataModel {
+                            id:           cacheListViewDataModel
+                            videoManager: YTVideoManager
+                        }
+                        
+                        layoutProperties: StackLayoutProperties {
+                            spaceQuota: 1
+                        }
+                        
+                        function navigateToWebPage(url) {
+                            youTubeWebView.url = url;
                             
-                            Container {
-                                id:           itemRoot
-                                background:   itemSelected ? Color.create("#00A7DE") : Color.White 
-                                leftPadding:  ui.sdu(1)
-                                rightPadding: ui.sdu(1)
+                            tabbedPane.activeTab = youTubeTab;
+                        } 
+                        
+                        onCreationCompleted: {
+                            cacheListViewDataModel.setUnwatchedFirst(AppSettings.showUnwatchedFirst);
+                            cacheListViewDataModel.setSortOrder(AppSettings.videoSortOrder);
+                        }
+                        
+                        listItemComponents: [
+                            ListItemComponent {
+                                type: ""
                                 
-                                property bool   itemSelected: ListItem.active || ListItem.selected
-                                property int    itemState:    ListItemData.state
-                                property int    itemSize:     ListItemData.size
-                                property int    itemDone:     ListItemData.done
-                                property string itemVideoId:  ListItemData.videoId
-                                property string itemTitle:    ListItemData.title
-                                property string itemErrorMsg: ListItemData.errorMsg
-                                
-                                layout: StackLayout {
-                                }
-                                
-                                gestureHandlers: [
-                                    TapHandler {
-                                        onTapped: {
-                                            if (itemRoot.itemState === YTDownloadState.StateCompleted) {
-                                                playerNavigationPane.push(playerPageDefinition.createObject());
-                                                
-                                                playerSheet.open();
-                                            }
-                                        }
-                                        
-                                        attachedObjects: [
-                                            Sheet {
-                                                id:          playerSheet
-                                                peekEnabled: false
-                                                
-                                                onOpened: {
-                                                    var page = playerNavigationPane.top;
-                                                    
-                                                    if (page.objectName === "playerPage") {
-                                                        page.playVideo(itemRoot.ListItem.view.ytVideoManager.getTaskVideoURI(itemRoot.itemVideoId), itemRoot.itemTitle, itemRoot.ListItem.view.appSettings.autoRepeatPlayback);
-                                                    }
-                                                }
-                                                
-                                                NavigationPane {
-                                                    id:          playerNavigationPane
-                                                    peekEnabled: false
-                                                    
-                                                    onTopChanged: {
-                                                        if (playerSheet.opened) {
-                                                            if (page.objectName === "playerPage") {
-                                                                page.playVideo(itemRoot.ListItem.view.ytVideoManager.getTaskVideoURI(itemRoot.itemVideoId), itemRoot.itemTitle, itemRoot.ListItem.view.appSettings.autoRepeatPlayback);
-                                                            } else {
-                                                                playerSheet.close();
-                                                            }
-                                                        }
-                                                    }
-                                                    
-                                                    onPopTransitionEnded: {
-                                                        if (page.objectName === "playerPage") {
-                                                            page.disconnectSignals();
-                                                        }
-                                                        
-                                                        page.destroy();
-                                                    }
-                                                    
-                                                    Page {
-                                                        Container {
-                                                            background: Color.White
-                                                        }
-                                                    }
-                                                }
-                                                
-                                                attachedObjects: [
-                                                    ComponentDefinition {
-                                                        id:     playerPageDefinition
-                                                        source: "PlayerPage.qml"
-                                                    }
-                                                ]
-                                            }
-                                        ]
+                                Container {
+                                    id:           itemRoot
+                                    background:   itemSelected ? Color.create("#00A7DE") : Color.White 
+                                    leftPadding:  ui.sdu(1)
+                                    rightPadding: ui.sdu(1)
+                                    
+                                    property bool   itemSelected: ListItem.active || ListItem.selected
+                                    property int    itemState:    ListItemData.state
+                                    property int    itemSize:     ListItemData.size
+                                    property int    itemDone:     ListItemData.done
+                                    property string itemVideoId:  ListItemData.videoId
+                                    property string itemTitle:    ListItemData.title
+                                    property string itemErrorMsg: ListItemData.errorMsg
+                                    
+                                    layout: StackLayout {
                                     }
-                                ]
-                                
-                                contextActions: [
-                                    ActionSet {
-                                        ActionItem {
-                                            title:       qsTr("Pause/Resume")
-                                            imageSource: "images/pause.png"
-                                            enabled:     itemRoot.itemState !== YTDownloadState.StateCompleted
-                                            
-                                            onTriggered: {
-                                                if (itemRoot.itemState === YTDownloadState.StatePaused) {
-                                                    itemRoot.ListItem.view.ytVideoManager.resumeTask(itemRoot.itemVideoId);
-                                                } else {
-                                                    itemRoot.ListItem.view.ytVideoManager.pauseTask(itemRoot.itemVideoId);
+                                    
+                                    gestureHandlers: [
+                                        TapHandler {
+                                            onTapped: {
+                                                if (itemRoot.itemState === YTDownloadState.StateCompleted) {
+                                                    playerNavigationPane.push(playerPageDefinition.createObject());
+                                                    
+                                                    playerSheet.open();
                                                 }
-                                            }
-                                        }
-                                        
-                                        ActionItem {
-                                            title:       qsTr("Open YouTube Page")
-                                            imageSource: "images/youtube.png"
-                                            
-                                            onTriggered: {
-                                                itemRoot.ListItem.view.navigateToWebPage(itemRoot.ListItem.view.ytVideoManager.getTaskWebURL(itemRoot.itemVideoId));
-                                            }
-                                        }
-                                        
-                                        DeleteActionItem {
-                                            title:       qsTr("Delete")
-                                            imageSource: "images/delete.png"
-                                            
-                                            onTriggered: {
-                                                itemRoot.ListItem.view.ytVideoManager.delTask(itemRoot.itemVideoId);
-                                                
-                                                videoDeletedToast.deletedVideoId = itemRoot.itemVideoId;
-                                                videoDeletedToast.show();
                                             }
                                             
                                             attachedObjects: [
-                                                SystemToast {
-                                                    id:             videoDeletedToast
-                                                    body:           qsTr("Video deleted successfully")
-                                                    button.label:   qsTr("Undo")
-                                                    button.enabled: true
+                                                Sheet {
+                                                    id:          playerSheet
+                                                    peekEnabled: false
                                                     
-                                                    property string deletedVideoId: ""
+                                                    onOpened: {
+                                                        var page = playerNavigationPane.top;
+                                                        
+                                                        if (page.objectName === "playerPage") {
+                                                            page.playVideo(itemRoot.ListItem.view.ytVideoManager.getTaskVideoURI(itemRoot.itemVideoId), itemRoot.itemTitle, itemRoot.ListItem.view.appSettings.autoRepeatPlayback);
+                                                        }
+                                                    }
                                                     
-                                                    onFinished: {
-                                                        if (buttonSelection() === button) {
-                                                            if (itemRoot.ListItem.view.ytVideoManager.restTask(deletedVideoId)) {
-                                                                videoRestoredToast.show();
-                                                            } else {
-                                                                videoRestoreFailedToast.show();
+                                                    NavigationPane {
+                                                        id:          playerNavigationPane
+                                                        peekEnabled: false
+                                                        
+                                                        onTopChanged: {
+                                                            if (playerSheet.opened) {
+                                                                if (page.objectName === "playerPage") {
+                                                                    page.playVideo(itemRoot.ListItem.view.ytVideoManager.getTaskVideoURI(itemRoot.itemVideoId), itemRoot.itemTitle, itemRoot.ListItem.view.appSettings.autoRepeatPlayback);
+                                                                } else {
+                                                                    playerSheet.close();
+                                                                }
+                                                            }
+                                                        }
+                                                        
+                                                        onPopTransitionEnded: {
+                                                            if (page.objectName === "playerPage") {
+                                                                page.disconnectSignals();
+                                                            }
+                                                            
+                                                            page.destroy();
+                                                        }
+                                                        
+                                                        Page {
+                                                            Container {
+                                                                background: Color.White
                                                             }
                                                         }
                                                     }
-                                                },
-                                                SystemToast {
-                                                    id:   videoRestoredToast
-                                                    body: qsTr("Video restored successfully")
-                                                },
-                                                SystemToast {
-                                                    id: videoRestoreFailedToast
-                                                    body: qsTr("Cannot restore video")
+                                                    
+                                                    attachedObjects: [
+                                                        ComponentDefinition {
+                                                            id:     playerPageDefinition
+                                                            source: "PlayerPage.qml"
+                                                        }
+                                                    ]
                                                 }
                                             ]
                                         }
+                                    ]
+                                    
+                                    contextActions: [
+                                        ActionSet {
+                                            ActionItem {
+                                                title:       qsTr("Pause/Resume")
+                                                imageSource: "images/pause.png"
+                                                enabled:     itemRoot.itemState !== YTDownloadState.StateCompleted
+                                                
+                                                onTriggered: {
+                                                    if (itemRoot.itemState === YTDownloadState.StatePaused) {
+                                                        itemRoot.ListItem.view.ytVideoManager.resumeTask(itemRoot.itemVideoId);
+                                                    } else {
+                                                        itemRoot.ListItem.view.ytVideoManager.pauseTask(itemRoot.itemVideoId);
+                                                    }
+                                                }
+                                            }
+                                            
+                                            ActionItem {
+                                                title:       qsTr("Open YouTube Page")
+                                                imageSource: "images/youtube.png"
+                                                
+                                                onTriggered: {
+                                                    itemRoot.ListItem.view.navigateToWebPage(itemRoot.ListItem.view.ytVideoManager.getTaskWebURL(itemRoot.itemVideoId));
+                                                }
+                                            }
+                                            
+                                            DeleteActionItem {
+                                                title:       qsTr("Delete")
+                                                imageSource: "images/delete.png"
+                                                
+                                                onTriggered: {
+                                                    itemRoot.ListItem.view.ytVideoManager.delTask(itemRoot.itemVideoId);
+                                                    
+                                                    videoDeletedToast.deletedVideoId = itemRoot.itemVideoId;
+                                                    videoDeletedToast.show();
+                                                }
+                                                
+                                                attachedObjects: [
+                                                    SystemToast {
+                                                        id:             videoDeletedToast
+                                                        body:           qsTr("Video deleted successfully")
+                                                        button.label:   qsTr("Undo")
+                                                        button.enabled: true
+                                                        
+                                                        property string deletedVideoId: ""
+                                                        
+                                                        onFinished: {
+                                                            if (buttonSelection() === button) {
+                                                                if (itemRoot.ListItem.view.ytVideoManager.restTask(deletedVideoId)) {
+                                                                    videoRestoredToast.show();
+                                                                } else {
+                                                                    videoRestoreFailedToast.show();
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    SystemToast {
+                                                        id:   videoRestoredToast
+                                                        body: qsTr("Video restored successfully")
+                                                    },
+                                                    SystemToast {
+                                                        id: videoRestoreFailedToast
+                                                        body: qsTr("Cannot restore video")
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                    
+                                    Label {
+                                        multiline:            true
+                                        textFormat:           TextFormat.Plain
+                                        textStyle.color:      itemRoot.itemSelected ? Color.White : Color.Black
+                                        textStyle.fontWeight: FontWeight.Bold
+                                        textStyle.fontSize:   FontSize.Medium
+                                        text:                 itemRoot.itemTitle
                                     }
-                                ]
-                                
-                                Label {
-                                    multiline:            true
-                                    textFormat:           TextFormat.Plain
-                                    textStyle.color:      itemRoot.itemSelected ? Color.White : Color.Black
-                                    textStyle.fontWeight: FontWeight.Bold
-                                    textStyle.fontSize:   FontSize.Medium
-                                    text:                 itemRoot.itemTitle
-                                }
-
-                                ProgressIndicator {
-                                    visible:   itemRoot.itemState === YTDownloadState.StateActive
-                                    fromValue: 0
-                                    toValue:   itemRoot.itemSize
-                                    value:     itemRoot.itemDone
-                                    accessibility.name:  qsTr("Video load progress: %1%").arg(value.toFixed())
-                                }
-
-                                Label {
-                                    visible:             itemRoot.itemState !== YTDownloadState.StateActive
-                                    multiline:           true
-                                    textStyle.color:     itemRoot.itemState === YTDownloadState.StateError ? Color.Red : (itemRoot.itemSelected ? Color.LightGray : Color.DarkGray)
-                                    textStyle.fontStyle: FontStyle.Italic
-                                    textStyle.fontSize:  FontSize.Small
-                                    text:                itemRoot.itemState === YTDownloadState.StateCompleted ? (itemRoot.itemSize / 1048576).toFixed(2) + " MiB" :
-                                    (itemRoot.itemState === YTDownloadState.StateError     ? itemRoot.itemErrorMsg                             :
-                                    (itemRoot.itemState === YTDownloadState.StateQueued    ? qsTr("QUEUED")                                    :
-                                    (itemRoot.itemState === YTDownloadState.StatePaused    ? qsTr("PAUSED")                                    : "")))
-                                }
-                                
-                                Divider {
-                                    accessibility.name: qsTr("Divider")
+                                    
+                                    ProgressIndicator {
+                                        visible:   itemRoot.itemState === YTDownloadState.StateActive
+                                        fromValue: 0
+                                        toValue:   itemRoot.itemSize
+                                        value:     itemRoot.itemDone
+                                        accessibility.name:  qsTr("Video load progress: %1%").arg(value.toFixed())
+                                    }
+                                    
+                                    Label {
+                                        visible:             itemRoot.itemState !== YTDownloadState.StateActive
+                                        multiline:           true
+                                        textStyle.color:     itemRoot.itemState === YTDownloadState.StateError ? Color.Red : (itemRoot.itemSelected ? Color.LightGray : Color.DarkGray)
+                                        textStyle.fontStyle: FontStyle.Italic
+                                        textStyle.fontSize:  FontSize.Small
+                                        text:                itemRoot.itemState === YTDownloadState.StateCompleted ? (itemRoot.itemSize / 1048576).toFixed(2) + " MiB" :
+                                        (itemRoot.itemState === YTDownloadState.StateError     ? itemRoot.itemErrorMsg                             :
+                                        (itemRoot.itemState === YTDownloadState.StateQueued    ? qsTr("QUEUED")                                    :
+                                        (itemRoot.itemState === YTDownloadState.StatePaused    ? qsTr("PAUSED")                                    : "")))
+                                    }
+                                    
+                                    Divider {
+                                        accessibility.name: qsTr("Divider")
+                                    }
                                 }
                             }
+                        ]
+                    }
+                    
+                    TextField {
+                        id:                  filterTextField
+                        horizontalAlignment: HorizontalAlignment.Fill
+                        hintText:            qsTr("filter string")
+                        
+                        layoutProperties: StackLayoutProperties {
+                            spaceQuota: -1
                         }
-                    ]
+                        
+                        input {
+                            submitKey: SubmitKey.Search
+                            
+                            onSubmitted: {
+                                cacheListViewDataModel.setFilter(text);
+                            }
+                        }
+                        
+                        onTextChanging: {
+                            cacheListViewDataModel.setFilter(text);
+                        }
+                    }
                 }
             }
         }

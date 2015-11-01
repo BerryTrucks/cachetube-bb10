@@ -10,18 +10,18 @@ AppSettings::~AppSettings()
     delete Settings;
 }
 
-int AppSettings::preferredVideoFormat() const
+bool AppSettings::showUnwatchedFirst() const
 {
-    if (Settings->contains("PreferredVideoFormat")) {
-        return Settings->value("PreferredVideoFormat").toInt();
+    if (Settings->contains("ShowUnwatchedFirst")) {
+        return Settings->value("ShowUnwatchedFirst").toBool();
     } else {
-        return 0;
+        return true;
     }
 }
 
-void AppSettings::setPreferredVideoFormat(const int &format)
+void AppSettings::setShowUnwatchedFirst(const bool &show)
 {
-    Settings->setValue("PreferredVideoFormat", format);
+    Settings->setValue("ShowUnwatchedFirst", show);
 }
 
 bool AppSettings::autoRepeatPlayback() const
@@ -36,4 +36,32 @@ bool AppSettings::autoRepeatPlayback() const
 void AppSettings::setAutoRepeatPlayback(const bool &repeat)
 {
     Settings->setValue("AutoRepeatPlayback", repeat);
+}
+
+int AppSettings::preferredVideoFormat() const
+{
+    if (Settings->contains("PreferredVideoFormat")) {
+        return Settings->value("PreferredVideoFormat").toInt();
+    } else {
+        return 0;
+    }
+}
+
+void AppSettings::setPreferredVideoFormat(const int &format)
+{
+    Settings->setValue("PreferredVideoFormat", format);
+}
+
+int AppSettings::videoSortOrder() const
+{
+    if (Settings->contains("VideoSortOrder")) {
+        return Settings->value("VideoSortOrder").toInt();
+    } else {
+        return 0;
+    }
+}
+
+void AppSettings::setVideoSortOrder(const int &order)
+{
+    Settings->setValue("VideoSortOrder", order);
 }

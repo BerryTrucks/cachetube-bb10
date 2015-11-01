@@ -189,5 +189,25 @@
         <source>Help browser</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>filter string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sort Order</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>By Title</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>By Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Unwatched Video First</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

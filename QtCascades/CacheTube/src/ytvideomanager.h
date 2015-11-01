@@ -58,6 +58,7 @@ public:
     Q_INVOKABLE QString getTaskWebURL(const QString &video_id);
     Q_INVOKABLE QString getTaskVideoURI(const QString &video_id);
 
+    Q_INVOKABLE int                   getTaskCount();
     Q_INVOKABLE QList<YTDownloadTask> getTaskList();
 
 private slots:
