@@ -100,7 +100,7 @@
         <location filename="../assets/main.qml" line="110"/>
         <location filename="../assets/main.qml" line="144"/>
         <location filename="../assets/main.qml" line="208"/>
-        <location filename="../assets/main.qml" line="701"/>
+        <location filename="../assets/main.qml" line="707"/>
         <source>Divider</source>
         <translation>Разделитель</translation>
     </message>
@@ -112,22 +112,22 @@
     <message>
         <location filename="../assets/main.qml" line="128"/>
         <source>Sort Order</source>
-        <translation type="unfinished"></translation>
+        <translation>Порядок сортировки</translation>
     </message>
     <message>
         <location filename="../assets/main.qml" line="131"/>
         <source>By Date</source>
-        <translation type="unfinished"></translation>
+        <translation>По дате</translation>
     </message>
     <message>
         <location filename="../assets/main.qml" line="135"/>
         <source>By Title</source>
-        <translation type="unfinished"></translation>
+        <translation>По названию</translation>
     </message>
     <message>
         <location filename="../assets/main.qml" line="139"/>
         <source>By Size</source>
-        <translation type="unfinished"></translation>
+        <translation>По размеру</translation>
     </message>
     <message>
         <location filename="../assets/main.qml" line="190"/>
@@ -137,7 +137,7 @@
     <message>
         <location filename="../assets/main.qml" line="160"/>
         <source>Show Unwatched Video First</source>
-        <translation type="unfinished"></translation>
+        <translation>Сначала непросмотренные видео</translation>
     </message>
     <message>
         <location filename="../assets/main.qml" line="234"/>
@@ -172,42 +172,42 @@
         <translation>Нет загруженного видео</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="711"/>
-        <source>filter string</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../assets/main.qml" line="457"/>
         <source>List of cached video</source>
         <translation>Список загруженного видео</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="596"/>
+        <location filename="../assets/main.qml" line="602"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="609"/>
+        <location filename="../assets/main.qml" line="615"/>
         <source>Video deleted successfully</source>
         <translation>Видео успешно удалено</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="610"/>
+        <location filename="../assets/main.qml" line="616"/>
         <source>Undo</source>
         <translation>Отменить</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="627"/>
+        <location filename="../assets/main.qml" line="633"/>
         <source>Video restored successfully</source>
         <translation>Видео успешно восстановлено</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="631"/>
+        <location filename="../assets/main.qml" line="637"/>
         <source>Cannot restore video</source>
         <translation>Невозможно восстановить видео</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="573"/>
+        <location filename="../assets/main.qml" line="717"/>
+        <source>filter video by name</source>
+        <translation>фильтр по имени видео</translation>
+    </message>
+    <message>
+        <location filename="../assets/main.qml" line="579"/>
         <source>Pause/Resume</source>
         <translation>Пауза/Продолжить</translation>
     </message>
@@ -223,22 +223,22 @@
         <translation>Прогресс загрузки страницы: %1%</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="587"/>
+        <location filename="../assets/main.qml" line="593"/>
         <source>Open YouTube Page</source>
         <translation>Открыть страницу YouTube</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="653"/>
+        <location filename="../assets/main.qml" line="659"/>
         <source>Video load progress: %1%</source>
         <translation>Прогресс загрузки видео: %1%</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="671"/>
+        <location filename="../assets/main.qml" line="677"/>
         <source>QUEUED</source>
         <translation>ОЖИДАНИЕ</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="672"/>
+        <location filename="../assets/main.qml" line="678"/>
         <source>PAUSED</source>
         <translation>ПАУЗА</translation>
     </message>

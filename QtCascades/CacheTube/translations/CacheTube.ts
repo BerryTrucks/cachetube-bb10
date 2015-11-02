@@ -190,10 +190,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>filter string</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Sort Order</source>
         <translation type="unfinished"></translation>
     </message>
@@ -211,6 +207,10 @@
     </message>
     <message>
         <source>By Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>filter video by name</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

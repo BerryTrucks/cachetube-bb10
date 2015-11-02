@@ -506,56 +506,62 @@ TabbedPane {
                                         TapHandler {
                                             onTapped: {
                                                 if (itemRoot.itemState === YTDownloadState.StateCompleted) {
-                                                    itemRoot.ListItem.view.ytVideoManager.setTaskWatched(itemRoot.itemVideoId);
-                                                    
                                                     playerNavigationPane.push(playerPageDefinition.createObject());
-                                                    
+
+                                                    playerSheet.playingVideoId = itemRoot.itemVideoId;
+                                                    playerSheet.playingTitle   = itemRoot.itemTitle;
+
                                                     playerSheet.open();
                                                 }
                                             }
-                                            
+
                                             attachedObjects: [
                                                 Sheet {
                                                     id:          playerSheet
                                                     peekEnabled: false
                                                     
+                                                    property string playingVideoId: ""
+                                                    property string playingTitle:   ""
+
                                                     onOpened: {
                                                         var page = playerNavigationPane.top;
                                                         
                                                         if (page.objectName === "playerPage") {
-                                                            page.playVideo(itemRoot.ListItem.view.ytVideoManager.getTaskVideoURI(itemRoot.itemVideoId), itemRoot.itemTitle, itemRoot.ListItem.view.appSettings.autoRepeatPlayback);
+                                                            page.playVideo(itemRoot.ListItem.view.ytVideoManager.getTaskVideoURI(playingVideoId), playingTitle, itemRoot.ListItem.view.appSettings.autoRepeatPlayback);
                                                         }
                                                     }
-                                                    
+
                                                     NavigationPane {
                                                         id:          playerNavigationPane
                                                         peekEnabled: false
-                                                        
+
                                                         onTopChanged: {
                                                             if (playerSheet.opened) {
                                                                 if (page.objectName === "playerPage") {
-                                                                    page.playVideo(itemRoot.ListItem.view.ytVideoManager.getTaskVideoURI(itemRoot.itemVideoId), itemRoot.itemTitle, itemRoot.ListItem.view.appSettings.autoRepeatPlayback);
+                                                                    page.playVideo(itemRoot.ListItem.view.ytVideoManager.getTaskVideoURI(playerSheet.playingVideoId), playerSheet.playingTitle, itemRoot.ListItem.view.appSettings.autoRepeatPlayback);
                                                                 } else {
+                                                                    itemRoot.ListItem.view.ytVideoManager.setTaskWatched(playerSheet.playingVideoId);
+
                                                                     playerSheet.close();
                                                                 }
                                                             }
                                                         }
-                                                        
+
                                                         onPopTransitionEnded: {
                                                             if (page.objectName === "playerPage") {
                                                                 page.disconnectSignals();
                                                             }
-                                                            
+
                                                             page.destroy();
                                                         }
-                                                        
+
                                                         Page {
                                                             Container {
                                                                 background: Color.White
                                                             }
                                                         }
                                                     }
-                                                    
+
                                                     attachedObjects: [
                                                         ComponentDefinition {
                                                             id:     playerPageDefinition
@@ -708,7 +714,7 @@ TabbedPane {
                     TextField {
                         id:                  filterTextField
                         horizontalAlignment: HorizontalAlignment.Fill
-                        hintText:            qsTr("filter string")
+                        hintText:            qsTr("filter video by name")
                         
                         layoutProperties: StackLayoutProperties {
                             spaceQuota: -1
