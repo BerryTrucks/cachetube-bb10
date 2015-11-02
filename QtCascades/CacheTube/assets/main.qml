@@ -714,7 +714,7 @@ TabbedPane {
                     TextField {
                         id:                  filterTextField
                         horizontalAlignment: HorizontalAlignment.Fill
-                        hintText:            qsTr("filter video by name")
+                        hintText:            qsTr("filter video by title")
                         
                         layoutProperties: StackLayoutProperties {
                             spaceQuota: -1

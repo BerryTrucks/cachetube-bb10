@@ -203,8 +203,8 @@
     </message>
     <message>
         <location filename="../assets/main.qml" line="717"/>
-        <source>filter video by name</source>
-        <translation>фильтр по имени видео</translation>
+        <source>filter video by title</source>
+        <translation>фильтр по названию видео</translation>
     </message>
     <message>
         <location filename="../assets/main.qml" line="579"/>

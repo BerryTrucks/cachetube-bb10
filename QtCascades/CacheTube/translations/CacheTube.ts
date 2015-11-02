@@ -210,7 +210,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>filter video by name</source>
+        <source>filter video by title</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
