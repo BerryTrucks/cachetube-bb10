@@ -603,12 +603,13 @@ TabbedPane {
                                                 imageSource: "images/delete.png"
                                                 
                                                 onTriggered: {
-                                                    itemRoot.ListItem.view.ytVideoManager.delTask(itemRoot.itemVideoId);
-                                                    
                                                     videoDeletedToast.deletedVideoId = itemRoot.itemVideoId;
+
+                                                    itemRoot.ListItem.view.ytVideoManager.delTask(itemRoot.itemVideoId);
+
                                                     videoDeletedToast.show();
                                                 }
-                                                
+
                                                 attachedObjects: [
                                                     SystemToast {
                                                         id:             videoDeletedToast
