@@ -1080,8 +1080,8 @@ bool YTVideoManager::DecodeSignature(const QByteArray &raw_js_code, const QStrin
 
     QString js_code = QString::fromUtf8(raw_js_code.data());
 
-    js_code = js_code.remove(QRegExp("^\\s*\\(\\s*function\\s*\\(\\s*\\)\\s*\\{"));
-    js_code = js_code.remove(QRegExp("\\}\\s*\\)\\s*\\(\\s*\\)\\s*;\\s*$"));
+    js_code = js_code.remove(QRegExp("^\\s*var\\s+[^\\s]+\\s*=\\s*\\{\\s*\\}\\s*;\\s*\\(\\s*function\\s*\\(\\s*[^\\s]+\\s*\\)\\s*\\{"));
+    js_code = js_code.remove(QRegExp("\\}\\s*\\)\\s*\\(\\s*[^\\s]+\\s*\\)\\s*;\\s*$"));
 
     js_code = browser_vars + js_code;
 
