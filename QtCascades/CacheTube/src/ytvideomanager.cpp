@@ -1076,7 +1076,8 @@ bool YTVideoManager::DecodeSignature(const QByteArray &raw_js_code, const QStrin
                                 "screenY       = window.screenY,"       +
                                 "self          = window.self,"          +
                                 "status        = window.status,"        +
-                                "top           = window.top;";
+                                "top           = window.top,"           +
+                                "g             = {};";
 
     QString js_code = QString::fromUtf8(raw_js_code.data());
 
