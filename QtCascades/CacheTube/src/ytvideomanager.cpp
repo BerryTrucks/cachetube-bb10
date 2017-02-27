@@ -971,6 +971,8 @@ bool YTVideoManager::ParseVideoPage(const QByteArray &raw_data, QString *sts, QS
 
                     if (url.startsWith("//")) {
                         *js_player_url = QString("https:") + url;
+                    } else if (url.startsWith("/")) {
+                        *js_player_url = QString("https://www.youtube.com") + url;
                     } else {
                         *js_player_url = url;
                     }
@@ -992,7 +994,7 @@ bool YTVideoManager::ParseVideoPage(const QByteArray &raw_data, QString *sts, QS
 
 bool YTVideoManager::DecodeSignature(const QByteArray &raw_js_code, const QString &encoded_signature, QString *decoded_signature)
 {
-    QRegExp js_function_extractor = QRegExp("\\.sig\\s*\\|\\|\\s*([a-zA-Z0-9_\\$]+)\\(");
+    QRegExp js_function_extractor = QRegExp("\\.set\\s*\\(\\s*\"signature\"\\s*,\\s*([a-zA-Z0-9_\\$]+)\\s*\\(");
 
     QString browser_vars = QString() +
                            "var window = {closed:        false,"    +
