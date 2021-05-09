@@ -202,7 +202,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Bitchute</source>
+        <source>Web Search</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

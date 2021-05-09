@@ -63,22 +63,22 @@
         <translation>YouTube</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="319"/>
+        <location filename="../assets/main.qml" line="312"/>
         <source>Back</source>
         <translation>Назад</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="352"/>
+        <location filename="../assets/main.qml" line="345"/>
         <source>Home</source>
         <translation>Домой</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="370"/>
+        <location filename="../assets/main.qml" line="363"/>
         <source>Reload</source>
         <translation>Обновить</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="328"/>
+        <location filename="../assets/main.qml" line="321"/>
         <source>Cache</source>
         <translation>Загрузить</translation>
     </message>
@@ -96,7 +96,7 @@
         <location filename="../assets/main.qml" line="110"/>
         <location filename="../assets/main.qml" line="144"/>
         <location filename="../assets/main.qml" line="208"/>
-        <location filename="../assets/main.qml" line="719"/>
+        <location filename="../assets/main.qml" line="712"/>
         <source>Divider</source>
         <translation>Разделитель</translation>
     </message>
@@ -141,74 +141,69 @@
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="343"/>
+        <location filename="../assets/main.qml" line="336"/>
         <source>Video caching started</source>
         <translation>Загрузка видео начата</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="347"/>
+        <location filename="../assets/main.qml" line="340"/>
         <source>Cannot cache this video. May be it is already cached?</source>
         <translation>Не могу загрузить это видео. Возможно, оно уже загружено?</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="361"/>
-        <source>Bitchute</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../assets/main.qml" line="389"/>
-        <location filename="../assets/main.qml" line="401"/>
+        <location filename="../assets/main.qml" line="382"/>
+        <location filename="../assets/main.qml" line="394"/>
         <source>YouTube browser</source>
         <translation>Браузер YouTube</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="419"/>
-        <location filename="../assets/main.qml" line="424"/>
+        <location filename="../assets/main.qml" line="412"/>
+        <location filename="../assets/main.qml" line="417"/>
         <source>Cached Video</source>
         <translation>Загруженное видео</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="453"/>
+        <location filename="../assets/main.qml" line="446"/>
         <source>No cached video</source>
         <translation>Нет загруженного видео</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="468"/>
+        <location filename="../assets/main.qml" line="461"/>
         <source>List of cached video</source>
         <translation>Список загруженного видео</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="613"/>
+        <location filename="../assets/main.qml" line="606"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="627"/>
+        <location filename="../assets/main.qml" line="620"/>
         <source>Video deleted successfully</source>
         <translation>Видео успешно удалено</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="628"/>
+        <location filename="../assets/main.qml" line="621"/>
         <source>Undo</source>
         <translation>Отменить</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="645"/>
+        <location filename="../assets/main.qml" line="638"/>
         <source>Video restored successfully</source>
         <translation>Видео успешно восстановлено</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="649"/>
+        <location filename="../assets/main.qml" line="642"/>
         <source>Cannot restore video</source>
         <translation>Невозможно восстановить видео</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="729"/>
+        <location filename="../assets/main.qml" line="722"/>
         <source>filter video by title</source>
         <translation>фильтр по названию видео</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="590"/>
+        <location filename="../assets/main.qml" line="583"/>
         <source>Pause/Resume</source>
         <translation>Пауза/Продолжить</translation>
     </message>
@@ -219,27 +214,32 @@
         <translation>Браузер справки</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="412"/>
+        <location filename="../assets/main.qml" line="354"/>
+        <source>Web Search</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../assets/main.qml" line="405"/>
         <source>Page load progress: %1%</source>
         <translation>Прогресс загрузки страницы: %1%</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="604"/>
+        <location filename="../assets/main.qml" line="597"/>
         <source>Open YouTube Page</source>
         <translation>Открыть страницу YouTube</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="671"/>
+        <location filename="../assets/main.qml" line="664"/>
         <source>Video load progress: %1%</source>
         <translation>Прогресс загрузки видео: %1%</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="689"/>
+        <location filename="../assets/main.qml" line="682"/>
         <source>QUEUED</source>
         <translation>ОЖИДАНИЕ</translation>
     </message>
     <message>
-        <location filename="../assets/main.qml" line="690"/>
+        <location filename="../assets/main.qml" line="683"/>
         <source>PAUSED</source>
         <translation>ПАУЗА</translation>
     </message>

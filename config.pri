@@ -45,6 +45,7 @@ config_pri_assets {
         $$quote($$BASEDIR/assets/images/play.png) \
         $$quote($$BASEDIR/assets/images/reload.png) \
         $$quote($$BASEDIR/assets/images/review.png) \
+        $$quote($$BASEDIR/assets/images/search.png) \
         $$quote($$BASEDIR/assets/images/youtube.png) \
         $$quote($$BASEDIR/assets/main.qml)
 }

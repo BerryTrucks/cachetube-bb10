@@ -307,13 +307,6 @@ TabbedPane {
                 InvocationHelper.videoUrlChanged.connect(onInvocationVideoUrlChanged);
             }
             
-            attachedObjects: [
-                SystemToast {
-                    id:   errorMsgToast
-                    body: thePage.message 
-                }
-            ]
-            
             actions: [
                 ActionItem {
                     title:               qsTr("Back")
@@ -358,12 +351,12 @@ TabbedPane {
                     }
                 },
                 ActionItem {
-                    title:               qsTr("Bitchute")
-                    imageSource:         "images/review.png"
-                    ActionBar.placement: ActionBarPlacement.OnBar
+                    title:               qsTr("Web Search")
+                    imageSource:         "images/search.png"
+                    ActionBar.placement: ActionBarPlacement.InOverflow
                     
                     onTriggered: {
-                        webView.url = "http://www.bitchute.com/";
+                        webView.url = "http://www.duckduckgo.com/";
                     }
                 },
                 ActionItem {
