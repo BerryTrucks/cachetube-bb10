@@ -26,7 +26,7 @@
 
     <!-- A universally unique application identifier. Must be unique across all BlackBerry Tablet OS applications.
          Using a reverse DNS-style name as the id is recommended. (Eg. com.example.ExampleApplication.) Required. -->
-    <id>com.derevenetz.oleg.CacheTube</id>
+    <id>org.berrytrucks.CacheTube</id>
 
     <!-- The name that is displayed in the BlackBerry Tablet OS application installer. 
          May have multiple values for each language. See samples or xsd schema file. Optional. -->
@@ -55,8 +55,8 @@
     <!-- <copyright></copyright> -->
 
     <!--  Name of author which is used for signing. Must match the developer name of your development certificate. -->
-    <author>Oleg Derevenetz</author>
-    <authorId>gYAAgC3qXeosEAmIIxl3F-lbwRY</authorId>
+    <author>BerryTrucks</author>
+    <authorId>gYAAgML3SsjiZXhA1d82mdE9DTw</authorId>
     <description>
        CacheTube lets you cache your favorite YouTube videos on your phone to watch them at any time without Internet connection.
        <text xml:lang="ru">CacheTube &#x43f;&#x43e;&#x437;&#x432;&#x43e;&#x43b;&#x44f;&#x435;&#x442; &#x43f;&#x440;&#x435;&#x434;&#x432;&#x430;&#x440;&#x438;&#x442;&#x435;&#x43b;&#x44c;&#x43d;&#x43e; &#x437;&#x430;&#x433;&#x440;&#x443;&#x436;&#x430;&#x442;&#x44c; &#x432;&#x430;&#x448;&#x438; &#x43b;&#x44e;&#x431;&#x438;&#x43c;&#x44b;&#x435; &#x432;&#x438;&#x434;&#x435;&#x43e; &#x438;&#x437; YouTube &#x43d;&#x430; &#x432;&#x430;&#x448; &#x442;&#x435;&#x43b;&#x435;&#x444;&#x43e;&#x43d; &#x438; &#x43f;&#x440;&#x43e;&#x441;&#x43c;&#x430;&#x442;&#x440;&#x438;&#x432;&#x430;&#x442;&#x44c; &#x438;&#x445; &#x432; &#x43b;&#x44e;&#x431;&#x43e;&#x435; &#x432;&#x440;&#x435;&#x43c;&#x44f;, &#x43d;&#x435; &#x442;&#x440;&#x435;&#x431;&#x443;&#x44f; &#x441;&#x43e;&#x435;&#x434;&#x438;&#x43d;&#x435;&#x43d;&#x438;&#x44f; &#x441; &#x418;&#x43d;&#x442;&#x435;&#x440;&#x43d;&#x435;&#x442;.</text>
@@ -88,6 +88,12 @@
        <platformArchitecture>x86</platformArchitecture>
        <asset path="x86/o-g/CacheTube" entry="true" type="Qnx/Elf">CacheTube</asset>
     </configuration>
+    <configuration name="Device-Coverage">       <platformArchitecture>armle-v7</platformArchitecture>
+</configuration>
+    <configuration name="Simulator-Profile">       <platformArchitecture>x86</platformArchitecture>
+</configuration>
+    <configuration name="Simulator-Coverage">       <platformArchitecture>x86</platformArchitecture>
+</configuration>
     
     <!--  The icon for the application, which should be 86x86. -->
     <icon>
@@ -115,7 +121,7 @@
     <env var="CASCADES_THEME" value="bright"/>
 
     <!-- Handle invocations -->
-    <invoke-target id="com.derevenetz.oleg.CacheTube.http.open">
+    <invoke-target id="org.berrytrucks.CacheTube.http.open">
         <invoke-target-type>application</invoke-target-type>
         <filter>
             <action>bb.action.OPEN</action>

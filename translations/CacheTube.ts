@@ -27,23 +27,11 @@
 <context>
     <name>YTVideoManager</name>
     <message>
-        <source>Invalid file size, retrying download</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>No suitable video formats available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Cannot extract video information</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cannot decode video signature</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cannot download signature decoder</source>
+        <source>Invalid file size, retrying download</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -211,6 +199,10 @@
     </message>
     <message>
         <source>filter video by title</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bitchute</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -3,23 +3,18 @@ BASEDIR = $$quote($$_PRO_FILE_PWD_)
 
 device {
     CONFIG(debug, debug|release) {
-        profile {
-            CONFIG += \
-                config_pri_assets \
-                config_pri_source_group1
-        } else {
+        !profile {
             CONFIG += \
                 config_pri_assets \
                 config_pri_source_group1
         }
-
     }
 
     CONFIG(release, debug|release) {
         !profile {
             CONFIG += \
                 config_pri_assets \
-                config_pri_source_group1
+                config_pri_source_group2
         }
     }
 }
@@ -29,7 +24,7 @@ simulator {
         !profile {
             CONFIG += \
                 config_pri_assets \
-                config_pri_source_group1
+                config_pri_source_group2
         }
     }
 }
@@ -55,6 +50,25 @@ config_pri_assets {
 }
 
 config_pri_source_group1 {
+    SOURCES += \
+        $$quote($$BASEDIR/src/CacheTube.cpp) \
+        $$quote($$BASEDIR/src/appsettings.cpp) \
+        $$quote($$BASEDIR/src/customtimer.cpp) \
+        $$quote($$BASEDIR/src/invocationhelper.cpp) \
+        $$quote($$BASEDIR/src/main.cpp) \
+        $$quote($$BASEDIR/src/ytarraydatamodel.cpp) \
+        $$quote($$BASEDIR/src/ytvideomanager.cpp)
+
+    HEADERS += \
+        $$quote($$BASEDIR/src/CacheTube.hpp) \
+        $$quote($$BASEDIR/src/appsettings.h) \
+        $$quote($$BASEDIR/src/customtimer.h) \
+        $$quote($$BASEDIR/src/invocationhelper.h) \
+        $$quote($$BASEDIR/src/ytarraydatamodel.h) \
+        $$quote($$BASEDIR/src/ytvideomanager.h)
+}
+
+config_pri_source_group2 {
     SOURCES += \
         $$quote($$BASEDIR/src/CacheTube.cpp) \
         $$quote($$BASEDIR/src/appsettings.cpp) \

@@ -290,23 +290,29 @@ TabbedPane {
         imageSource: "images/youtube.png"
         
         Page {
+            id: thePage
+            property string message: ""
+            
             function onInvocationVideoUrlChanged() {
-                var video_id = YTVideoManager.getVideoId(InvocationHelper.videoUrl);
-                
-                if (video_id !== "") {
-                    youTubeWebView.url = "http://m.youtube.com/watch?v=" + encodeURIComponent(video_id);
+                if (InvocationHelper.videoUrl != "") {
+                    webView.url = InvocationHelper.videoUrl;
                 }
             }
             
             onCreationCompleted: {
-                var video_id = YTVideoManager.getVideoId(InvocationHelper.videoUrl);
-                
-                if (video_id !== "") {
-                    youTubeWebView.url = "http://m.youtube.com/watch?v=" + encodeURIComponent(video_id);
+                if (InvocationHelper.videoUrl != "") {
+                    webView.url = InvocationHelper.videoUrl;
                 }
                 
                 InvocationHelper.videoUrlChanged.connect(onInvocationVideoUrlChanged);
             }
+            
+            attachedObjects: [
+                SystemToast {
+                    id:   errorMsgToast
+                    body: thePage.message 
+                }
+            ]
             
             actions: [
                 ActionItem {
@@ -315,7 +321,7 @@ TabbedPane {
                     ActionBar.placement: ActionBarPlacement.OnBar
                     
                     onTriggered: {
-                        youTubeWebView.goBack();
+                        webView.goBack();
                     }
                 },
                 ActionItem {
@@ -324,15 +330,11 @@ TabbedPane {
                     ActionBar.placement: ActionBarPlacement.Signature
                     
                     onTriggered: {
-                        var video_id = YTVideoManager.getVideoId(youTubeWebView.url);
-                        
-                        if (video_id !== "") {
-                            if (YTVideoManager.addTask(video_id)) {
-                                cachingStartedToast.show();
-                            } else {
-                                cachingFailedToast.show();
-                            }
-                        }
+                         if (YTVideoManager.addTask(webView.url)) {
+                             cachingStartedToast.show();
+                         } else {
+                             cachingFailedToast.show();
+                         }
                     }
                     
                     attachedObjects: [
@@ -352,7 +354,16 @@ TabbedPane {
                     ActionBar.placement: ActionBarPlacement.OnBar
                     
                     onTriggered: {
-                        youTubeWebView.url = "http://m.youtube.com/";
+                        webView.url = "http://m.youtube.com/";
+                    }
+                },
+                ActionItem {
+                    title:               qsTr("Bitchute")
+                    imageSource:         "images/review.png"
+                    ActionBar.placement: ActionBarPlacement.OnBar
+                    
+                    onTriggered: {
+                        webView.url = "http://www.bitchute.com/";
                     }
                 },
                 ActionItem {
@@ -361,7 +372,7 @@ TabbedPane {
                     ActionBar.placement: ActionBarPlacement.InOverflow
                     
                     onTriggered: {
-                        youTubeWebView.reload();
+                        webView.reload();
                     }
                 }
             ]
@@ -385,7 +396,7 @@ TabbedPane {
                     }
                     
                     WebView {
-                        id:                 youTubeWebView
+                        id:                 webView
                         url:                "http://m.youtube.com/"
                         accessibility.name: qsTr("YouTube browser")
                     }
@@ -394,10 +405,10 @@ TabbedPane {
                 ProgressIndicator {
                     horizontalAlignment: HorizontalAlignment.Fill
                     verticalAlignment:   VerticalAlignment.Bottom
-                    visible:             youTubeWebView.loading
+                    visible:             webView.loading
                     fromValue:           0
                     toValue:             100
-                    value:               youTubeWebView.loadProgress
+                    value:               webView.loadProgress
                     accessibility.name:  qsTr("Page load progress: %1%").arg(value.toFixed())
                 }
             }
@@ -469,7 +480,7 @@ TabbedPane {
                         }
                         
                         function navigateToWebPage(url) {
-                            youTubeWebView.url = url;
+                            webView.url = url;
                             
                             tabbedPane.activeTab = youTubeTab;
                         } 
@@ -594,7 +605,7 @@ TabbedPane {
                                                 imageSource: "images/youtube.png"
                                                 
                                                 onTriggered: {
-                                                    itemRoot.ListItem.view.navigateToWebPage(itemRoot.ListItem.view.ytVideoManager.getTaskWebURL(itemRoot.itemVideoId));
+                                                    itemRoot.ListItem.view.navigateToWebPage(itemRoot.itemVideoId);
                                                 }
                                             }
                                             

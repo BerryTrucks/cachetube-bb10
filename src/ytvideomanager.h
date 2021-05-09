@@ -32,7 +32,7 @@ struct YTDownloadTask
     bool    Watched;
     int     State, Fmt;
     qint64  Size, Done, StartTime;
-    QString VideoId, Title, ErrorMsg, JSPlayerURL, VideoURL, Signature, VisitorInfo1LiveCookie;
+    QString VideoId, Title, ErrorMsg, VideoURL, Signature, VisitorInfo1LiveCookie;
 };
 
 class YTVideoManager : public QObject
@@ -45,8 +45,6 @@ public:
 
     Q_INVOKABLE void setPreferredVideoFormat(const int &format);
 
-    Q_INVOKABLE QString getVideoId(const QString &url);
-
     Q_INVOKABLE bool addTask(const QString &video_id);
     Q_INVOKABLE void delTask(const QString &video_id);
 
@@ -58,7 +56,6 @@ public:
 
     Q_INVOKABLE void setTaskWatched(const QString &video_id);
 
-    Q_INVOKABLE QString getTaskWebURL(const QString &video_id);
     Q_INVOKABLE QString getTaskVideoURI(const QString &video_id);
 
     Q_INVOKABLE int                   getTaskCount();
@@ -82,7 +79,7 @@ private:
 
     void UpdateTask(const YTDownloadTask &task);
 
-    bool ParseMetadata(const QByteArray &raw_data, QString *video_title, QHash<int, QString> *fmt_url_map, QHash<int, QString> *fmt_sig_map);
+    bool ParseMetadata(const QByteArray &raw_data, QString *video_title, QHash<int, QString> *fmt_url_map);
     bool ParseVideoPage(const QByteArray &raw_data, QString *sts, QString *js_player_url);
     bool DecodeSignature(const QByteArray &raw_js_code, const QString &encoded_signature, QString *decoded_signature);
 
@@ -97,7 +94,7 @@ private:
     QFile                 CurrentFile;
     QSqlDatabase          TaskDatabase;
     QNetworkAccessManager *NetworkAccessManager;
-    QNetworkReply         *VideoPageReply, *MetadataReply, *JSPlayerReply, *DownloadReply;
+    QNetworkReply         *MetadataReply, *DownloadReply;
 };
 
 #endif // YTVIDEOMANAGER_H
